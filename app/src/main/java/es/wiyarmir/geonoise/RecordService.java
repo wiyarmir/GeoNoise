@@ -3,6 +3,7 @@ package es.wiyarmir.geonoise;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 import android.widget.Toast;
 
@@ -24,22 +25,25 @@ import es.wiyarmir.geonoise.utils.Utils;
  */
 public abstract class RecordService extends Service implements LocationListener {
     public static String LOCATION_NOISE_UPDATE = "es.wiyarmir.geonoise.update";
+    private final IBinder mBinder = new RecordBinder();
     protected LocationClient locationClient = null;
     protected LocationRequest locationRequest = null;
     protected CSVWriter wr = null;
     private ComponentName locSrv;
+    private boolean recording;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
         locSrv = startService(new Intent(RecordService.this, LocationService.class));
-        locationClient = new LocationClient(this, this, this);
+        //locationClient = new LocationClient(this, this, this);
         locationRequest = LocationRequest.create();
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBinder;
     }
 
     @Override
@@ -50,9 +54,6 @@ public abstract class RecordService extends Service implements LocationListener 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        startRecording();
-
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(500);
         locationRequest.setFastestInterval(500);
@@ -60,6 +61,7 @@ public abstract class RecordService extends Service implements LocationListener 
     }
 
     protected void startRecording() {
+        recording = true;
         locationClient.connect();
 
         Toast.makeText(this, "Saving session to " + getFilePathForSession(), Toast.LENGTH_LONG).show();
@@ -83,7 +85,7 @@ public abstract class RecordService extends Service implements LocationListener 
     }
 
     protected void stopRecording() {
-
+        recording = false;
         locationClient.disconnect();
         try {
             wr.close();
@@ -99,6 +101,16 @@ public abstract class RecordService extends Service implements LocationListener 
     public double getDecibels(double level) {
         //return Math.abs(20.0 * Math.log10(level / 51805.5336 / 0.00002));
         return (20.0 * Math.log10(level / 32767.0) + 120.0);
+    }
+
+    public boolean isRecording() {
+        return recording;
+    }
+
+    public class RecordBinder extends Binder {
+        RecordService getService() {
+            return RecordService.this;
+        }
     }
 
 }

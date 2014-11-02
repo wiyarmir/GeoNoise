@@ -2,6 +2,7 @@ package es.wiyarmir.geonoise;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
@@ -18,9 +19,10 @@ public class LocationService extends Service implements
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener {
 
+    private static LocationService sInstance;
     private LocationClient locationClient;
     private LocationRequest locationRequest;
-    private static LocationService sInstance;
+    private final IBinder mBinder = new LocationBinder();
 
     public static LocationService getInstance() {
         return sInstance;
@@ -33,8 +35,6 @@ public class LocationService extends Service implements
         locationClient = new LocationClient(this, this, this);
         locationRequest = LocationRequest.create();
     }
-
-
 
     /*
      * Called by Location Services when the request to connect the
@@ -69,9 +69,14 @@ public class LocationService extends Service implements
         Toast.makeText(this, "Connection failed", Toast.LENGTH_SHORT).show();
     }
 
-
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBinder;
+    }
+
+    public class LocationBinder extends Binder {
+        LocationService getService() {
+            return getInstance();
+        }
     }
 }
