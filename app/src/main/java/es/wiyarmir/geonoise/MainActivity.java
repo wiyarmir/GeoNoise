@@ -14,6 +14,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import es.wiyarmir.geonoise.utils.LocationNoiseUpdatesListener;
+
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, PastSessionFragment.OnFragmentInteractionListener {
@@ -146,12 +148,6 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onFragmentInteraction(String id) {
 
-    }
-
-    public interface LocationNoiseUpdatesListener {
-        public void onLocationNoiseUpdate(Location location, double noise);
-
-        public boolean isInterestedInLocationNoiseUpdates();
     }
 
     private class StuffReceiver extends BroadcastReceiver {

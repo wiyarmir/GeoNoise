@@ -1,12 +1,17 @@
 package es.wiyarmir.geonoise;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +25,10 @@ import com.androidplot.xy.XYPlot;
 
 import java.util.Date;
 
+import es.wiyarmir.geonoise.utils.LocationNoiseUpdatesListener;
 
-public class RecordFragment extends Fragment implements MainActivity.LocationNoiseUpdatesListener {
+
+public class RecordFragment extends Fragment implements LocationNoiseUpdatesListener {
 
     private static final String TAG = "RecordFragment";
     private static final int HISTORY_SIZE = 50;
@@ -30,6 +37,32 @@ public class RecordFragment extends Fragment implements MainActivity.LocationNoi
     private TextView tUpdate;
     private XYPlot xyPlot;
     private SimpleXYSeries mySeries;
+    private RecordService mService;
+    private boolean mBound;
+    private Button startStopButton = null;
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            Log.d(TAG, "RecordFragment connected to RecordService");
+            // We've bound to RecordService, cast the IBinder and get RecordService instance
+            RecordService.RecordBinder binder = (RecordService.RecordBinder) service;
+            mService = binder.getService();
+            mBound = true;
+            if (startStopButton != null) {
+                startStopButton.setEnabled(true);
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            Log.d(TAG, "RecordFragment disconnected from RecordService");
+            mBound = false;
+            if (startStopButton != null) {
+                startStopButton.setEnabled(false);
+            }
+        }
+    };
 
     public RecordFragment() {
 
@@ -38,9 +71,31 @@ public class RecordFragment extends Fragment implements MainActivity.LocationNoi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         serviceIntent = new Intent(getActivity(), ARRecordService.class);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().unbindService(mConnection);
+        mService = null;
+        mBound = false;
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (startStopButton != null && !mBound) {
+            startStopButton.setEnabled(false);
+        }
     }
 
     @Override
@@ -49,28 +104,26 @@ public class RecordFragment extends Fragment implements MainActivity.LocationNoi
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_record, container, false);
 
-        final Button startStopButton = (Button) view.findViewById(R.id.button);
+        startStopButton = (Button) view.findViewById(R.id.button);
+        tDecibels = (TextView) view.findViewById(R.id.text_db);
+        tUpdate = (TextView) view.findViewById(R.id.text_update);
+
+        if (!mBound) {
+            startStopButton.setEnabled(false);
+        }
         startStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (startStopButton.getText().toString().equals(getText(R.string.button_start_rec).toString())) {
-                    getActivity().startService(serviceIntent);
+                if (!mService.isRecording()) {
+                    mService.startRecording();
                     startStopButton.setText(getText(R.string.button_stop_rec));
                 } else {
-                    try {
-                        getActivity().stopService(serviceIntent);
-                    } catch (IllegalStateException e) {
-                        e.printStackTrace();
-                    }
+                    mService.stopRecording();
                     startStopButton.setText(getText(R.string.button_start_rec));
 
                 }
             }
         });
-
-        tDecibels = (TextView) view.findViewById(R.id.text_db);
-
-        tUpdate = (TextView) view.findViewById(R.id.text_update);
 
         xyPlot = (XYPlot) view.findViewById(R.id.xyplot);
         xyPlot.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED);

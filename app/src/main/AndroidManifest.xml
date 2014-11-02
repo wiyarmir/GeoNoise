@@ -52,6 +52,13 @@
             android:enabled="true"
             android:exported="false"
             android:label="Audio Recording Service" />
+        <service
+            android:name=".LocationService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="GeoNoise Location Service"
+
+            />
     </application>
 
 
