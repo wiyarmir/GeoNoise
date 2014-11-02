@@ -1,5 +1,6 @@
 package es.wiyarmir.geonoise.utils;
 
+import android.location.Location;
 import android.os.Environment;
 import android.util.Log;
 
@@ -36,4 +37,5 @@ public class Utils {
             return new String[0];
         }
     }
+
 }

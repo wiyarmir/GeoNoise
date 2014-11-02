@@ -13,8 +13,10 @@ import android.widget.TextView;
 
 import java.util.Date;
 
+import es.wiyarmir.geonoise.utils.LocationNoiseUpdatesListener;
 
-public class RecordFragment extends Fragment implements MainActivity.LocationNoiseUpdatesListener {
+
+public class RecordFragment extends Fragment implements LocationNoiseUpdatesListener {
 
     private static final String TAG = "RecordFragment";
     private static Intent serviceIntent = null;
