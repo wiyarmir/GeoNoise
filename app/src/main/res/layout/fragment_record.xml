@@ -6,12 +6,17 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_start_rec"
         android:id="@+id/button"
-        android:layout_gravity="center_horizontal|bottom" />
+        android:layout_gravity="center|bottom"
+        android:background="@drawable/ripple"
+        android:stateListAnimator="@anim/anim"
+        android:src="@android:drawable/radiobutton_off_background"
+        android:elevation="4dp"
+        android:layout_marginBottom="16dp"
+        android:padding="8dp" />
 
     <RelativeLayout
         android:layout_width="fill_parent"

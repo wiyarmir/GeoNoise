@@ -1,14 +1,16 @@
 package es.wiyarmir.geonoise;
 
+import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Outline;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -39,11 +41,16 @@ public class RecordFragment extends Fragment implements MainActivity.LocationNoi
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_record, container, false);
 
-        final Button startStopButton = (Button) view.findViewById(R.id.button);
+        final ImageButton startStopButton = (ImageButton) view.findViewById(R.id.button);
+        int size = getResources().getDimensionPixelSize(R.dimen.fab_size);
+        if (Build.VERSION.SDK_INT >= 21) {
+            Outline outline = new Outline();
+            outline.setOval(0, 0, size, size);
+        }
         startStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (startStopButton.getText().toString().equals(getText(R.string.button_start_rec).toString())) {
+                /*if (startStopButton.getText().toString().equals(getText(R.string.button_start_rec).toString())) {
                     getActivity().startService(serviceIntent);
                     startStopButton.setText(getText(R.string.button_stop_rec));
                 } else {
@@ -54,7 +61,7 @@ public class RecordFragment extends Fragment implements MainActivity.LocationNoi
                     }
                     startStopButton.setText(getText(R.string.button_start_rec));
 
-                }
+                }*/
             }
         });
 

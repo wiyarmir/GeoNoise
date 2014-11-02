@@ -5,7 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
+import android.app.DialogFragment;
 import android.widget.Toast;
 
 import java.io.File;
@@ -15,14 +15,13 @@ import java.io.File;
  */
 public class FilePickerDialogFragment extends DialogFragment {
 
-    private final HeatmapCapable instance;
+    private HeatmapCapable instance;
     public File mPath = null;
     public String[] mFileList;
 
-    public FilePickerDialogFragment(HeatmapCapable hc) {
+    public FilePickerDialogFragment() {
         mPath = new File(Utils.getSaveDirPath());
         mFileList = Utils.listFilesInPath(mPath);
-        this.instance = hc;
     }
 
     @NonNull
@@ -43,4 +42,7 @@ public class FilePickerDialogFragment extends DialogFragment {
 
     }
 
+    public void setInstance(HeatmapCapable instance) {
+        this.instance = instance;
+    }
 }

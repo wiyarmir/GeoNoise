@@ -1,13 +1,13 @@
 package es.wiyarmir.geonoise;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -61,7 +61,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         Fragment toInstantiate = null;
         String tag = null;
 
@@ -104,7 +104,7 @@ public class MainActivity extends ActionBarActivity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag("maps");
+            Fragment fragment = getFragmentManager().findFragmentByTag("maps");
             if (fragment != null && fragment.isVisible()) {
                 getMenuInflater().inflate(R.menu.maps, menu);
             } else {

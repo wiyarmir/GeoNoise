@@ -1,10 +1,12 @@
 package es.wiyarmir.geonoise;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
@@ -96,7 +99,8 @@ public class MapsFragment extends Fragment implements HeatmapCapable {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.load:
-                fpdf = new FilePickerDialogFragment(this);
+                fpdf = new FilePickerDialogFragment();
+                fpdf.setInstance(this);
                 fpdf.show(getFragmentManager(), "filedialog");
                 return true;
             default:
@@ -127,9 +131,15 @@ public class MapsFragment extends Fragment implements HeatmapCapable {
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
+            FragmentManager fragmentManager;
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
+            if (Build.VERSION.SDK_INT < 17) {
+                fragmentManager = getFragmentManager();
+            } else {
+                fragmentManager = getChildFragmentManager();//getFragmentManager();
+            }
+            MapFragment mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.mymap);
+            mMap = mapFragment.getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
@@ -143,6 +153,7 @@ public class MapsFragment extends Fragment implements HeatmapCapable {
      * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
+
     private void setUpMap() {
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setMyLocationEnabled(true);
