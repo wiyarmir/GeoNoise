@@ -3,6 +3,7 @@ package es.wiyarmir.geonoise;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import android.widget.Toast;
@@ -31,13 +32,30 @@ public abstract class RecordService extends Service implements LocationListener 
     protected CSVWriter wr = null;
     private ComponentName locSrv;
     private boolean recording;
+    private LocationService mService;
+    private boolean mBound;
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to RecordService, cast the IBinder and get RecordService instance
+            LocationService.LocationBinder binder = (LocationService.LocationBinder) service;
+            mService = binder.getService();
+            locationClient = new LocationClient(RecordService.this, mService, mService);
 
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName className) {
+            mBound = false;
+        }
+    };
 
     @Override
     public void onCreate() {
         super.onCreate();
         locSrv = startService(new Intent(RecordService.this, LocationService.class));
-        //locationClient = new LocationClient(this, this, this);
         locationRequest = LocationRequest.create();
     }
 
