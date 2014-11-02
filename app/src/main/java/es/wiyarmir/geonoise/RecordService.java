@@ -1,14 +1,11 @@
 package es.wiyarmir.geonoise;
 
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
-import android.location.Location;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -25,21 +22,19 @@ import es.wiyarmir.geonoise.utils.Utils;
 /**
  * Created by wiyarmir on 10/08/14.
  */
-public abstract class RecordService extends Service implements LocationListener,
-        GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener {
+public abstract class RecordService extends Service implements LocationListener {
     public static String LOCATION_NOISE_UPDATE = "es.wiyarmir.geonoise.update";
-    protected LocationClient lc = null;
-    protected LocationRequest lr = null;
+    protected LocationClient locationClient = null;
+    protected LocationRequest locationRequest = null;
     protected CSVWriter wr = null;
+    private ComponentName locSrv;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        lc = new LocationClient(this, this, this);
-        lr = LocationRequest.create();
-
-
+        locSrv = startService(new Intent(RecordService.this, LocationService.class));
+        locationClient = new LocationClient(this, this, this);
+        locationRequest = LocationRequest.create();
     }
 
     @Override
@@ -58,14 +53,14 @@ public abstract class RecordService extends Service implements LocationListener,
 
         startRecording();
 
-        lr.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        lr.setInterval(500);
-        lr.setFastestInterval(500);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(500);
+        locationRequest.setFastestInterval(500);
         return START_STICKY;
     }
 
     protected void startRecording() {
-        lc.connect();
+        locationClient.connect();
 
         Toast.makeText(this, "Saving session to " + getFilePathForSession(), Toast.LENGTH_LONG).show();
 
@@ -89,7 +84,7 @@ public abstract class RecordService extends Service implements LocationListener,
 
     protected void stopRecording() {
 
-        lc.disconnect();
+        locationClient.disconnect();
         try {
             wr.close();
         } catch (IOException e) {
@@ -106,41 +101,4 @@ public abstract class RecordService extends Service implements LocationListener,
         return (20.0 * Math.log10(level / 32767.0) + 120.0);
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    /*
-   * Called by Location Services when the request to connect the
-   * client finishes successfully. At this point, you can
-   * request the current location or start periodic updates
-   */
-    @Override
-    public void onConnected(Bundle dataBundle) {
-        // Display the connection status
-        Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
-        lc.requestLocationUpdates(lr, this);
-    }
-
-    /*
-     * Called by Location Services if the connection to the
-     * location client drops because of an error.
-     */
-    @Override
-    public void onDisconnected() {
-        // Display the connection status
-        Toast.makeText(this, "Disconnected. Please re-connect.",
-                Toast.LENGTH_SHORT).show();
-    }
-
-    /*
-     * Called by Location Services if the attempt to
-     * Location Services fails.
-     */
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-        Toast.makeText(this, "Connection failed", Toast.LENGTH_SHORT).show();
-    }
 }
