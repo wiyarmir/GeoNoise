@@ -17,7 +17,7 @@ import java.util.Date;
 public class ARRecordService extends RecordService {
     private static String TAG = "ARRecordService";
     private int bufferSize;
-    private long runnableDelay = 750;
+    private long runnableDelay = 250;
     private int sampleRate = 8000;
     private AudioRecord audio;
     private Handler mHandler = new Handler();
@@ -27,6 +27,10 @@ public class ARRecordService extends RecordService {
     @Override
     public void onCreate() {
         super.onCreate();
+        prepareAudio();
+    }
+
+    private void prepareAudio() {
         try {
             bufferSize = 10 * AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
             samplePeriod = 1.0f / ((float) sampleRate / (float) bufferSize);
@@ -36,7 +40,6 @@ public class ARRecordService extends RecordService {
         } catch (Exception e) {
             Log.d(TAG, "Error creating audioRecorder");
         }
-
     }
 
     public void readAudioBuffer() {
@@ -72,6 +75,9 @@ public class ARRecordService extends RecordService {
 
     @Override
     protected void startRecording() {
+        if (audio == null) {
+            prepareAudio();
+        }
         audio.startRecording();
         mHandler.post(recorderRunnable);
         super.startRecording();

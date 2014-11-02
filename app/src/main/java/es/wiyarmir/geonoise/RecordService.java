@@ -32,7 +32,6 @@ public abstract class RecordService extends Service implements LocationListener 
     private final IBinder mBinder = new RecordBinder();
     protected LocationRequest locationRequest = null;
     protected CSVWriter wr = null;
-    private ComponentName locSrv;
     private boolean recording;
     private LocationService mService;
     private boolean mBound;

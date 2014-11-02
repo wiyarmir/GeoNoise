@@ -1,10 +1,17 @@
 package es.wiyarmir.geonoise;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -12,8 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.maps.android.heatmaps.Gradient;
@@ -24,8 +33,9 @@ import java.util.List;
 
 import es.wiyarmir.geonoise.utils.FilePickerDialogFragment;
 import es.wiyarmir.geonoise.utils.HeatmapCapable;
+import es.wiyarmir.geonoise.utils.LocationNoiseUpdatesListener;
 
-public class MapsFragment extends Fragment implements HeatmapCapable {
+public class MapsFragment extends Fragment implements HeatmapCapable, LocationNoiseUpdatesListener {
 
     public static final float[] ALT_HEATMAP_GRADIENT_START_POINTS = {
             0.0f, 0.10f, 0.20f, 0.60f, 1.0f
@@ -54,14 +64,13 @@ public class MapsFragment extends Fragment implements HeatmapCapable {
     };
     public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(ALT_HEATMAP_GRADIENT_COLORS,
             ALT_HEATMAP_GRADIENT_START_POINTS);
+    private static final String TAG = "MAPFRAGMENT";
     private static View view = null;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private HeatmapTileProvider mProvider;
     private TileOverlay mOverlay;
     private FilePickerDialogFragment fpdf;
 
-    private void loadHeatmap(String s) {
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +83,7 @@ public class MapsFragment extends Fragment implements HeatmapCapable {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view != null) { // already have a view
             ViewGroup parent = (ViewGroup) view.getParent();
-            if (parent != null) { // it has a parent, deattach it
+            if (parent != null) { // it has a parent, de attach it
                 parent.removeView(view);
             }
         }
@@ -160,4 +169,13 @@ public class MapsFragment extends Fragment implements HeatmapCapable {
         }
     }
 
+    @Override
+    public void onLocationNoiseUpdate(Location location, double noise) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 14.0f));
+    }
+
+    @Override
+    public boolean isInterestedInLocationNoiseUpdates() {
+        return true;
+    }
 }

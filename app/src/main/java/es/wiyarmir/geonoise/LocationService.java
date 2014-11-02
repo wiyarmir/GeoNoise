@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -18,6 +19,7 @@ public class LocationService extends Service implements
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener {
 
+    private static final String TAG = "LocationService";
     private static LocationService sInstance;
     private final IBinder mBinder = new LocationBinder();
     private LocationClient locationClient;
@@ -57,7 +59,7 @@ public class LocationService extends Service implements
     @Override
     public void onConnected(Bundle dataBundle) {
         // Display the connection status
-        Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "Connected to GMS");
         //locationClient.requestLocationUpdates(locationRequest, this);
     }
 
@@ -68,8 +70,7 @@ public class LocationService extends Service implements
     @Override
     public void onDisconnected() {
         // Display the connection status
-        Toast.makeText(this, "Disconnected. Please re-connect.",
-                Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "Disconnected from GMS");
     }
 
     /*
@@ -80,6 +81,8 @@ public class LocationService extends Service implements
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
         Toast.makeText(this, "Connection failed", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "Connection to GMS failed");
+
     }
 
 

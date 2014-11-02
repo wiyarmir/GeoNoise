@@ -116,6 +116,7 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
             public void onClick(View view) {
                 if (!mService.isRecording()) {
                     mService.startRecording();
+                    clearSeries();
                     startStopButton.setText(getText(R.string.button_stop_rec));
                 } else {
                     mService.stopRecording();
@@ -140,6 +141,12 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
         xyPlot.addSeries(mySeries, formatter);
 
         return view;
+    }
+
+    private void clearSeries() {
+        while (mySeries.size() > 0) {
+            mySeries.removeFirst();
+        }
     }
 
 
