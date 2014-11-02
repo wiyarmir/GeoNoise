@@ -26,13 +26,11 @@ public class ARRecordService extends RecordService {
 
     @Override
     public void onCreate() {
-        Log.d(TAG, "onCreate");
         super.onCreate();
-
         try {
             bufferSize = 10 * AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
             samplePeriod = 1.0f / ((float) sampleRate / (float) bufferSize);
-            Log.d(TAG, String.format("Starting recorder, sample rate of %d, buffer size %d. Should get full every %f s",
+            Log.d(TAG, String.format("Creating recorder, sample rate of %d, buffer size %d. Should get full every %.2f s",
                     sampleRate, bufferSize, samplePeriod));
             audio = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
         } catch (Exception e) {
@@ -94,17 +92,9 @@ public class ARRecordService extends RecordService {
     }
 
     @Override
-    public int getAmplitude() {
-        return 0;
-
-    }
-    @Override
     public void onLocationChanged(Location location) {
-
         lastLocation = location;
-        //Log.d(TAG, "Location change: " + location);
-
-
+        Log.d(TAG, "Location change: " + location);
     }
 
     Runnable recorderRunnable = new Runnable() {

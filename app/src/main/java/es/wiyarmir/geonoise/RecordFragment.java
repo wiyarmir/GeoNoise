@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
+            Log.d(TAG, "RecordFragment connected to RecordService");
             // We've bound to RecordService, cast the IBinder and get RecordService instance
             RecordService.RecordBinder binder = (RecordService.RecordBinder) service;
             mService = binder.getService();
@@ -54,6 +56,7 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
+            Log.d(TAG, "RecordFragment disconnected from RecordService");
             mBound = false;
             if (startStopButton != null) {
                 startStopButton.setEnabled(false);

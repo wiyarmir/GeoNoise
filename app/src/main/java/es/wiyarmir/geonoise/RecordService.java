@@ -2,10 +2,12 @@ package es.wiyarmir.geonoise;
 
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationClient;
@@ -26,8 +28,8 @@ import es.wiyarmir.geonoise.utils.Utils;
  */
 public abstract class RecordService extends Service implements LocationListener {
     public static String LOCATION_NOISE_UPDATE = "es.wiyarmir.geonoise.update";
+    private static String TAG = "RecordService";
     private final IBinder mBinder = new RecordBinder();
-    protected LocationClient locationClient = null;
     protected LocationRequest locationRequest = null;
     protected CSVWriter wr = null;
     private ComponentName locSrv;
@@ -38,16 +40,16 @@ public abstract class RecordService extends Service implements LocationListener 
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
+            Log.d(TAG, "RecordService connected to LocationService");
             // We've bound to RecordService, cast the IBinder and get RecordService instance
             LocationService.LocationBinder binder = (LocationService.LocationBinder) service;
             mService = binder.getService();
-            locationClient = new LocationClient(RecordService.this, mService, mService);
-
             mBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName className) {
+            Log.d(TAG, "RecordService disconnected from LocationService");
             mBound = false;
         }
     };
@@ -55,8 +57,12 @@ public abstract class RecordService extends Service implements LocationListener 
     @Override
     public void onCreate() {
         super.onCreate();
-        locSrv = startService(new Intent(RecordService.this, LocationService.class));
+
+        bindService(new Intent(RecordService.this, LocationService.class), mConnection, Context.BIND_AUTO_CREATE);
         locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(500);
+        locationRequest.setFastestInterval(500);
     }
 
     @Override
@@ -67,20 +73,18 @@ public abstract class RecordService extends Service implements LocationListener 
     @Override
     public void onDestroy() {
         stopRecording();
+        unbindService(mConnection);
         super.onDestroy();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(500);
-        locationRequest.setFastestInterval(500);
         return START_STICKY;
     }
 
     protected void startRecording() {
         recording = true;
-        locationClient.connect();
+        mService.getLocationClient().requestLocationUpdates(locationRequest, this);
 
         Toast.makeText(this, "Saving session to " + getFilePathForSession(), Toast.LENGTH_LONG).show();
 
@@ -104,16 +108,11 @@ public abstract class RecordService extends Service implements LocationListener 
 
     protected void stopRecording() {
         recording = false;
-        locationClient.disconnect();
         try {
             wr.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public int getAmplitude() {
-        return 0;
     }
 
     public double getDecibels(double level) {

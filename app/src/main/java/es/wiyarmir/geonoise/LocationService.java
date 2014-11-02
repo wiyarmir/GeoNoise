@@ -10,7 +10,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
-import com.google.android.gms.location.LocationRequest;
 
 /**
  * Created by wiyarmir on 02/11/14.
@@ -20,12 +19,15 @@ public class LocationService extends Service implements
         GooglePlayServicesClient.OnConnectionFailedListener {
 
     private static LocationService sInstance;
-    private LocationClient locationClient;
-    private LocationRequest locationRequest;
     private final IBinder mBinder = new LocationBinder();
+    private LocationClient locationClient;
 
     public static LocationService getInstance() {
         return sInstance;
+    }
+
+    public LocationClient getLocationClient() {
+        return locationClient;
     }
 
     @Override
@@ -33,7 +35,18 @@ public class LocationService extends Service implements
         super.onCreate();
         sInstance = this;
         locationClient = new LocationClient(this, this, this);
-        locationRequest = LocationRequest.create();
+        locationClient.connect();
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
+
+    @Override
+    public void onDestroy() {
+        locationClient.disconnect();
+        super.onDestroy();
     }
 
     /*
@@ -69,10 +82,6 @@ public class LocationService extends Service implements
         Toast.makeText(this, "Connection failed", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
 
     public class LocationBinder extends Binder {
         LocationService getService() {
