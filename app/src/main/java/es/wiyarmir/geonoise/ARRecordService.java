@@ -47,13 +47,11 @@ public class ARRecordService extends RecordService {
             int resultSize = -1;
             if (audio != null) {
                 resultSize = audio.read(buffer, 0, bufferSize);
-                //Log.d(TAG, resultSize + " samples");
                 double sum = 0;
                 for (int i = 0; i < resultSize; i++) {
-                    sum += buffer[i];
+                    sum += Math.abs(buffer[i]);
                 }
-                double level = Math.abs(sum / resultSize);
-                //Log.d(TAG, "level:" + level);
+                double level = (sum / resultSize);
                 Location location = lastLocation;
 
                 if (location != null) {
@@ -100,12 +98,6 @@ public class ARRecordService extends RecordService {
         return 0;
 
     }
-
-    @Override
-    public double getDecibels(double level) {
-        return 20.0 * Math.log10(level / 32767.0);
-    }
-
     @Override
     public void onLocationChanged(Location location) {
 

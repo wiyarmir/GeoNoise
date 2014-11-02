@@ -102,7 +102,8 @@ public abstract class RecordService extends Service implements LocationListener,
     }
 
     public double getDecibels(double level) {
-        return 20.0 * Math.log10(level / 51805.5336 / 0.00002);
+        //return Math.abs(20.0 * Math.log10(level / 51805.5336 / 0.00002));
+        return (20.0 * Math.log10(level / 32767.0) + 120.0);
     }
 
     @Override

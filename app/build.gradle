@@ -26,4 +26,20 @@ dependencies {
     compile 'com.android.support:appcompat-v7:20.0.+'
     compile 'com.google.maps.android:android-maps-utils:0.+'
     compile 'net.sf.opencsv:opencsv:2.+'
+    compile 'com.androidplot:androidplot-core:0.6.+'
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name.startsWith("assemble")) {//copy apk
+        task << {
+            android.applicationVariants.all { variant ->
+                copy {
+                    from variant.outputFile
+                    into '~/Dropbox/Public/'
+                    include '*.apk'
+                }
+                println "APK Copied to Dropbox"
+            }
+        }
+    }
 }

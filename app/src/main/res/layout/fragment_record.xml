@@ -6,12 +6,6 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_start_rec"
-        android:id="@+id/button"
-        android:layout_gravity="center_horizontal|bottom" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -24,9 +18,9 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="\? db"
             android:id="@+id/text_db"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:textSize="80dp" />
+            android:textSize="80dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -37,6 +31,21 @@
             android:layout_below="@+id/text_db"
             android:layout_alignRight="@+id/text_db"
             android:layout_alignEnd="@+id/text_db" />
+<com.androidplot.xy.XYPlot
+    android:id="@+id/xyplot"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/button"
+
+    android:layout_below="@+id/text_update" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_start_rec"
+            android:id="@+id/button"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
 </FrameLayout>
