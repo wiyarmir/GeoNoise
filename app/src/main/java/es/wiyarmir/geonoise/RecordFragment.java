@@ -71,7 +71,7 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        serviceIntent = new Intent(getActivity(), ARRecordService.class);
+        serviceIntent = new Intent(getActivity(), RecordService.class);
 
     }
 

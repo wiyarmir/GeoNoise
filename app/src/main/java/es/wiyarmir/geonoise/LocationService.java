@@ -9,26 +9,26 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 /**
  * Created by wiyarmir on 02/11/14.
  */
 public class LocationService extends Service implements
-        GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener {
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "LocationService";
     private static LocationService sInstance;
     private final IBinder mBinder = new LocationBinder();
-    private LocationClient locationClient;
+    private GoogleApiClient locationClient;
 
     public static LocationService getInstance() {
         return sInstance;
     }
 
-    public LocationClient getLocationClient() {
+    public GoogleApiClient getLocationClient() {
         return locationClient;
     }
 
@@ -36,7 +36,11 @@ public class LocationService extends Service implements
     public void onCreate() {
         super.onCreate();
         sInstance = this;
-        locationClient = new LocationClient(this, this, this);
+        locationClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
         locationClient.connect();
     }
 
@@ -63,14 +67,9 @@ public class LocationService extends Service implements
         //locationClient.requestLocationUpdates(locationRequest, this);
     }
 
-    /*
-     * Called by Location Services if the connection to the
-     * location client drops because of an error.
-     */
     @Override
-    public void onDisconnected() {
-        // Display the connection status
-        Log.d(TAG, "Disconnected from GMS");
+    public void onConnectionSuspended(int i) {
+
     }
 
     /*

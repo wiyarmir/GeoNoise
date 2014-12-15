@@ -63,34 +63,39 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment toInstantiate = null;
-        String tag = null;
 
-        String[] section_titles = getResources().getStringArray(R.array.section_titles);
-        mTitle = section_titles[position];
+        if (position == 3) { // Settings special case
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
+        } else {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment toInstantiate = null;
+            String tag = null;
 
-        switch (position) {
-            case 0:
-                toInstantiate = new MapsFragment();
-                tag = "maps";
-                break;
+            String[] section_titles = getResources().getStringArray(R.array.section_titles);
+            mTitle = section_titles[position];
 
-            case 1:
-                toInstantiate = new RecordFragment();
-                tag = "record";
-                break;
+            switch (position) {
+                case 0:
+                    toInstantiate = new MapsFragment();
+                    tag = "maps";
+                    break;
 
-            case 2:
-                toInstantiate = new PastSessionFragment();
-                tag = "pastsession";
-                break;
+                case 1:
+                    toInstantiate = new RecordFragment();
+                    tag = "record";
+                    break;
 
+                case 2:
+                    toInstantiate = new PastSessionFragment();
+                    tag = "pastsession";
+                    break;
+            }
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, toInstantiate, tag)
+                    .commit();
         }
-
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, toInstantiate, tag)
-                .commit();
     }
 
     public void restoreActionBar() {

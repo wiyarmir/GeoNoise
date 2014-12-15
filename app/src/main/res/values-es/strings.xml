@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GeoNoise</string>
+
+    <string-array name="section_titles">
+        <item>Mapa de calor</item>
+        <item>Medición</item>
+        <item>Sesiones anteriores</item>
+        <item>Opciones</item>
+    </string-array>
+
+    <string name="navigation_drawer_open">Abrir navigation drawer</string>
+    <string name="navigation_drawer_close">Cerrar navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Opciones</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="button_start_rec">Empezar medición</string>
+    <string name="button_stop_rec">Parar medición</string>
+
+</resources>
