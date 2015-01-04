@@ -1,0 +1,70 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Documento LaTeX 																						%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Título:		Capítulo 2
+% Autor:  	Ignacio Moreno Doblas
+% Fecha:  	2014-02-01
+% Versión:	0.5.0
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapterbegin{Implementación}
+\label{chp:Impl}
+%\minitoc
+
+\section{Análisis de requisitos}
+\label{sec:Requirements}
+
+Para el desarrollo de este proyecto se han tenido en cuenta una serie de requisitos previos mínimos, necesarios para una correcta implementación del mismo. Los requisitos funcionales de la aplicación fueron acordados en los siguientes:
+
+\begin{itemize}
+
+\item Capacidad de medir la magnitud del ruido ambiente
+\item Capacidad de determinar la posición del dispositivo
+\item Capacidad de asociar ambas mediciones
+\item Capacidad de almacenar los datos obtenidos
+\item Capacidad de mostrar los datos obtenidos sobre un mapa
+
+\end{itemize}
+
+
+Adicionalmente, los siguientes requisitos no funcionales fueron considerados:
+
+\subsection{Dispositivo Android}
+
+El desarrollo de este proyecto ha sido realizado y testeado en dos dispositivos. El primero, modelo HTC Desire HD poseedor de la versión 4.2.2 de Android y el segundo Google Nexus 5, bajo la versión Android 5.0, lo cual garantiza que la aplicación conserva toda su funcionalidad en los modelos más modernos, tanto en software como en hardware. 
+
+No obstante, también se ha comprobado su funcionalidad en una rango de dispositivos más amplio, tales como Samsung Galaxy S3, Samsung Galaxy Nexus, Sony Xperia P, no mostrando pérdida alguna de funcionalidad.
+
+La versión mínima de Android requerida para el correcto funcionamiento de esta aplicación, es el nivel de API 15, correspondiente a Android 4.0.3. Es posible hacerla funcionar en niveles más bajos (antiguos), pero requiere esfuerzo adicional, tal y como se esboza en el apartado de Conclusiones y Trabajo Futuro.
+
+\subsection{Micrófono externo}
+
+Los micrófonos empotrados en los teléfonos móviles tienen un objetivo muy claro y marcado, que es la transmisión de voz vía redes celulares, y muestran cierto sesgo en diseño cuando se les intenta usar para otro propósito.
+
+Un perfecto ejemplo de ello es el control automático de ganancia (CAG). EL CAG es de verdadera utilidad para mejorar los niveles sonoros realizando una llamada, pero entra en conflicto con el propósito de este proyecto, ya que necesita de una señal sin pre-procesamiento alguno. El efecto de compresión que realiza el CAG, proporciona unas medidas sin sentido alguno.
+
+Adicionalmente, el tamaño y posición empotrada del mismo, los hace muy sensibles a interferencias indeseadas tales como la vibración del propio teléfono.
+
+Uno de los modelos utilizados en el desarrollo, el Google Nexus 5, permite la desactivación del CAG, por tanto se obtienen medidas aceptables. No obstante, para mejores resultados, se debe de usar un micrófono externo sin CAG.
+
+\subsection{Herramientas de calibración/dispositivo de calibrado}
+
+\section{Android}
+
+\subsection{Estructura del código}
+
+La estructura de la aplicación sigue la estructura estándar de proyecto Android bajo el entorno de desarrollo Android Studio. Se diferencia tres grupos principales: código, organizado en paquetes de Java, recursos, los cuales se clasifican por tipo y versión a la que van orientados, y varios archivos de instrucciones de compilación escritos en el lenguaje específico de dominio (en inglés DSL, domain specific language) de Gradle.
+ 
+\subsection{Interfaz gráfica}
+
+La interfaz gráfica de esta aplicación se ha desarrollado siguiendo las guías de diseño vigentes para la versión del sistema KitKat. Estas no son las más modernas, ya que recientemente han sido actualizadas a Lollipop, y las guías de diseño cambiadas hacia el llamado “Material Design” (diseño material), pero se ha desestimado seguirlas dadas su novedad, que implica una nueva curva de aprendizaje y posible escasez de recursos de apoyo.
+
+No obstante, la interfaz es sencilla e intuitiva, y resulta familiar para todo usuario del sistema operativo Android. Además se han incluido explicaciones y guías de usuario dentro de la aplicación, para mejorar su usabilidad y asegurar el correcto uso de la misma por parte del usuario.
+
+En Android hay dos maneras de definir una interfaz gráfica: programáticamente o por archivos de recurso XML. Se ha optado por la segunda opción, la cual disminuye el acoplamiento en el código, aumenta la reusabilidad y la claridad del mismo, y por otra parte el entorno de desarrollo permite previsualizar el resultado de dichos archivos XML con bastante fidelidad.
+
+\subsection{Captura de audio}
+
+\subsection{Calibración}
+
+
+\chapterend{}

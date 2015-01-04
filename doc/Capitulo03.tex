@@ -1,0 +1,48 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Documento LaTeX 																						%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Título:		Capítulo 3
+% Autor:  	Ignacio Moreno Doblas
+% Fecha:  	2014-02-01
+% Versión:	0.5.0
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapterbegin{Plan de pruebas y verificación}
+\label{chp:App}
+%\minitoc
+
+\section{Calidad del software}
+
+\section{Precisión de las medidas}
+
+Para cercioranse de que los valores de nivel de presión sonora mostrados en la aplicación se ajustan a la realidad, es necesario comparar los valores para una misma fuente con los obtenidos por un aparato de medición calibrado.
+
+Tras realizar dichas medidas, la aplicación deberá de ser configurada conforme a los resultados obtenidos, introduciendo los parámetros pertinentes en la pantalla dispuesta a dicho efecto.
+
+Dicho proceso es necesario para cada micrófono distinto que sea usado con la aplicación, ya sea por usarla en un teléfono distinto o por utilizar un micrófono externo, ya que las características de cada uno varían, y no puede garantizarse la fidelidad de los resultados de un micrófono con los parámetros de otro.
+
+Para las pruebas de calibrado del nivel de presión sonora, se han realizado en el laboratorio medidas de nivel de presión sonora emitido por un monitor de estudio, primero por un sonómetro calibrado, y después por la aplicación.
+
+El sonómetro utilizado ha sido el Svantek SVAN 977.
+
+El micrófono utilizado por la aplicación ha sido el integrado en el teléfono, modelo LG Nexus 5. Según \cite{n5-svcman}, es un micrófono del tipo microelectromecánico, o MEMS según sus siglas en inglés, de la marca Goertek. Sin embargo, la hoja de características del micrófono no está disponible.
+
+\begin{table}[h]%
+\centering
+\begin{tabular}{|c|c|c|}
+    \hline
+    \hline
+    \tbf{Aparato}&\tbf{Sonómetro} &\tbf{Teléfono}\\ \hline 
+    \tbf{Tono 440 Hz} &68.7 dB& 68.6 dB \\ \hline
+    \tbf{Ruido ambiente}& 37.4 dB& 43.2 dB \\ \hline
+    \tbf{Ruido blanco} &  69.3 dB & 62.6 dB\\ \hline
+    \tbf{Ruido Rosa} & 69.2 dB& 64.1 dB \\ \hline
+    \tbf{Canción}& 63.1 dB & 59.3 dB\\ \hline
+    \hline 
+\end{tabular}
+\caption{Tabla de comparacion de mediciones} \label{tab:SAR}
+\end{table} 
+
+
+\section{Realización de los objectivos}
+
+\chapterend{}
