@@ -1,4 +1,4 @@
-package es.wiyarmir.geonoise;
+package es.guillermoorellana.geonoise;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,7 +25,8 @@ import com.androidplot.xy.XYPlot;
 
 import java.util.Date;
 
-import es.wiyarmir.geonoise.utils.LocationNoiseUpdatesListener;
+import es.guillermoorellana.geonoise.utils.LocationNoiseUpdatesListener;
+import es.guillermoorellana.geonoise.R;
 
 
 public class RecordFragment extends Fragment implements LocationNoiseUpdatesListener {

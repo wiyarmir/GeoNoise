@@ -1,4 +1,4 @@
-package es.wiyarmir.geonoise;
+package es.guillermoorellana.geonoise;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import es.guillermoorellana.geonoise.R;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.

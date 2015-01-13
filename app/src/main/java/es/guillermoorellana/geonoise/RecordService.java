@@ -1,4 +1,4 @@
-package es.wiyarmir.geonoise;
+package es.guillermoorellana.geonoise;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -26,27 +26,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import au.com.bytecode.opencsv.CSVWriter;
-import es.wiyarmir.geonoise.utils.Utils;
+import es.guillermoorellana.geonoise.utils.Utils;
 
 /**
- * Created by wiyarmir on 10/08/14.
+ * Created by Guillermo Orellana on 10/08/14.
  */
 public class RecordService extends Service implements LocationListener {
-    public static String LOCATION_NOISE_UPDATE = "es.wiyarmir.geonoise.update";
+    public static String LOCATION_NOISE_UPDATE = "es.guillermoorellana.geonoise.action.update";
     private static String TAG = "RecordService";
     private final IBinder mBinder = new RecordBinder();
     protected LocationRequest locationRequest = null;
     protected CSVWriter wr = null;
     private boolean recording;
     private LocationService mService;
-    Runnable recorderRunnable = new Runnable() {
-        @Override
-        public void run() {
-            readAudioBuffer();
-            if (audio != null)
-                mHandler.postDelayed(recorderRunnable, runnableDelay);
-        }
-    };
     private boolean mBound;
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -65,6 +57,7 @@ public class RecordService extends Service implements LocationListener {
             mBound = false;
         }
     };
+
     private int bufferSize;
     private long runnableDelay = 250;
     private int sampleRate = 8000;
@@ -72,6 +65,7 @@ public class RecordService extends Service implements LocationListener {
     private Handler mHandler = new Handler();
     private Location lastLocation;
     private float samplePeriod;
+    private double splAdjustment = -8;
 
     @Override
     public void onCreate() {
@@ -150,6 +144,7 @@ public class RecordService extends Service implements LocationListener {
         if (audio == null) {
             prepareAudio();
         }
+
         audio.startRecording();
         mHandler.post(recorderRunnable);
 
@@ -168,6 +163,15 @@ public class RecordService extends Service implements LocationListener {
         }
 
     }
+
+    Runnable recorderRunnable = new Runnable() {
+        @Override
+        public void run() {
+            readAudioBuffer();
+            if (audio != null)
+                mHandler.postDelayed(recorderRunnable, runnableDelay);
+        }
+    };
 
     public String getFilePathForSession() {
         return Utils.getSaveDirPath()
@@ -197,7 +201,7 @@ public class RecordService extends Service implements LocationListener {
 
     public double getDecibels(double level) {
         //return Math.abs(20.0 * Math.log10(level / 51805.5336 / 0.00002));
-        return (20.0 * Math.log10(level / 32767.0) + 120.0);
+        return (20.0 * Math.log10(level / 32767.0) + 120.0 + splAdjustment);
     }
 
     public boolean isRecording() {
@@ -208,6 +212,10 @@ public class RecordService extends Service implements LocationListener {
     public void onLocationChanged(Location location) {
         lastLocation = location;
         Log.d(TAG, "Location change: " + location);
+    }
+
+    public boolean isBound() {
+        return mBound;
     }
 
     public class RecordBinder extends Binder {

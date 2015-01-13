@@ -1,17 +1,11 @@
-package es.wiyarmir.geonoise;
+package es.guillermoorellana.geonoise;
 
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -31,9 +25,10 @@ import com.google.maps.android.heatmaps.WeightedLatLng;
 
 import java.util.List;
 
-import es.wiyarmir.geonoise.utils.FilePickerDialogFragment;
-import es.wiyarmir.geonoise.utils.HeatmapCapable;
-import es.wiyarmir.geonoise.utils.LocationNoiseUpdatesListener;
+import es.guillermoorellana.geonoise.utils.FilePickerDialogFragment;
+import es.guillermoorellana.geonoise.utils.HeatmapCapable;
+import es.guillermoorellana.geonoise.utils.LocationNoiseUpdatesListener;
+import es.guillermoorellana.geonoise.R;
 
 public class MapsFragment extends Fragment implements HeatmapCapable, LocationNoiseUpdatesListener {
 

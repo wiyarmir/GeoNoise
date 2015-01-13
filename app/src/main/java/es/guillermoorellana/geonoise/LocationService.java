@@ -1,4 +1,4 @@
-package es.wiyarmir.geonoise;
+package es.guillermoorellana.geonoise;
 
 import android.app.Service;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 /**
- * Created by wiyarmir on 02/11/14.
+ * Created by Guillermo Orellana on 02/11/14.
  */
 public class LocationService extends Service implements
         GoogleApiClient.ConnectionCallbacks,

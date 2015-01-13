@@ -1,4 +1,4 @@
-package es.wiyarmir.geonoise;
+package es.guillermoorellana.geonoise;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import es.wiyarmir.geonoise.utils.Utils;
+import es.guillermoorellana.geonoise.utils.Utils;
 
 
 public class PastSessionFragment extends ListFragment {

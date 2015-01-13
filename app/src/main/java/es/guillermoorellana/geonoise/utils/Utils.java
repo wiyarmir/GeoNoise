@@ -1,6 +1,5 @@
-package es.wiyarmir.geonoise.utils;
+package es.guillermoorellana.geonoise.utils;
 
-import android.location.Location;
 import android.os.Environment;
 import android.util.Log;
 
@@ -8,7 +7,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 /**
- * Created by wiyarmir on 10/08/14.
+ * Created by Guillermo Orellana on 10/08/14.
  */
 public class Utils {
 

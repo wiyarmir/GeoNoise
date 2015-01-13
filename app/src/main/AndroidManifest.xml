@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="es.wiyarmir.geonoise">
+    package="es.guillermoorellana.geonoise">
 
 
     <!-- Permissions required by Google Maps Android API v2 -->
@@ -35,7 +35,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MainActivity"
+            android:name="es.guillermoorellana.geonoise.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,19 +43,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="es.guillermoorellana.geonoise.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName="es.guillermoorellana.geonoise.MainActivity" />
 
         <service
-            android:name=".LocationService"
+            android:name="es.guillermoorellana.geonoise.LocationService"
             android:enabled="true"
             android:exported="false"
             android:label="GeoNoise Location Service"
 
             />
         <service
-            android:name=".RecordService"
+            android:name="es.guillermoorellana.geonoise.RecordService"
             android:enabled="true"
             android:exported="false"
             android:label="GeoNoise Record Service"

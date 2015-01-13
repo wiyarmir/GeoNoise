@@ -3,5 +3,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/map"
-    tools:context="es.wiyarmir.geonoise.MapsFragment"
+    tools:context="es.guillermoorellana.geonoise.MapsFragment"
     android:name="com.google.android.gms.maps.SupportMapFragment"/>

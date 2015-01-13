@@ -1,4 +1,4 @@
-package es.wiyarmir.geonoise.utils;
+package es.guillermoorellana.geonoise.utils;
 
 import android.os.AsyncTask;
 
@@ -14,7 +14,7 @@ import java.util.List;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
- * Created by wiyarmir on 25/08/14.
+ * Created by Guillermo Orellana on 25/08/14.
  */
 public class AsyncHeatmapFileLoader extends AsyncTask<String, Void, List<WeightedLatLng>> {
 

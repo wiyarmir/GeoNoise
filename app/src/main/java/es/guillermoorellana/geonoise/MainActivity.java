@@ -1,4 +1,4 @@
-package es.wiyarmir.geonoise;
+package es.guillermoorellana.geonoise;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,7 +14,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import es.wiyarmir.geonoise.utils.LocationNoiseUpdatesListener;
+import es.guillermoorellana.geonoise.utils.LocationNoiseUpdatesListener;
+import es.guillermoorellana.geonoise.R;
 
 
 public class MainActivity extends ActionBarActivity

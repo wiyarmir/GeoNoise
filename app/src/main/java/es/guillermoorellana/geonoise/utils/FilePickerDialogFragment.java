@@ -1,4 +1,4 @@
-package es.wiyarmir.geonoise.utils;
+package es.guillermoorellana.geonoise.utils;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.io.File;
 
 /**
- * Created by wiyarmir on 25/08/14.
+ * Created by Guillermo Orellana on 25/08/14.
  */
 public class FilePickerDialogFragment extends DialogFragment {
 

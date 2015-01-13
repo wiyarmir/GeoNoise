@@ -3,15 +3,15 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="es.wiyarmir.geonoise.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="es.guillermoorellana.geonoise.SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="es.wiyarmir.geonoise.SettingsActivity$MapDisplayPreferenceFragment"
+        android:fragment="es.guillermoorellana.geonoise.SettingsActivity$MapDisplayPreferenceFragment"
         android:title="@string/pref_header_notifications" />
 
     <header
-        android:fragment="es.wiyarmir.geonoise.SettingsActivity$AudioRecordPreferenceFragment"
+        android:fragment="es.guillermoorellana.geonoise.SettingsActivity$AudioRecordPreferenceFragment"
         android:title="@string/pref_header_data_sync" />
 
 </preference-headers>
