@@ -1,4 +1,4 @@
-package es.guillermoorellana.geonoise;
+package es.guillermoorellana.geonoise.fragment;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -25,7 +25,6 @@ import com.google.maps.android.heatmaps.WeightedLatLng;
 
 import java.util.List;
 
-import es.guillermoorellana.geonoise.utils.FilePickerDialogFragment;
 import es.guillermoorellana.geonoise.utils.HeatmapCapable;
 import es.guillermoorellana.geonoise.utils.LocationNoiseUpdatesListener;
 import es.guillermoorellana.geonoise.R;

@@ -2,50 +2,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="es.guillermoorellana.geonoise.RecordFragment">
+    tools:context="es.guillermoorellana.geonoise.fragment.RecordFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="\? db"
-            android:id="@+id/text_db"
-            android:textSize="80dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Last updated: never"
-            android:id="@+id/text_update"
-            android:layout_below="@+id/text_db"
-            android:layout_alignRight="@+id/text_db"
-            android:layout_alignEnd="@+id/text_db" />
-<com.androidplot.xy.XYPlot
-    android:id="@+id/xyplot"
+<RelativeLayout
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_above="@+id/button"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center">
 
-    android:layout_below="@+id/text_update" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button_start_rec"
-            android:id="@+id/button"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
-    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="\? db"
+        android:id="@+id/text_db"
+        android:textSize="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Last updated: never"
+        android:id="@+id/text_update"
+        android:layout_below="@+id/text_db"
+        android:layout_alignRight="@+id/text_db"
+        android:layout_alignEnd="@+id/text_db" />
+
+    <com.androidplot.xy.XYPlot
+        android:id="@+id/xyplot"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button"
+        android:layout_below="@+id/text_update" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_start_rec"
+        android:id="@+id/button"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
 
 </FrameLayout>

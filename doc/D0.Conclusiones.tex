@@ -1,10 +1,24 @@
-\chapterbeginx{Conclusiones y líneas de trabajo futuras}
+\chapterbegin{Conclusiones y líneas de trabajo futuras}
 
+	Son varias las mejoras directas que se pueden realizar en la aplicación.
+\begin{description}
+	\item[Almacenamiento remoto] \hfill \\	
+	El almacenamiento en un servidor externo de los datos obtenidos por la aplicación es una mejora que se presenta obvia, pero no trivial. A implementar quedaría toda la lógica de sincronización, junto con la no sencilla elección de la infraestructura externa a procura. Esto abre camino a toda una serie de mejoras futuras.	
 	
+	\item[Plataforma web de visualizado y agregación]\hfill \\	
+	Como acompañante a la aplicación, y extendiendo la idea de almacenamiento remoto, se puede construir una plataforma web en la que, con la entrada de las medidas de múltiples usuarios, se puedan agregar los datos y, por ejemplo, representar los datos de toda una ciudad.
+	
+    \item[Exploración de alternativas en el formato de almacenamiento]\hfill \\	
+    En este proyecto se ha utilizado \ac{CSV} como formato de almacenamiento, pero cabe la posibilidad de que otros formatos brinden un valor añadido o incluso posibiliten nuevos usos para la aplicación.
+    
+    \item[Mediciones basadas en posición]\hfill \\	
+    Según el diseño actual, las mediciones se realizan periódicamente según un intervalo de tiempo configurable. Sin embargo, con ayuda de la \ac{API} de localización de \ac{GMS}, es posible llevar a cabo mediciones cada vez que nos encontremos a una distancia arbitraria de la última medición. De esta manera, es posible realizar mediciones en intervalos de espacio constantes, en oposición a las mediciones en intervalos de tiempo constantes.
+	
+\end{description}
 
 \begin{flushright}
 {\large \pfcauthorname}\nli
 \today
 \end{flushright}
 	
-\chapterend
+\chapterend{}

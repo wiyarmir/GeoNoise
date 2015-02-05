@@ -1,4 +1,4 @@
-package es.guillermoorellana.geonoise.utils;
+package es.guillermoorellana.geonoise.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,6 +9,10 @@ import android.support.v4.app.DialogFragment;
 import android.widget.Toast;
 
 import java.io.File;
+
+import es.guillermoorellana.geonoise.utils.AsyncHeatmapFileLoader;
+import es.guillermoorellana.geonoise.utils.HeatmapCapable;
+import es.guillermoorellana.geonoise.utils.Utils;
 
 /**
  * Created by Guillermo Orellana on 25/08/14.

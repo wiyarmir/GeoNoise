@@ -3,9 +3,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="es.guillermoorellana.geonoise.MapsFragment">
+    tools:context="es.guillermoorellana.geonoise.fragment.MapsFragment">
     <item
         android:id="@+id/load"
-        android:title="Load data"
+        android:title="@string/load_data"
         app:showAsAction="ifRoom|withText" />
 </menu>

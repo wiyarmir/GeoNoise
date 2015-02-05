@@ -1,4 +1,4 @@
-package es.guillermoorellana.geonoise;
+package es.guillermoorellana.geonoise.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;

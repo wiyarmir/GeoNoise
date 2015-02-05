@@ -1,4 +1,4 @@
-package es.guillermoorellana.geonoise;
+package es.guillermoorellana.geonoise.fragment;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,8 +25,9 @@ import com.androidplot.xy.XYPlot;
 
 import java.util.Date;
 
-import es.guillermoorellana.geonoise.utils.LocationNoiseUpdatesListener;
 import es.guillermoorellana.geonoise.R;
+import es.guillermoorellana.geonoise.service.RecordService;
+import es.guillermoorellana.geonoise.utils.LocationNoiseUpdatesListener;
 
 
 public class RecordFragment extends Fragment implements LocationNoiseUpdatesListener {

@@ -1,4 +1,4 @@
-package es.guillermoorellana.geonoise;
+package es.guillermoorellana.geonoise.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -86,7 +86,7 @@ public class LocationService extends Service implements
 
 
     public class LocationBinder extends Binder {
-        LocationService getService() {
+        public LocationService getService() {
             return getInstance();
         }
     }

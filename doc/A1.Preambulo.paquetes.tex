@@ -53,7 +53,25 @@
   morekeywords={models, lambda, forms}
 }
 
+\usepackage{mdframed}
+
+\usepackage{setspace}
+
+\usepackage{moreverb}
+
 \usepackage{minted}
+\usepackage{tikz}
+\usetikzlibrary{shapes, arrows}
+
+\tikzstyle{block} = [rectangle, draw, fill=gray!20, 
+    text width=5em, text centered, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+
+\newcommand{\codigofuente}{\inputminted[linenos,numberblanklines,breaklines,frame=lines]}
+%\newcommand{\codigfuente}{}
+
+\newcommand{\extractocodigo}{\minted[linenos,numberblanklines,breaklines,frame=lines]}
+%\newcommand{\codigfuente}{}
 
 \usepackage{tipa} % tipografía IPA (International Phonetic Alphabet)
 \usepackage{longtable} %Entorno Longtable, fracciona tablas a lo largo de páginas%

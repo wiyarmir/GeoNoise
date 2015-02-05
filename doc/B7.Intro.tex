@@ -11,68 +11,81 @@
 \chapterbeginx{Introducción y visión general}
 \minitoc
 
-\begin{sinopsis}
-\label{sec:intro:sinop}
-	Éste es el capítulo de introducción, donde se explica todo lo que un lector externo necesita para entender el resto de la documentación.
-	
-	El objetivo explica lo que persigue el proyecto, su finalidad.\nli
-	El \miindex{estado del arte} explica la situación actual del entorno en el que este proyecto\footnote{En adelante, se utiliza la palabra \tit{proyecto} como sinónimo de TFG/TFM/PFC, según se aplique (Nota del autor).} se desenvuelve.\nli
-	Las metodologías y directrices seguidas se centran en qué procedimientos se han utilizado durante el desarrollo del proyecto.\nli
-	La estructura del documento describe los capítulos de los que se compone, incluyendo apéndices e información adicional.\nli
-	Por último, el ámbito de aplicación completa el entorno de utilización del proyecto.
-	
-	Aunque estos cinco apartados no son obligatorios, al menos es recomendable considerar estos conceptos en el capítulo de introducción como una guía básica.
-	
-	Tampoco es obligatorio usar el entorno \LaTeX\ \ttw{minitoc} para cada capítulo.\nli
-	En caso de no querer usarlo, tan sólo hay que comentar la línea \ttw{\textbackslash \miindex{minitoc}}.
-	
-	Igualmente, esta sección inicial de Sinopsis no es obligatoria, se puede suprimir si no se desea.
-	
-	Por extensión y en general, esta plantilla es una guía cuyo objetivo es facilitar la realización del proyecto, no un reglamento estricto ni rígido.
-\end{sinopsis}
- 
-\sectionx{Resumen y objetivos del Proyecto}
+\sectionx{Objetivos del Proyecto}
 \label{sec:intro:obj}
-Cosas
+    El presente proyecto consiste en el desarrollo de una aplicación en Android para su uso en teléfonos móviles inteligentes cuya funcionalidad sea medir el nivel de ruido presente en distintos lugares, y después representarlo sobre un mapa.
 
 \sectionx{Motivación}
     Es difícil encontrar actividades que no generen cierto nivel sonoro, ya sean naturales o producidas por el ser humano. Estos sonidos pueden ser categorizados en base a muchos parámetros, como lugar, duración, tipo, etc. pero cuando el sonido es molesto y no deseado, estamos hablando de ruido. Este ruido puede llegar a ser perjudicial para la audición, el físico y el psique de seres vivos, convirtiéndose en contaminación acústica.
     
-    La contaminación acústica es hoy día un factor clave en el deterioro de la calidad ambiental de un territorio. Según estudios de la Unión Europea (2005) “80 millones de personas están expuestas diariamente a niveles de ruido ambiental superiores a 65dBa y otros 170 millones, lo están a niveles entre 55-65dBa”
+    La contaminación acústica es hoy día un factor clave en el deterioro de la calidad ambiental de un territorio. Según estudios de la Unión Europea “80 millones de personas están expuestas diariamente a niveles de ruido ambiental superiores a 65dBa y otros 170 millones, lo están a niveles entre 55-65dBa” \cite{directiva}
     
-    Normalmente, las mediciones de ruido conllevan el uso de múltiples y muy caros aparatos tales como sonómetro, calibrador, pantalla anti-viento, trípode, micrófono, preamplificador, etc. pero se puede tomar provecho de la alta penetración en el mercado que tienen los teléfonos inteligentes y conseguir, a costa de pérdida de precisión, una mayor facilidad y simplicidad a la hora de realizar mediciones.
+    Normalmente, las mediciones de ruido conllevan el uso de múltiples y muy caros aparatos tales como sonómetro, calibrador, pantalla anti-viento, trípode, micrófono, preamplificador, etc. Esto supone una importante barrera de accesibilidad a mediciones de ruido. En este proyecto se plantea tomar provecho de la alta penetración en el mercado que tienen los teléfonos inteligentes, y conseguir poner la medición de ruido a un nivel bastante más accesible, a costa de pérdida de precisión. Sin embargo, a cambio se obtienen una mayor facilidad y simplicidad a la hora de realizar mediciones.
     
-    La vasta mayoría de estos dispositivos incorporan de serie un receptor GPS, micrófono y almacenamiento, además de acceso a internet y pantalla táctil.\
+    Por otra parte, la vasta mayoría de estos dispositivos incorporan de serie un receptor GPS, micrófono y almacenamiento, además de acceso a internet y pantalla táctil. Son características que, de buscarlas todas juntas, sólo se encontrarían en sonómetros de la más alta gama, ya que no son esenciales en una medición profesional. Sin embargo, permiten mejorar la experiencia del usuario y compensar en gran parte la pérdida de precisión.\
 
 \sectionx{Estado del arte}
-	Un proyecto se realiza sobre un \miindex{estado de la técnica} que debe explicarse para entender mejor conceptos tales como los problemas existentes o cuáles son las soluciones que se emplean hasta la fecha actual.
+% primera aproximación a un problema de campo 
+% hay que vender dos cosas: la medicion del sonido y la construccion android, que no se ha enseñado en la carrera
+    El ámbito de la medición y caracterización de ruido está hoy día bastante desarrollado, y no es difícil encontrar buenas herramientas y precisos aparatos que realicen las tareas pertinentes. Sin embargo, el coste de los mismos suele ser bastante elevado, no habiendo soluciones accesibles o de bajo presupuesto. El precio de un sonómetro profesional de clase 1, ronda entre 3 y cinco mil euros, lo que contrasta con el precio de un teléfono inteligente de gama alta, con precios rondando el medio millar de euros.
+    
+    Por otra parte, la penetración de mercado de los teléfonos inteligentes crece día a día, superando 1.75 mil millones de usuarios para final de 2014\cite{smartphoneusers}. Como se observa en la tabla \ref{tab:mobileusage}, cerca de dos quintos de la base total de usuarios de teléfonos móviles, utiliza teléfonos móviles inteligentes. Esto supone cerca de un cuarto de la población mundial.
 
-	El \miindex{estado del arte}, a veces llamado estado de la técnica, suele estar presente en este tipo de documentos.
-  
-\sectionx{Metodología y directrices seguidas}
-	Durante la elaboración del proyecto, se siguen procedimientos que el lector necesita conocer para entender de forma integral todo el documento.
+\begin{table}[h]%
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \hline
+    \tbf{}&\tbf{2012} &\tbf{2013}&\tbf{2014}&\tbf{2015}&\tbf{2016}&\tbf{2017}\\ \hline 
+    \tbf{\specialcell{ Usuarios totales \\ (miles de millones)}}&1.13&1.43&1.75&2.03&2.28&2.50 \\ \hline
+    \tbf{\% de incremento}&68.4\%&27.1\%&22.5\%&15.9\%&12.3\%&9.7\%\\ \hline
+    \tbf{\% de usuarios móviles}& 27.6\%&33.0\%&38.5\%&42.6\%&46.1\%&48.8\%\\ \hline
+    \tbf{\% de población mundial}&16.0\%&20.2\%&24.4\%&28.0\%&31.2\%&33.8\% \\ \hline
+    \hline 
+\end{tabular}
+\caption{Tabla usuarios de teléfonos móviles inteligentes \cite{smartphoneusers}}\label{tab:mobileusage}
+\end{table} 
+
+    Dentro del segmento de usuarios de teléfonos móviles inteligentes, existen varios sistemas operativos móviles, cada cual provee su propia plataforma de desarollo, entorno de desarrollo y ecosistema de aplicaciones. A raíz de la información de la tabla \ref{tab:mobimarketshare}, se observa que Android es el líder del mercado, con sobrada ventaja.
+
+ \begin{table}[h]%
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \hline
+\tbf{Período}&\tbf{Android}&\tbf{iOS}&\tbf{Windows Phone}&\tbf{BlackBerry OS}&\tbf{Otros}\\
+\tbf{T3 2014}&84.4\%&11.7\%&2.9\%&0.5\%&0.6\%\\
+\tbf{T3 2013}&81.2\%&12.8\%&3.6\%&1.7\%&0.6\%\\
+\tbf{T3 2012}&74.9\%&14.4\%&2.0\%&4.1\%&4.5\%\\
+\tbf{T3 2011}&57.4\%&13.8\%&1.2\%&9.6\%&18.0\%
+    \end{tabular}
+\caption{Tabla usuarios de teléfonos móviles inteligentes \cite{smartphonemarket}}\label{tab:mobimarketshare}
+\end{table} 
+    % situacion actual con relativo detalle 
+    
+\sectionx{Herramientas y metodologías utilizadas}
 
 \sectionx{Estructura del documento}
 
 \textbf{Introducción teórica}
 
-En el capítulo 2 se hará una introducción a los conceptos teóricos requeridos para la comprensión del trabajo realizado.
+En el capítulo 1 se hará una introducción a los conceptos teóricos requeridos para la comprensión del trabajo realizado.
 Se explicarán los parámetros acústicos tratados a lo largo de la memoria.
 A su vez, también se explicarán conceptos relativos a la programación en Android, tratados a lo largo del proyecto.
 
 \textbf{Implementación}
 
-En el capítulo 3 se explicará cómo se ha llevado a cabo toda la implementación de la aplicación, empezando por un análisis de los requisitos necesarios para la realización de esta, y siguiendo con los aspectos relevantes a la programación de la aplicaciónÑ métodos, interfaz gráfica, algoritmos, etc.
+En el capítulo 2 se explicará cómo se ha llevado a cabo toda la implementación de la aplicación, empezando por un análisis de los requisitos necesarios para la realización de esta, y siguiendo con los aspectos relevantes a la programación de la aplicación: métodos, interfaz gráfica, algoritmos, etc.
 
 \textbf{Plan de pruebas y verificación}
 
-Aquí se explicarán los procedimientos llevados a cabo para cerciorar el correcto funcionamiento de la aplicación.
+En el capítulo 3 se explicarán los procedimientos llevados a cabo para cerciorar el correcto funcionamiento de la aplicación.
 
 \textbf{Conclusiones y trabajo futuro}
 
 En este apartado se pretende representar las conclusiones obtenidas durante la realización de este proyecto así como plasmar posibles ideas que se consideran interesantes de cara a una futura continuidad en el desarrollo de la aplicación.
 
-\sectionx{Ámbito de aplicación}
-	Por último, completando los apartados anteriores, se explican las áreas de las que se compone el proyecto.
+%\sectionx{Ámbito de aplicación}
+%	Por último, completando los apartados anteriores, se explican las áreas de las que se compone el proyecto.
 
 \chapterend

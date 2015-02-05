@@ -10,6 +10,7 @@
         <item>Opciones</item>
     </string-array>
 
+    <string name="load_data">Cargar datos</string>
     <string name="navigation_drawer_open">Abrir navigation drawer</string>
     <string name="navigation_drawer_close">Cerrar navigation drawer</string>
     <string name="action_example">Example action</string>

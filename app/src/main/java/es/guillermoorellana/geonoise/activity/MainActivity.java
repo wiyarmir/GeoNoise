@@ -1,4 +1,4 @@
-package es.guillermoorellana.geonoise;
+package es.guillermoorellana.geonoise.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,6 +14,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import es.guillermoorellana.geonoise.fragment.MapsFragment;
+import es.guillermoorellana.geonoise.fragment.NavigationDrawerFragment;
+import es.guillermoorellana.geonoise.fragment.PastSessionFragment;
+import es.guillermoorellana.geonoise.fragment.RecordFragment;
+import es.guillermoorellana.geonoise.service.RecordService;
 import es.guillermoorellana.geonoise.utils.LocationNoiseUpdatesListener;
 import es.guillermoorellana.geonoise.R;
 

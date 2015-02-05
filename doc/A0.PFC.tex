@@ -28,7 +28,7 @@
 % Document body.
 %-------------------------------------------------------------------%
 \begin{document}
-
+\begin{spacing}{1}
 % Formato de documento hasta el capítulo 1 (sin incluirlo)
 \frontmatter
 
@@ -66,19 +66,20 @@
 \input{B5.TableOfFigures.tex}
 \input{B5.TableOfTables.tex}
 
+\end{spacing}
 % Formato de documento durante los capítulos.
 \mainmatter
-
+\begin{spacing}{1.3}
 % Prólogo.
-\input{B6.Prologo.tex}
+%\input{B6.Prologo.tex}
 
 % Parte I. Introducción
-\part{Introducción}
+%\part{Introducción}
 
 % Introducción y objetivo
 \input{B7.Intro.tex}
 
-\part{Desarrollo del proyecto}
+%\part{Desarrollo del proyecto}
 
 % Capítulo 01.
 \input{Capitulo01.tex}
@@ -93,15 +94,15 @@
 %\input{Capitulo04.tex}
 
 
-\part{Parte tercera.}
+%\part{Parte tercera.}
 \input{D0.Conclusiones.tex}
 
 % Anexos
-\part{Apéndices}
-
+% \part{Apéndices}
+\end{spacing}
 \appendix
 
-\input{D1.AppendixA.tex}
+%\input{D1.AppendixA.tex}
 
 %\input{D2.AppendixB.tex}
 

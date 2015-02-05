@@ -7,24 +7,97 @@
 % Versión:	0.5.0
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapterbegin{Introducción teórica}
-\label{chp:ManLaTeX}
-\minitoc
+%\minitoc
 
-\begin{sinopsis}
-\label{sec:chpltx:sinop}
-	
-\end{sinopsis}
+%\begin{sinopsis}
+%\label{sec:chpltx:sinop}
+%	
+%\end{sinopsis}
 
 \section{Acústica}
 \label{sec:RuidoAmb}
 
 \subsection{Nivel de presión sonora}
 
+Definimos como presión acústica o presión sonora el cambio local de presión respecto a la presión atmosférica ambiente (media o en equilibrio) causada por una onda sonora. En el SI, la presión atmosférica (y por ende la acústica) se mide en pascales (Pa), que es igual a una fuerza de un newton (1 N) actuando sobre una superficie de un metro cuadrado ($1 m^2$)
+
+Sin embargo, para mediciones se utiliza el \ac{SPL} definido en~\ref{eq:spl}, una medición logarítmica de la presión sonora efectiva relativa a un nivel de referencia. Por definición:
+\begin{equation}
+L_p = 10 \log_{10}\left(\frac{{p_\mathrm{rms}}^2}{{p_0}^2}\right) = 20 \log_{10}\left(\frac{p_\mathrm{rms}}{p_0}\right)~\mathrm{dB (SPL)}
+\label{eq:spl}
+\end{equation}
+
+Donde $p_\mathrm{rms}$ es el valor cuadrático medio de la presion sonora, que es calculado como se muestra en \ref{eq:prms}, medido en $Pa$, y $p_0$ es la presión sonora de referencia, también medida en Pa.
+
+\begin{equation}
+p_\mathrm{rms} = \left[ \frac{1}{T} \int_0^T p^2(t)dt \right]^\frac{1}{2}
+\label{eq:prms}
+\end{equation}
+
+El valor de $p_0$ más comunmente utilizado es $p_0 = 20 \micro Pa (RMS)$, que representa el umbral mínimo de audición humana, y será el utilizado en el presente proyecto.
+
+\subsection{Potencia acústica y densidad espectral de potencia }
+Es potencia acústica, o potencia sonora, la medición de la cantidad de energía sonora por unidad de tiempo emitida por una fuente determinada\ref{eq:pa}. Dicha potencia en el \ac{SI} se mide en Watios (W). Dada una fuente sonora, la potencia sonora de dicha fuente es independiente del entorno y de la distancia. La potencia sonora es la potencia total producida por la fuente en todas direcciones. Esto contrasta con la presión sonora, que sí es dependiente de la distancia, ya que es una medición en un punto concreto.
+
+\begin{equation}
+P_a = f \cdot v = A \cdot p \cdot u \cdot v
+\label{eq:pa}
+\end{equation}
+
+Es posible también definir el \ac{SWL}~\ref{eq:swl} de manera análoga al \ac{SPL}, utilizando en este caso una $P_0 = 1 \pico W$. 
+
+\begin{equation}
+L_W = 10 \log_{10}\left(\frac{P}{P_0}\right) ~\mathrm{dB (SWL)}
+\label{eq:swl}
+\end{equation}
+
+\subsubsection{Espectro de frecuencia}
+El espectro de frecuencia de una señal en el dominio del tiempo es una representación de dicha señal en el dominio de la frecuencia. El espectro de frecuencia puede ser generado mediante una transformada de Fourier de dicha señal, y los valores resultantes son normalmente amplitud y fase representados en función de la frecuencia.
+
+\subsection{Ruido}
+De forma general, es posible definir como ruido cualquier sonido no deseado que interfiera en la recepción de un sonido. El ruido acústico es aquel ruido producido por la mezcla de ondas sonoras de distintas frecuencias y distintas amplitudes. La mezcla se produce a diferentes niveles ya que se conjugan tanto las frecuencias fundamentales como los armónicos que las acompañan.
+
+De las múltiples maneras de clasificar el ruido acústico, son de interés en este proyecto dos:
+
+\subsubsection{Ruido en función de la intensidad y el periodo}
+
+\begin{description}
+
+\item[Ruido fluctuante]
+Ruido fluctuante es aquel cuya intensidad no es constante sino que fluctúa a lo largo del tiempo, ya sea de forma periódica o aleatoria.
+\item[Ruido impulsivo]
+Ruido impulsivo es aquel cuya intensidad aumenta bruscamente durante un impulso. En comparación con el tiempo que transcurre entre un impulso y otro, la duración del impulso es breve.
+
+\end{description}
+% division clara
+\subsubsection{Ruido en función de la frecuencia}
+Existen múltiples modelos de ruido en función de su frecuencia, y la mayoría se implementan en generadores de ruido para ser utilizados en mediciones acústicas. Los principales son:
+\begin{description}
+\item[Ruido blanco] Quizás el modelo de ruido más conocido, ruido blanco es aquel con la misma cantidad de potencia sonora en cualquier banda de un ancho de banda determinado. Es llamado así por analogía a la luz blanca. Cuando se realiza el diagrama de espectro de un ruido blanco, se observa un espectro plano en frecuencia. Para una señal de audio, es suficiente que esta condición se cumpla en el rango audible, es decir de 20 Hz a 20.000 Hz.
+ \begin{figure}[H] \centering
+    \includegraphics[height=8cm]{graphs/white_noise.png} \caption{Espectro de un ruido blanco}\label{fig:diagrama:ruidoblanco}
+\end{figure}
+\item[Ruido rosa] El ruido rosa es un ruido con una densidad espectral inversamente proporcional a la frecuencia, de manera que la potencia de ruido de cada octava sea idéntica. Al visualizar su espectro de frecuencia, se aprecia claramente la caída.
+ \begin{figure}[H] \centering
+    \includegraphics[height=8cm]{graphs/pink_noise.png} \caption{Espectro de un ruido rosa}\label{fig:diagrama:ruidorosa}
+\end{figure}
+
+\end{description}
+
 \subsection{Control automático de ganancia (CAG)}
+Un \ac{CAG} es un circuito con realimentación cuyo propósito es que la amplitud de la señal a su salida se mantenga controlada a pesar de posibles variaciones de amplitud en la señal de entrada. Dependiendo del diseño del circuito, el nivel medio o de pico es utilizado para ajustar dinámicamente la ganancia del circuito a un valor adecuado.
+
+La vasta mayoría de los fabricantes de teléfonos móviles inteligentes, incorporan semejante función en alguna fase del procesado de la señal de entrada de micrófono, ya sea mediante circuitos analógicos o procesado digital de señal. Es importante tener esto en cuenta, ya que puede ser causa de una aparente compresión de la señal, si se diera el caso. 
 
 \subsection{Modulación por impulsos codificados}
 
-\subsection{Mapa de calor}
+La \ac{PCM}, es un método utilizado para representar digitalmente señales analógicas muestreadas. Es la forma básica de audio digital en ordenadores, discos compactos, telefonía digital y la gran mayoría de aplicaciones de audio digital. En un flujo de audio \ac{PCM}, la amplitud de la señal analógica se muestrea regularmente en intervalos uniformes, y cada muestra se cuantifica al valor más próximo dentro de un rango de posibles valores digitales.
+
+\begin{figure}[H] \centering
+    \includegraphics[height=10cm]{graphs/Pcm.png} \caption{Muestreo y cuantización de una señal en PCM de 4 bits}\label{fig:diagrama:PCM}
+\end{figure}
+
+Este es el formato en el que el sistema operativo del teléfono inteligente nos proveerá las muestras de audio, y sobre el que trabajaremos.
 
 \section{Android}
 \label{sec:AndroidIntro}
@@ -78,10 +151,11 @@ Una actividad tiene cuatro estados básicos:
 \end{description}
 
 \begin{figure}[h] \centering
-    \includegraphics[height=12cm]{graphs/activity_lifecycle.png} \caption{Diagrama del ciclo de vida de una actividad en Android. Tomado de \cite{androiddevguide}.}\label{fig:diagrama:ActivityLifecycle}
+    \includegraphics[height=12cm]{graphs/activity_lifecycle.png} \caption{Diagrama del ciclo de vida de una actividad en Android. \cite{androiddevguide}.}\label{fig:diagrama:ActivityLifecycle}
 \end{figure}
 
 \subsubsection{Servicios}
+\label{ssec:teo:svc}
 
 Un Servicio (\ttw{Service}) es un componente de la aplicación que puede realizar tareas de larga duración en segundo plano y no provee ninguna interfaz de usuario. Otro componente de la aplicación puede iniciar un servicio y este continuará en marcha en segundo plano, incluso si el usuario cambia a otra aplicación distinta. Además, un componente puede adherirse (\ttw{bind}) a un servicio para interacutar con él, e incluso realizar comunicación inter-procesos (IPC por sus siglas en inglés, Inter-Process Communication). Por ejemplo, un servicio puede manejar llamadas de red, reproducir música, realizar operaciones en el sistema de archivos, todo en segundo plano.
 
@@ -96,7 +170,7 @@ Un servicio puede tomar dos estados:
 \end{description}
 
 \begin{figure}[h] \centering
-    \includegraphics[height=12cm]{graphs/service_lifecycle.png} \caption{Diagrama del ciclo de vida de un servicio. Tomado de \cite{androiddevguide}}\label{fig:diagrama:ServiceLifecycle}
+    \includegraphics[height=12cm]{graphs/service_lifecycle.png} \caption{Diagrama del ciclo de vida de un servicio.{androiddevguide}}\label{fig:diagrama:ServiceLifecycle}
 \end{figure}
 
 Hay que tener cuidado, dado que un servicio corre en el hilo principal de ejecución del proceso que lo llama, a no ser que se especifique lo contrario. Esto implica que, si el servicio va a realizar alguna tarea intensiva en CPU, o alguna operación bloqueante, se debe de crear un nuevo hilo de ejecución dentro del servicio para ese propósito. De no hacerlo, se corre el riesgo de que la aplicación deje de responder y sea matada por el sistema operativo.
@@ -112,7 +186,7 @@ Android provee un vocabulario XML que se corresponde con las subclases de \ttw{V
 
 En sistemas operativos, son básicos los conceptos de proceso e hilo de ejecución. En Android, el sistema operativo comienza un nuevo proceso Linux por cada primer componente de cada aplicación, con un único hilo de ejecución. Por defecto, todos los componentes de la misma aplicación corren en los mismos proceso e hilo de ejecución, el hilo principal de ejecución (\tit{main thread} en inglés). 
 
-En caso de que un componente de una aplicación sea inicializado, y ya exista un proceso para dicha aplicación en el sistema que otro componente de la misma aplicación ha inicializado, el nuevo componente se inicializa dentro del proceso roiginal y usa el mismo hilo de ejecución. Sin embargo, se puede configurar una aplicación de manera que diferentes componentes corran en procesos separados, y siempre se pueden crear hilos de ejecución adicionales para cualquier proceso.
+En caso de que un componente de una aplicación sea inicializado, y ya exista un proceso para dicha aplicación en el sistema que otro componente de la misma aplicación ha inicializado, el nuevo componente se inicializa dentro del proceso original y usa el mismo hilo de ejecución. Sin embargo, se puede configurar una aplicación de manera que diferentes componentes corran en procesos separados, y siempre se pueden crear hilos de ejecución adicionales para cualquier proceso.
 
 \subsubsection{Procesos}
 
@@ -122,7 +196,7 @@ El sistema operativo puede decidir apagar un proceso, cuando la cantidad de memo
 
 \subsubsection{Hilos de ejecución}
 
-Previamente se ha mencionado que todos los componentes de la misma aplicación corren en el mismo hilo de ejecución, el hilo principal de ejecución o \tit{main thread}. Éste hilo es de suma importancia, dado que carga con la responsabilidad de despachar los eventos al widget de la interfaz de usuario que sea pertinente, incluyendo los eventos de dibujado en pantalla. Es también el hilo de ejecución en el que la aplicación interactúa con los componentes básicos de interfaz de usuario de Android, también conocidos como \tit{Android UI toolkit} (ubicados dentro de los paquetes java \ttw{android.widget} y \ttw{android.view}). Por todo esto, no es extraño encontrar denominado este hilo de ejecución como el hilo de la interfaz de usuario, o \tit{UI Thread}.
+Previamente se ha mencionado que todos los componentes de la misma aplicación corren en el mismo hilo de ejecución, el hilo principal de ejecución o \tit{main thread}. Este hilo es de suma importancia, dado que carga con la responsabilidad de despachar los eventos al widget de la interfaz de usuario que sea pertinente, incluyendo los eventos de dibujado en pantalla. Es también el hilo de ejecución en el que la aplicación interactúa con los componentes básicos de interfaz de usuario de Android, también conocidos como \tit{Android UI toolkit} (ubicados dentro de los paquetes java \ttw{android.widget} y \ttw{android.view}). Por todo esto, no es extraño encontrar denominado este hilo de ejecución como el hilo de la interfaz de usuario, o \tit{UI Thread}.
 
 Dado que todos los componentes que corren en el mismo porceso son instanciados en el hilo de ejecución principal, las llamadas del sistema operativo a cada componente son despachadas desde dicho hilo. En consecuencia, todos los métodos que responden a retrollamadas del sistema (\tit{system callbacks}), como por ejemplo para indicar que una tecla ha sido pulsada, siempre corren en el hilo principal de ejecución del proceso.
 
@@ -132,8 +206,34 @@ Cuando una aplicación realiza trabajo intensivo en respuesta a una interacción
 
  Para evitar dicha penalización en el rendimiento, deben usarse hilos de ejecución alternativos para toda tarea que bloquee la ejecución o sea de alta carga procedural.
 
-\subsection{Servicios de Google Play}
-
 \subsection{Manejo de archivos}
+
+Para guardar la información recabada en las sesiones de medición realizadas en la aplicación, se usará almacenamiento en archivos de texto plano. Concretamente, se utilizará el formato de valores separados por comas, CSV por sus siglas en inglés. En este formato, como su nombre indica, cada valor de un registro está separdo del contiguo por dicho signo de puntuación. Cada registro está separado de otro por un salto de línea.
+
+La simplicidad que brinda este formato, además de la legibilidad de los archivos al estar estos en texto plano, se presumen adecuados para este proyecto.
+
+\subsection{Ubicación}
+\subsubsection{GPS}
+El \ac{GPS} es un sistema de navegación por satélite que provee información sobre la posición y el reloj del dispositivo de recepción. El sistema fue desarrollado, instalado y empleado por el Departamento de Defensa de los Estados Unidos. Está constituido por 24 satélites en órbida geosíncrona y se basa en un sistema de triangulación para determinar posiciones con precisión de metros.
+
+El funcionamiento del \ac{GPS} necesita la recepción de la señal de al menos cuatro de los 24 satélites en órbita. En base a dichas señales, que incluyen la identificación del satélite emisor y la hora de reloj de emisión, el aparato receptor sincroniza su reloj interno y calcula el tiempo que tardan en llegar las señales al equipo. Con dicha información, el dispositivo es capaz de conocer su distancia a cada uno de los satélites cuya señal es recibida, y por ende la posición absoluta del punto de medición.
+
+\subsubsection{Servicios Móviles de Google}
+Conocer la localización \ac{GPS} del dispositivo móvil es crítico en el funcionamiento de la aplicación. Es posible en un dispositivo Android utilizar el receptor \ac{GPS} a bajo nivel y recibir actualizaciones de posición en formato NMEA. Sin embargo, no se aprovecharían cantidad sustancial de optimizaciones que Google ofrece como parte de \ac{GMS} tales como tiempo de respuesta mejorado, localización mixta y consumo de batería mejorado. 
+
+GMS es un servicio en segundo plano propietario de Google presente en todos los dispositivos Android que satisfagan las condiciones de entrada de la empresa. En este proyecto, la aplicación se conectará a dicho servicio para requerir actualizaciones de posición junto con información extra, por ejemplo la precisión de dicha medida.
+
+\section{Otros}
+
+\subsection{Mapa de calor}
+Un mapa de calor es una representación gráfica de datos donde los valores en un plano se representan como colores. Es común utilizarlos superpuestos a otro gráfico o mapa para representar intensidad de una magnitud sobre este. Un ejemplo de mapa de calor se puede apreciar en la figura \ref{fig:saltheatmap}.
+
+\begin{figure}[h] \centering
+    \includegraphics[height=10cm]{graphs/saltheatmap.png}\caption{Mapa de calor mostrando el grado de salinidad de los océanos.\cite{wikiheatmap}}\label{fig:saltheatmap}
+\end{figure}
+
+
+
+En este proyecto, se utilizarán mapas de calor para representar el nivel de presión sonora registrado en puntos geográficos, de manera que la visualización sea clara y concisa.
 
 \chapterend{}

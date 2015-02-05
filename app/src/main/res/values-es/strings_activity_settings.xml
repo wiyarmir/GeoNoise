@@ -1,5 +1,5 @@
 <resources>
-        <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
 
@@ -25,15 +25,15 @@
     </string-array>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_audio_record">Audio Record</string>
+    <string name="pref_header_audio_record">Grabación</string>
 
-    <string name="pref_title_sample_frequency">Sample frequency</string>
+    <string name="pref_title_sample_frequency">Período de integración</string>
     <string-array name="pref_sample_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
+        <item>0.2s</item>
+        <item>0.4s</item>
+        <item>0.6s</item>
+        <item>0.8s</item>
+        <item>1.0s</item>
     </string-array>
     <string-array name="pref_sample_frequency_values">
         <item>15</item>
@@ -42,8 +42,8 @@
         <item>180</item>
         <item>360</item>
     </string-array>
-    <string name="pref_title_gain_correction">Gain correction (dB SPL)</string>
 
+    <string name="pref_title_gain_correction">Corrección de Ganancia (dB SPL)</string>
 
     <!-- Example settings for Notifications -->
     <string name="pref_header_mapdisplay">Map Display</string>

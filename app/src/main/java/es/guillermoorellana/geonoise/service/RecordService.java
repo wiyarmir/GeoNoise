@@ -1,4 +1,4 @@
-package es.guillermoorellana.geonoise;
+package es.guillermoorellana.geonoise.service;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -65,7 +65,7 @@ public class RecordService extends Service implements LocationListener {
     private Handler mHandler = new Handler();
     private Location lastLocation;
     private float samplePeriod;
-    private double splAdjustment = -8;
+    private double splAdjustment = +8;
 
     @Override
     public void onCreate() {
@@ -116,16 +116,17 @@ public class RecordService extends Service implements LocationListener {
             if (audio != null) {
                 resultSize = audio.read(buffer, 0, bufferSize);
                 double sum = 0;
+// p_rms = sqrt(1/T Integral 0->T p^2) =sqrt( 1/T Sum 0->T p^2 )
                 for (int i = 0; i < resultSize; i++) {
-                    sum += Math.abs(buffer[i]);
+                    sum += buffer[i] * buffer[i] / 51805.5336 / 51805.5336;
                 }
-                double level = (sum / resultSize);
+                double p_rms = Math.sqrt(sum / resultSize);
                 Location location = lastLocation;
 
                 if (location != null) {
                     Intent i = new Intent(LOCATION_NOISE_UPDATE);
 
-                    double db = getDecibels(level);
+                    double db = getDecibels(p_rms);
                     i.putExtra("Location", location);
                     i.putExtra("Noise", db);
                     sendBroadcast(i);
@@ -140,7 +141,7 @@ public class RecordService extends Service implements LocationListener {
         }
     }
 
-    protected void startRecording() {
+    public void startRecording() {
         if (audio == null) {
             prepareAudio();
         }
@@ -164,15 +165,6 @@ public class RecordService extends Service implements LocationListener {
 
     }
 
-    Runnable recorderRunnable = new Runnable() {
-        @Override
-        public void run() {
-            readAudioBuffer();
-            if (audio != null)
-                mHandler.postDelayed(recorderRunnable, runnableDelay);
-        }
-    };
-
     public String getFilePathForSession() {
         return Utils.getSaveDirPath()
                 + File.separator + "dump - "
@@ -180,7 +172,7 @@ public class RecordService extends Service implements LocationListener {
                 + ".csv";
     }
 
-    protected void stopRecording() {
+    public void stopRecording() {
         if (audio != null) {
             try {
                 audio.stop();
@@ -193,15 +185,17 @@ public class RecordService extends Service implements LocationListener {
 
         recording = false;
         try {
-            wr.close();
+            if (wr != null) {
+                wr.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public double getDecibels(double level) {
-        //return Math.abs(20.0 * Math.log10(level / 51805.5336 / 0.00002));
-        return (20.0 * Math.log10(level / 32767.0) + 120.0 + splAdjustment);
+        return Math.abs(20.0 * Math.log10(level / 0.00002)) + splAdjustment;
+        //return (20.0 * Math.log10(level / 32767.0) + 120.0 + splAdjustment);
     }
 
     public boolean isRecording() {
@@ -218,8 +212,17 @@ public class RecordService extends Service implements LocationListener {
         return mBound;
     }
 
+    Runnable recorderRunnable = new Runnable() {
+        @Override
+        public void run() {
+            readAudioBuffer();
+            if (audio != null)
+                mHandler.postDelayed(recorderRunnable, runnableDelay);
+        }
+    };
+
     public class RecordBinder extends Binder {
-        RecordService getService() {
+        public RecordService getService() {
             return RecordService.this;
         }
     }

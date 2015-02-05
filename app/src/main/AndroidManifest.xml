@@ -35,7 +35,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="es.guillermoorellana.geonoise.MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,19 +43,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="es.guillermoorellana.geonoise.SettingsActivity"
+            android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="es.guillermoorellana.geonoise.MainActivity" />
+            android:parentActivityName=".activity.MainActivity" />
 
         <service
-            android:name="es.guillermoorellana.geonoise.LocationService"
+            android:name=".service.LocationService"
             android:enabled="true"
             android:exported="false"
             android:label="GeoNoise Location Service"
 
             />
         <service
-            android:name="es.guillermoorellana.geonoise.RecordService"
+            android:name=".service.RecordService"
             android:enabled="true"
             android:exported="false"
             android:label="GeoNoise Record Service"
