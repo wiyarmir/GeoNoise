@@ -44,19 +44,15 @@ Adicionalmente, los siguientes requisitos no funcionales fueron considerados:
 
 \begin{itemize}
 \item Extensibilidad futura
-
 La aplicación debe de ser fácilmente extensible en un futuro. Para ello se tendrá en mente la modularidad y el código autoexplicativo durante el desarrollo de la aplicación 
 
 \item Tolerancia a fallos
-
 La aplicación debe de tolerar pequeños fallos sin que estos entorpezcan en medida alguna la posible medición en curso.
 
 \item Rendimiento
-
 La aplicación no debe de ser una carga importante para el rendimiento del sistema, ya que esto podría resultar en mediciones imprecisas o pérdida de muestras por incapacidad del sistema de copar con la carga.
 
 \item Usabilidad
-
 La aplicación está enfocada hacia la accesibilidad de las mediciones de ruido ambiente hacia un público más amplio, por tanto no deberá de ser de dificultoso manejo.
 
 \end{itemize}
@@ -72,7 +68,7 @@ Como paso previo a la implementación en código, se han diseñado unos borrador
 \end{description} 
 
 \begin{figure}[h] \centering
-    \includegraphics[width=15cm]{graphs/mockup.png} \caption{Primer borrador sobre el aspecto de las distintas pantallas de la aplicación}\label{fig:mockup}
+    \includegraphics[width=15cm]{graphs/mockup.png} \caption{Borrador para el aspecto de las distintas pantallas de la aplicación}\label{fig:mockup}
 \end{figure}
 \subsection{Dispositivo Android}
 
@@ -97,16 +93,40 @@ La aplicación debe de ser capaz de adaptarse a distintos dispositivos, y no só
 
 \section{Aplicación Android}
 
-\subsection{Herramientas de desarrollo}
+\subsection{Entorno de desarrollo integrado}
+\label{sec:IDE}
+Es posible elegir entre varios entornos integrados de desarollo a la hora de desarrollar una aplicación para la plataforma Android. Los dos principales son Eclipse y Android Studio.
+\begin{figure}[h] \centering
+    \includegraphics[width=12cm]{graphs/intellij.png} \caption{Entorno de desarrollo integrado Android Studio}\label{fig:astudio}
+\end{figure}
 
+Android Studio es un \ac{IDE} específico para desarrollar en la plataforma Android. Está basado en el popular IntelliJ IDEA de la compañía JetBrains, pero fuertemente modificado, tanto en aspecto como en funcionalidad. Android Studio es de reciente desarrollo, llegando a su versión 1.0 inicial en Diciembre de 2014. La versión 1.0.2 se puede observar en la figura \ref{fig:astudio}.
 
+Eclipse es un \ac{IDE} de propósito general, que provee un espacio de trabajo y un sistema de complementos muy extensible y flexible. Está escrito en Java, e inicialmente se enfocó al desarrollo en dicho lenguaje, pero gracias a su sistema de complementos, Eclipse puede ser utilizado para desarrollar aplicaciones en múltiples lenguajes: Ada, ABAP, C, C++, COBOL, Fortran, Haskell, JavaScript, Lasso, Lua, Natural, Perl, PHP, Prolog, Python, R, Ruby (inlcuyendo el framework Ruby on Rails), Scala, Clojure, Groovy, Scheme, y Erlang. Eclipse fue también el primer \ac{IDE} con soporte para desarrollo en la plataforma Android. La figura \ref{fig:eclipse} muestra la versión 4.4 Luna.
+ 
+ \begin{figure}[h] \centering
+    \includegraphics[width=12cm]{graphs/eclipse.png} \caption{Entorno de desarrollo integrado Eclipse}\label{fig:eclipse}
+\end{figure}
+ 
+A la hora de realizar el proyecto, se consideraron ambas soluciones, y se optó por utlizar el entorno de desarrollo integrado Android Studio, por varias razones.
+\begin{itemize}
+
+\item Android Studio utiliza Gradle como su sistema de compilación, el cual resulta mucho más claro y menos tedioso de lidiar que ANT, el utilizado por Eclipse. Con Gradle, es mucho más sencillo declarar dependencias de librerías externas, caracteristica utilizada en el apartado \ref{sec:libext} y siguientes. Dichas dependencias pueden estar incluso basadas en el sistema de gestión de paquetes Maven, proveyendo facilidad adicional para gestionar versiones de dependencias.
+
+\item Android Studio posee una superior cantidad y calidad de análisis en tiempo real del código del proyecto. Autocompletado de código, refactorización asistida y sugerencias de optimización son algunas de las características en las que supera a Eclipse.
+
+\item El editor gráfico de interfaces gráficas de usuario, aunque presente en Eclipse de manera básica, es mucho más completo, rápido y preciso en Android Studio.
+
+\item El único aspecto en el que Eclipse supera a Android Studio, es en el soporte para extensiones nativas de Android, escritas en C++, que todavía no ha sido implementado en Android Studio. Sin embargo, en este proyecto no se hace uso de dichas extensiones, por lo que no supone un problema.
+
+\end{itemize}
 \subsection{Estructura del código}
-
+\label{sec:estructura}
 La estructura de la aplicación sigue la estructura estándar de proyecto Android que se sigue en el entorno de desarrollo Android Studio. Se distinguen cuatro grupos principales:
 \begin{description}
 \item[Manifiestos] son archivos que presentan la aplicación al sistema operativo y proveen información básica sobre la misma, tal como el paquete Java de la aplicación, los componentes de la misma (actividades, servicios, eventos de emisión, proveedores de contenido...), los permisos requeridos por la aplicación, el nivel mínimo de \ac{API} Android requerido y los permisos proporcionados por la aplicación.
 \item[Código fuente] escrito en el lenguaje de programación Java, el cual será compilado posteriormente y convertido a código intermedio. Toda la lógica de la aplicación está implementada de esta manera. El código fuente a su vez se organiza dentro de paquetes, que son agrupaciones lógicas y funcionales de distintos archivos de código fuente.
-\item[Recursos] que incluyen todo elemento gráfico, diseño de interfaces gráficas de usuario o componentes de las mismas, composición de menús contextuales, y valores de variables. Es posible proveer distintas versiones de cada uno de los recursos enfocadas a características en concreto de los dispositivos. Por ejemplo, es posible especificar un recurso para un idioma del télefono, tamaño de pantalla, ratio, orientación del dispositivo, versión de la API Android e incluso si el dispositivo se encuentra en modo nocturno o no.
+\item[Recursos] que incluyen todo elemento gráfico, diseño de interfaces gráficas de usuario o componentes de las mismas, composición de menús contextuales, y valores de variables. Es posible proveer distintas versiones de cada uno de los recursos enfocadas a características en concreto de los dispositivos. Por ejemplo, es posible especificar un recurso para un idioma del télefono, tamaño de pantalla, ratio, orientación del dispositivo, versión de la API Android e incluso si el dispositivo se encuentra en modo nocturno o no. Esta característica es aprovechada en el proyecto para proveer una aplicación bilingüe, que muestre un idioma u otro dependiendo del que tenga configurado el dispositivo en el que la aplicación ha sido instalada.
 \item[Instrucciones de compilación] escritos en el \ac{DSL} de Gradle. Esto es una herramienta de automatización de proyectos que permite manejar de manera cómoda y eficiente tareas como gestión de dependencias, compilación, empaquetado y publicado de artefactos.
 \end{description}
  
@@ -124,7 +144,7 @@ No obstante, la interfaz es sencilla e intuitiva, y resulta familiar para todo u
 
 En Android hay dos maneras de definir una interfaz gráfica: programáticamente o por archivos de recurso XML. Se ha optado por la segunda opción, la cual disminuye el acoplamiento en el código, aumenta la reusabilidad y la claridad del mismo, y por otra parte el entorno de desarrollo permite previsualizar el resultado de dichos archivos XML con bastante fidelidad.
 
- \begin{figure}[hb] \centering
+ \begin{figure}[h] \centering
     \includegraphics[height=10cm]{graphs/layoutedit.png} \caption{Editor de archivos de recurso XML con vista previa.}\label{fig:layoutedit}
 \end{figure}
 
@@ -134,13 +154,13 @@ Para el diseño de los archivos XML se ha hecho uso de la herramienta incorporad
 
 Si así se deseara, también cambe la posibilidad de diseñar las interfaces gráficas de usuario de la aplicación mediante la misma herramienta, pero de una manera completamente visual, tal y como se observa en la figura \ref{fig:layoutvisual}. De esta manera, se sacrifica precisión y control por comodidad y claridad.
 
- \begin{figure}[H] \centering
+ \begin{figure}[h] \centering
     \includegraphics[height=10cm]{graphs/layoutvisual.png} \caption{Edición completamente visual de la interfaz gráfica de usuario de la aplicación.}\label{fig:layoutvisual}
 \end{figure}
 
 Dentro de cada pantalla, la estructuración de los elementos que se observan se realiza a través de layouts. Los layouts pueden definirse como contenedores de una o más vistas, que ayudan al posicionamiento de cada una de ellas dentro de la aplicación así como a controlar el comportamiento de las mismas. Este concepto encaja a la perfección con el anidado de etiquetas de XML. En el ejemplo de la figura \ref{fig:layoutedit}, el código XML es el presente en el extracto \ref{code:layout}. En dicho extracto se puede observar cómo el elemento \ttw{RelativeLayout} contiene a varios elementos a su vez, entre otros \ttw{TextView} y \ttw{Button}, y cómo estos elementos interiores definen su posición y tamaño en relación al resto de elementos. 
 
-\begin{figure}[H] 
+\begin{listing}[h] 
 %\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
 \begin{minted}[linenos,numberblanklines,breaklines,frame=lines]{xml}
 <RelativeLayout
@@ -166,22 +186,35 @@ Dentro de cada pantalla, la estructuración de los elementos que se observan se 
         [...]
 </RelativeLayout>
 \end{minted}
-\caption{Preparación de AudioRecord}
+\caption{Descripción de la interfaz gráfica de usuario del fragmento \ttw{Medición}}
 \label{code:layout}
-\end{figure}
+\end{listing}
 
 \subsubsection{Cajón de Navegación}
 El cajón de navegación, más conocido por su denominación inglesa Navigation Drawer, es un patrón de interfaz de usuario muy utilizado en Android. Consiste en un panel que transiciona desde el borde izquierdo de la pantalla y muestra las opciones principales de navegación de la aplicación. Se ha decidido incluir dicho patrón de diseño en la aplicación dado que permite una mejor utilización del espacio, al no bloquear región alguna de la pantalla mientras se encuentra sin desplegar.
 
- \begin{figure}[H] \centering
+ \begin{figure}[h] \centering
     \includegraphics[height=10cm]{graphs/navdrawer.png} \caption{Patrón de cajón de navegación implementado en la aplicación.}\label{fig:navdrawer}
 \end{figure}
 
-\subsection{Captura de audio}
-
-El sistema operativo Android provee una \ac{HAL} que conecta todas las \ac{API} de alto nivel con los controladores y hardware subyacentes en cada dispositivo. La figura \ref{fig:diagrama:audiohal} muestra los distintos niveles de la arquitectura del audio en el sistema operativo Android y su interconexión.
+\subsubsection{Multilengüaje}
 \begin{figure}[h] \centering
-    \includegraphics[height=10cm]{graphs/audio_hal.png} \caption{Arquitectura del audio en Android. Tomado de \cite{audiohal}}\label{fig:diagrama:audiohal}
+ \begin{minipage}{0.45\textwidth}\centering
+    \includegraphics[width=7cm]{graphs/settings.png} \caption{Actividad \ttw{Opciones} en un dispositivo con Castellano como lenguaje del sistema.}\label{fig:screen:settings_es}
+ \end{minipage}
+ \hfill
+\begin{minipage}{0.45\textwidth}\centering
+    \includegraphics[width=7cm]{graphs/settings_en.png} \caption{Actividad \ttw{Opciones} en un dispositivo con cualquier otro lenguaje del sistema.}\label{fig:screen:settings_en}
+\end{minipage}
+\end{figure}
+    Como se ha mencionado anteriormente en el apartado \ref{sec:estructura}, en este proyecto se aprovecha que los archivos de recursos pueden ser discriminados según el idioma principal configurado en el dispositivo de instalación, para obtener una aplicación bilingüe. La manera de conseguirlo es, en lugar de incrustar cadenas de texto en código e interfaces gráficas de usuario, extraer las que se desee traducida a un archivo de recurso, normalmente \ttw{strings.xml}, y referenciar dichas cadenas de texto por un identificador dado. De esta manera, por cada versión adicional de \ttw{strings.xml} que se cree, y que sea configurado para estar asociado a un lenguaje del sistema en concreto, se consigue una traducción de la aplicación
+    En las figuras \ref{fig:screen:settings_es} y \ref{fig:screen:settings_en} se muestra la actividad \ttw{Opciones}. La diferencia es, que en la figura \ref{fig:screen:settings_es} el dispositivo está configurado con el Castellano como lengua del sistema, por lo que las cadenas de texto son cargadas de la versión \ttw{strings-es.xml} asociada con dicho perfil. En la figura \ref{fig:screen:settings_en}, el sistema no está configurado en ninguno de los casos especiales, por lo que las cadenas de texto se extraen del archivo por defecto, \ttw{strings.xml}, el cual se encuentra traducido al Inglés.
+    En caso de que fuera necesaria la traducción a cualquier idioma adicional, bastaría con crear una versión de \ttw{strings.xml} para dicho idioma, y asociarlo con el perfil correspondiente, de manera que sea preferida dicha versión en lugar de la versión por defecto.
+    
+\subsection{Captura de audio}
+    El sistema operativo Android provee una \ac{HAL} que conecta todas las \ac{API} de alto nivel con los controladores y hardware subyacentes en cada dispositivo. La figura \ref{fig:diagrama:audiohal} muestra los distintos niveles de la arquitectura del audio en el sistema operativo Android y su interconexión.
+\begin{figure}[h] \centering
+    \includegraphics[height=10cm]{graphs/audio_hal.png} \caption{Arquitectura del audio en Android  \cite{audiohal}}\label{fig:diagrama:audiohal}
 \end{figure}
 
 En la aplicación se ha optado por la simplicidad, y utilizado las clases del paquete \ttw{android.media.*} que provee el framework, y que brindan un nivel de abstracción bastante cómodo.
@@ -190,7 +223,7 @@ Para garantizar que la operación de captura de audio no se ve interferida por o
 
 El servicio hace uso de la clase \ttw{AudioRecord}, la cual requiere una preparación previa a la grabación, tal y como se muestra en el extracto \ref{code:audioprep}.
 
-\begin{figure}[h] 
+\begin{listing}[h] 
 %\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
 \begin{minted}[linenos,numberblanklines,breaklines,frame=lines]{java}
 private void prepareAudio() {
@@ -205,21 +238,21 @@ private void prepareAudio() {
 \end{minted}
 \caption{Preparación de AudioRecord}
 \label{code:audioprep}
-\end{figure}
+\end{listing}
 
 Una vez la instancia de AudioRecord ha sido configurada, es posible comenzar la misma llamando al método \ttw{startRecording()}. De esta manera, el sistema operativo empezará a rellenar el búfer interno de la instancia de AudioRecord según los parámetros que han sido indicados. Los datos del búfer son obtenidos bajo demanda, llamando al método \ttw{read(short[] audioData, int offsetInShorts, int sizeInShorts)} que introducirá en el búfer referenciado las muestras obtenidas hasta el momento. Una muestra de cómo es realizado en la aplicación está presente en la figura \ref{code:audiocapture}. 
 
-Las muestras están codificadas en formato \ac{PCM} de 16 bits con signo. Por tanto, el límite superior del valor de las muestras es $2^15-1=32767$. Los teléfonos móviles inteligentes suelen incorporar micrófonos de tecnología \ac{MEMS}. El valor típico de saturación de estos micrófonos es de 90dB SPL. Asumiremos pues, que el valor máximo \ttw{32767} corresponde a 90dB SPL, que corresponden con $0.6325 Pa$ en el micrófono. Asumiremos también que para el valor $P_0=0.00002 Pa$ se obtiene una muestra PCM con valor 1.
-En consecuencia, a las muestras obtenidas les es aplicado un factor $\frac{32767}{0.6325 Pa} =  51805.5336 Pa^{-1}$.
+Las muestras están codificadas en formato \ac{PCM} de 16 bits con signo. Por tanto, el límite superior del valor de las muestras es $2^{15}-1=32767$. Los teléfonos móviles inteligentes suelen incorporar micrófonos de tecnología \ac{MEMS}. El valor típico de saturación de estos micrófonos es de 90dB SPL. Asumiremos pues, que el valor máximo \ttw{32767} corresponde a 90dB SPL, que corresponden con $P=0.6325 Pa$ en el micrófono. Asumiremos también que para el valor $P_0=0.00002 Pa$ se obtiene una muestra PCM con valor 1.
+En consecuencia, a las muestras obtenidas les es aplicado un factor $\frac{32767}{0.6325 Pa} \approx  51805.5336 Pa^{-1}$.
 
-\begin{figure}[h] 
+\begin{listing}[h] 
 %\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
 \begin{minted}[mathescape,linenos,numberblanklines,breaklines,frame=lines]{java}
 short[] buffer = new short[bufferSize];
 int resultSize = -1;
 resultSize = audio.read(buffer, 0, bufferSize);
 double sum = 0;
-// $ p_\mathrm{rms} = \left[ \frac{1}{T} \int_0^T p^2(t)dt \right]^\frac{1}{2} = \left( \frac{1}{T} \sum\limits_0^T p^2[n] \right)^\frac{1}{2} $
+// $ p_\mathrm{rms} = \left[ \frac{1}{T} \int_0^T p^2(t)dt \right]^\frac{1}{2} \rightarrow \left( \frac{1}{T} \sum\limits_0^T p^2[n] \right)^\frac{1}{2} $
 for (int i = 0; i < resultSize; i++) {
     sum += buffer[i] / 51805.5336 * buffer[i] / 51805.5336;
 }
@@ -227,15 +260,15 @@ double p_rms = Math.sqrt(sum / resultSize);
 \end{minted}
 \caption{Captura de muestras con AudioRecord y cálculo de la $p_{rms}$}
 \label{code:audiocapture}
-\end{figure}
+\end{listing}
 
 Al mismo tiempo que se realiza la captura de sonido, se solicita al servicio de geolocalización la posición actual, para poder relacionar ambas medidas. Dicho servicio de geolocalización se trata en detalle en la sección \ref{sec:impl:geo}.
 
 Una vez obtenido el contenido del búfer de muestras, realizamos el procesado de las mismas. Según la definición de $p_{rms}$ vista en la ecuación \ref{eq:prms}, y teniendo en cuenta que para muestras discretas la integral pasa a ser un sumatorio, se implementa el cálculo de $p_{rms}$ tal y como en \ref{code:audiocapture}.
 
-El siguiente paso es obtener el \ac{SPL} correspondiente a la $p_{rms}$ calculada, implementado en ka figura \ref{code:spl} según la ecuación \ref{eq:spl}. Se ha añadido una constante \ttw{splAdjustment}, la cual se utiliza para calibrar previsibles diferencias en el sistema captador de audio de distintos teléfonos.
+El siguiente paso es obtener el \ac{SPL} correspondiente a la $p_{rms}$ calculada, implementado en el fragmento de código \autoref{code:spl} según la ecuación \ref{eq:spl}. Se ha añadido una constante \ttw{splAdjustment}, la cual se utiliza para calibrar previsibles diferencias en el sistema captador de audio de distintos teléfonos.
 
-\begin{figure}[h] 
+\begin{listing}[h] 
 %\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
 \begin{minted}[mathescape,linenos,numberblanklines,breaklines,frame=lines]{java}
 public double getDecibels(double level) {
@@ -244,32 +277,56 @@ public double getDecibels(double level) {
 \end{minted}
 \caption{Cálculo del SPL.}
 \label{code:spl}
-\end{figure}
+\end{listing}
 
-\subsection{Geolocalización}
+\subsection{Librerías externas}
+\subsubsection{Ubicación}
+\label{sec:libext}
 \label{sec:impl:geo}
-Para obtener la posición absoluta del dispositivo móvil, la aplicación se comunica con los \ac{GMS}, que no sólo actúan como una capa de abstracción del hardware GPS del dispositivo, sino que además proveen servicios de valor añadido, tales como un menor tiempo de precalentamiento, localización por redes WiFi u optimización del consumo energético.
+Para obtener la ubicacion absoluta del dispositivo móvil, la aplicación se comunica con los \ac{GMS}, que no sólo actúan como una capa de abstracción del hardware GPS del dispositivo, sino que además proveen servicios de valor añadido, tales como un menor tiempo de precalentamiento, localización por redes WiFi u optimización del consumo energético.
 
-Se utiliza un servicio en segundo plano por los mismos motivos que en el apartado de Captura de Audio. De hecho, es un servicio intermedio, ya que la obtención en sí de la posición la hace el servicio \ac{GMS}. La interacción de la aplicación con los distintos servicios se puede observar en el diagrama \ref{fig:diagrama:servicios}.
+No obstante, antes de hacer uso de los \ac{GMS}, es necesario configurar el proyecto para que obtenga como dependencias las librerías pertinentes. Gracias al sistema de compilación de Gradle, este paso es sumamente sencillo. 
+\begin{listing}[h] 
+%\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
+\begin{minted}[mathescape,linenos,numberblanklines,breaklines,frame=lines]{groovy}
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.google.android.gms:play-services:6.5.87'
+    compile 'com.google.android.gms:play-services-maps:6.5.87'
+    compile 'com.android.support:support-v4:20.0.0'
+    compile 'com.android.support:appcompat-v7:20.0.0'
+    compile 'com.google.maps.android:android-maps-utils:0.5.+'
+    compile 'net.sf.opencsv:opencsv:2.0.+'
+    compile 'com.androidplot:androidplot-core:0.6.+'
+}
+\end{minted}
+\caption{Sección de dependencias dentro del archivo \ttw{build.gradle}}
+\label{code:buildeps}
+\end{listing}
 
-El servicio creado en la aplicación se conecta a los \ac{GMS}, solicita actualizaciones y las pone a disponibilidad del resto de la aplicación de la manera mostrada en \ref{code:location}.
+Los \ac{GMS} en su versión más reciente se han fragmentado, así que solo es necesario declarar como dependencias las partes que sean necesarias en el proyecto, para evitar sobrecargar la aplicación. Las dependencias se añaden editando el archivo \ttw{build.gradle}. Para utilizar la parte de ubicación de los GMS, se añade la línea 3 del fragmento \ref{code:buildeps}, dado que ubicación se encuentra en la parte general de las librerías. Las dependencias son añadidas con el descriptor Maven\footnote{El funcionamiento de la herramienta Maven y el sistema de gestión de proyectos de software asociado quedan fuera del ámbito de este proyecto. No obstante, se invita al lector a visitar \mbox{\url{maven.apache.org} para conocer más acerca de los mismos.}} del paquete, siguiendo el esquema \ttw{paquete-padre:librería:versión}, y son descargadas del repositorio central de Maven.
 
 \begin{figure}[h] \centering
 \begin{tikzpicture}[node distance = 4cm, auto]
     % Place nodes
-    \node [block] (app) {Aplicación};
+    \node [block] (app) {Actividad};
     \node [block, right of=app] (audio) {Servicio de captura de audio};
-    \node [block, right of=audio] (loc) {Servicio de localización};
+    \node [block, right of=audio] (loc) {Servicio de\\ localización};
     \node [block, right of=loc] (gms) {GMS};
     % Draw edges
     \path [line] (app) -- (audio);
     \path [line] (audio) -- (loc);
     \path [line] (loc) -- (gms);
+    \path [line] (audio) -- (app);
+    \path [line] (loc) -- (audio);
+    \path [line] (gms) -- (loc);
 \end{tikzpicture}
 \caption{Diagrama de interacción de la aplicación y los servicios.}\label{fig:diagrama:servicios}
 \end{figure}
 
-\begin{figure}[h] 
+Para comunicarse con los \ac{GMS}, es utilizado un servicio en segundo plano por los mismos motivos que en el apartado de Captura de Audio. De hecho, es un servicio intermedio, ya que la obtención en sí de la posición la realiza el servicio \ac{GMS}. La interacción de la aplicación con los distintos servicios se puede observar en el diagrama \ref{fig:diagrama:servicios}. El servicio creado en la aplicación se conecta a los \ac{GMS}, solicita actualizaciones y las pone a disponibilidad del resto de la aplicación de la manera mostrada en \ref{code:location}.
+
+\begin{listing}[h] 
 %\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
 \begin{minted}[mathescape,linenos,numberblanklines,breaklines,frame=lines]{java}
 private GoogleApiClient locationClient;
@@ -282,6 +339,159 @@ locationClient.connect();
 \end{minted}
 \caption{Solicitud de conexión a los GMS.}
 \label{code:location}
-\end{figure}
+\end{listing}
+
+\subsubsection{Mapas}
+    En el proyecto, se hace uso de la API Google Maps Android versión 2, la más moderna disponible, y con mejor soporte de usuario. Una aplicación que utilice los servicios de la API Google Maps Android necesita elementos adicionales a parte de los requeridos por cualquier aplicación Android. Esto son, al igual que para utilizar los servicios de ubicación, la inclusión de las dependencias pertinentes (en caso de los mapas, existen como una dependencia separada), y adicionalmente, se necesita una clave para identificarse como usuario autorizado de la \ac{API}. Esta identificación es necesaria, dado que la API de Google Maps es sólo de libre uso bajo ciertos límites. En la actualidad, el límite está fijado en los 25.000 accesos diarios a la API, a partir de los cuales se considera que se hace un uso empresarial de la misma, por el cual hay que pagar. Por tanto, al utilizar una clave de API, se identifica la aplicación como consumidor de dichos datos, y Google puede verificar que no se hace uso de esta por encima de los límites impuestos.
+        
+\begin{listing}[h] 
+%\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
+\begin{minted}[mathescape,linenos,numberblanklines,breaklines,frame=lines]{xml}
+<application
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
+
+     ...
+        
+    <meta-data
+                android:name="com.google.android.maps.v2.API_KEY"
+                android:value="AIzaSyBdVl-cTICSwYKrZ95SuvNw7dbMuDt1KG0"/>
+    
+     ...    
+    
+</application>
+\end{minted}
+\caption{Ubicación de la clave de API de Google Maps en el manifiesto principal.}
+\label{code:apimanifest}
+\end{listing}
+
+    Para obtener una clave de la API de Google Maps, es necesario indicar  en la consola de APIs de Google el nombre del paquete de la aplicación junto con la huella SHA-1 de la clave con la que se firma el APK final, garantizando una relación única entre una clave de API y una aplicación dadas. Por ejemplo, la huella SHA-1 \ttw{BB:0D:AC:74:D3:21:E1:43:67:71:9B:62:91:AF:A1:66:6E:44:5D:75} y el nombre de paquete \ttw{com.example.android.mapexample} darán como resultado la clave \ttw{AIzaSyBdVl-cTICSwYKrZ95SuvNw7dbMuDt1KG0}. La clave se indica en el manifiesto de la aplicación en una etiqueta \ttw{meta-data}, tal y como se muestra en el fragmento de código \ref{code:apimanifest}. Los detalles de cómo obtener una clave de API de Google Maps se describen en el apéndice A.
+    
+    Una vez que la aplicación está autorizada a acceder a la API de Google Maps, y las dependencias de librerías han sido configuradas, mostrar un mapa en la aplicación es tarea sencilla. Los parámetros de configuración de dependencias para este componente de los \ac{GMS} son los mostrados en la línea 4 del fragmento de código \ref{code:buildeps}. Los \ac{GMS} proveen un fragmento \ttw{MapFragment} listo para ser incluído en una aplicación, y con el que el resto de la aplicación puede interactuar. La manera más simple de integrarlo es incluír el fragmento en alguno de los archivos de diseño de interfaz gráfica de usuario mediante la etiqueta \ttw{fragment}, tal y como se demuestra en el fragmento de código \ref{code:mapfragment}.
+           
+\begin{listing}[h] 
+%\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
+\begin{minted}[mathescape,linenos,numberblanklines,breaklines,frame=lines]{xml}
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/map"
+    android:name="com.google.android.gms.maps.MapFragment"/>
+\end{minted}
+\caption{Inclusión del fragmento MapFragment en un archivo de diseño de interfaz gráfica de usuario.}
+\label{code:mapfragment}
+\end{listing}
+
+\subsubsection{Mapa de calor}
+    Los mapas de calor se generan con la ayuda de una pequeña librería de utilidades adicional construída sobre la API de Google Maps. La configuración de dependencias para dicha librería se muestra en la línea 7 del fragmento de código \ref{code:buildeps}. Esta no es más que un conjunto de clases de utilidad, poco documentadas, que facilitan tareas como la coloración de partes del mapa o generación de esquemas y gradientes de colores.
+    Una de las clases que provee es una derivación de la clase \ttw{LatLng} (que representa una latitud y longitud concretas) en la clase \ttw{WeighedLatLng}, que como la traducción de su nombre indica, no es más que asociar un peso o una intensidad a dicho par latitud-longitud.
+    Una vez que los datos han sido extraídos del medio de almacenamiento pertinente, y posterior a cualquier procesado que se decida hacer, cada trío nivel-latitud-longitud se almacena en una instancia de \ttw{WeighedLatLng}. 
+        
+\begin{listing}[h] 
+%\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
+\begin{minted}[mathescape,linenos,numberblanklines,breaklines,frame=lines]{java}
+HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder()
+        .weightedData(weighedLatLngList)
+        .build();
+mMap.addTileOverlay(new TileOverlayOptions()
+            .tileProvider(mProvider)
+        );
+\end{minted}
+\caption{Inclusión del fragmento MapFragment en un archivo de diseño de interfaz gráfica de usuario.}
+\label{code:heatmap}
+\end{listing}
+
+    Una vez obtenido el conjunto de \ttw{WeighedLatLng}, se hace uso del patrón de diseño \tit{provider} \ttw{HeatmapTileProvider} para generar el gráfico que irá superpuesto, y se aplica mediante el método \ttw{addTileOverlay}. En el fragmento de código \ref{code:heatmap}, se observa cómo se ha implementado en la aplicación. En caso de querer modificar el gradiente con el que se muestra el mapa de calor, es posible hacerlo en el proveedor, añadiendo una llamada a \ttw{gradient()} antes de la llamada al \ttw{build()} final.
+
+\subsubsection{Gráficos}
+    A la hora de dibujar gráficos arbitrarios en las interfaces gráficas de usuario utilizando la API que Android provee, no hay término medio. O bien se utilizan las formas básicas predefinidas en el sistema, opción muy limitada, o bien se utiliza el soporte incluído para gráficos 2D y 3D mediante la API OpenGL, lo cual supone una exageración en términos de complejidad. Como término medio, se ha decidido utilizar la librería \tit{AndroidPlot}, disponible de manera libre en licencias de código abierto, la cual provee buen soporte para dibujar gráficas estáticas y dinámicas sin perderse en la complejidad que supone utilizar OpenGL.
+    La información de dependencias para utilizar AndroidPlot se muestra en la línea 9 del fragmento de código \ref{code:buildeps}. Una vez incluída la dependencia, el uso de la librería AndroidPlot es muy similar a los mapas de Google, aunque sin la necesidad de utilizar una clave para la API. 
+            
+\begin{listing}[h] 
+%\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
+\begin{minted}[mathescape,linenos,numberblanklines,breaklines,frame=lines]{xml}
+<com.androidplot.xy.XYPlot
+    android:id="@+id/xyplot"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/button"
+    android:layout_below="@+id/text_update" />
+\end{minted}
+\caption{Inclusión del fragmento XYPlot en un archivo de diseño de interfaz gráfica de usuario.}
+\label{code:plotlayout}
+\end{listing}
+
+    AndroidPlot es una librería con multitud de funcionalidades dentro del dominio del dibujo de gráficas, desde simples gráficas de barras hasta complejas gráficas de sectores. Sin embargo, en el proyecto es utilizado un componente relativamente simple, el \ttw{XYPlot}, que tal y como el nombre indica sirve para representar un conjunto de puntos $(X,Y)$. 
+    
+    Dicho componente es utilizado en el fragmento \ttw{Medición} para, cuando hay una medición en curso, mostra una representación de la magnitud de las últimas muestras. La inclusión del componente en el fragmento se hace de manera parecida al mapa, si bien en el casod el mapa se nos proveía de un fragmento completo, en este caso \ttw{XYPlot} constituye una vista que puede ser incrustada en cualquier parte de un diseño de interfaz gráfica de usuario. 
+        
+\begin{listing}[h] 
+\begin{minted}[mathescape,linenos,numberblanklines,breaklines,frame=lines]{java}
+XYPlot xyPlot = (XYPlot) view.findViewById(R.id.xyplot);
+// Límites del dominio (x)
+xyPlot.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED);
+// Límites del rango (y)
+xyPlot.setRangeBoundaries(0, 140, BoundaryMode.FIXED);
+LineAndPointFormatter formatter = new LineAndPointFormatter(
+        Color.rgb(0, 0, 0), null, null, null);
+formatter.getLinePaint().setStrokeJoin(Paint.Join.ROUND);
+formatter.getLinePaint().setStrokeWidth(10);
+SimpleXYSeries mySeries = new SimpleXYSeries("Noise Level");
+mySeries.useImplicitXVals();
+xyPlot.addSeries(mySeries, formatter);
+\end{minted}
+\caption{Configuración y puesta en marcha del componente \ttw{XYPlot} de la librería AndroidPlot.}
+\label{code:plot}
+\end{listing}
+    
+    En el fragmento de código \ref{code:plotlayout}, se muestra la inclusión del componente en el diseño de la interfaz gráfica de usuario del fragmento \ttw{Medición}, y el fragmento de código \ref{code:plot} se muestra la configuración realizada en el código correspondiente al mismo fragmento. En código se configuran aspectos tales como los límites del dominio y del rango, si estos son fijos o crecen con los valores, el tipo y color de las líneas, y el tipo de valores a representar. En el caso del proyecto, se solicita a la librería que sean utilizados valores implícitos en el eje de abscisas.
+
+\subsubsection{Formato CSV}
+    El formato CSV ha sido elegido por su simplicidad, y gracias a ello cabría la posibilidad de implementar su escritura y lectura por completo. Sin embargo, se ha optado por utilizar una librería externa, OpenCSV, para realizar dichas operaciones. Esto permite, a parte de un menor acople y una mayor modularidad en el código del programa, centrar los esfuerzos en partes más significativas del proyecto. La información de dependencias para utilizar OpenCSV se muestra en la línea 8 del fragmento de código \ref{code:buildeps}. 
+    
+\begin{listing}[h] 
+\begin{minted}[mathescape,linenos,numberblanklines,breaklines,frame=lines]{java}
+CSVWriter wr;
+// Obtener la ruta y el nombre de archivo 
+String path = getFilePathForSession();
+ // Crear la ruta en caso de que no exista en el árbol de archivos
+new File(Utils.getSaveDirPath()).mkdirs(); 
+// Crea la instancia del escritor CSV
+wr = new CSVWriter(new FileWriter(path));
+// Escribir las cabeceras del archivo
+wr.writeNext(new String[]{"magnitude", "latitude", "longitude", "accuracy", "timestamp"});
+for(Item item: measures) {
+    // Escribir una línea por cada medición
+    wr.writeNext(new String[]{String.valueOf(item.db), String.valueOf(item.location.getLatitude()),
+        String.valueOf(item.location.getLongitude()), String.valueOf(item.location.getAccuracy()),
+        new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date(item.location.getTime()))});
+}
+\end{minted}
+\caption{Uso del componente \ttw{CSVWriter} de la librería OpenCSV}
+\label{code:csvwrite}
+\end{listing}
+
+    En el fragmento de código \ref{code:csvwrite}, se muestra la operación de escritura, y en el fragmento de código \ref{code:csvread} se muestra la operación de lectura. 
+
+\begin{listing}[h] 
+\begin{minted}[mathescape,linenos,numberblanklines,breaklines,frame=lines]{java}
+CSVReader reader = new CSVReader(new FileReader(string));
+// Lista de líneas, cada línea es un array de elementos que estaban separados por una coma
+List<String[]> lines = reader.readAll();
+for (String[] line : lines) {
+    if (line[0].equals("magnitude")) // Cabecera
+        continue;
+    WeightedLatLng item = new WeightedLatLng(
+            new LatLng(Double.parseDouble(line[1]), Double.parseDouble(line[2])),
+            Double.parseDouble(line[0]) - 40
+    );
+    ret.add(item);
+}
+\end{minted}
+\caption{Uso del componente \ttw{CSVReader} de la librería OpenCSV.}
+\label{code:csvread}
+\end{listing}
 
 \chapterend{}

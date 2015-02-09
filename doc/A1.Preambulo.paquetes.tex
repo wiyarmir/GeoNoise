@@ -33,6 +33,7 @@
 \usepackage{graphpap}	%comando \graphpaper en el entorno picture%
 
 %4 Estilo y formato%
+\usepackage{placeins}
 \usepackage{fancyhdr}	%cabeceras y pies mejor que con \pagestyle{}%
 \usepackage{titlesec,titletoc} %Formateo de secciones y títulos%
 \raggedbottom %Para fragmentar versos en varias páginas%
@@ -40,7 +41,7 @@
 %\usepackage{showidx} % Hace que cada comando \index se imprima en la página donde se ha puesto (útil para corregir los índices)
 \usepackage{alltt} % Define el environment alltt, como verbatim, excepto que \, { y } tienen su significado normal. Se describe en el fichero alltt.dtx.
 \usepackage[pdftex,bookmarksnumbered,hidelinks]{hyperref} %hyper-references%
-\usepackage{minitoc} % Para poner tablas de contenido en cada capítulo.
+%\usepackage{minitoc} % Para poner tablas de contenido en cada capítulo.
 \usepackage{listings} % Para escribir piezas de código C, Python, etc. %
 %listings configuration
 \lstset{
@@ -54,12 +55,14 @@
 }
 
 \usepackage{mdframed}
-
+\usepackage{footnote}
 \usepackage{setspace}
 
 \usepackage{moreverb}
 
-\usepackage{minted}
+%\usepackage{minted}
+\usepackage[chapter]{minted}
+
 \usepackage{tikz}
 \usetikzlibrary{shapes, arrows}
 

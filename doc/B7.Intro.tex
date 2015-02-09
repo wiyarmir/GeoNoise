@@ -9,25 +9,25 @@
 
 %\chapterbeginx{Introducción, Objetivo y Visión general}
 \chapterbeginx{Introducción y visión general}
-\minitoc
+%\minitoc
 
 \sectionx{Objetivos del Proyecto}
 \label{sec:intro:obj}
     El presente proyecto consiste en el desarrollo de una aplicación en Android para su uso en teléfonos móviles inteligentes cuya funcionalidad sea medir el nivel de ruido presente en distintos lugares, y después representarlo sobre un mapa.
 
 \sectionx{Motivación}
-    Es difícil encontrar actividades que no generen cierto nivel sonoro, ya sean naturales o producidas por el ser humano. Estos sonidos pueden ser categorizados en base a muchos parámetros, como lugar, duración, tipo, etc. pero cuando el sonido es molesto y no deseado, estamos hablando de ruido. Este ruido puede llegar a ser perjudicial para la audición, el físico y el psique de seres vivos, convirtiéndose en contaminación acústica.
+    Es difícil encontrar actividades que no generen cierto nivel sonoro, ya sean naturales o producidas por el ser humano. Estos sonidos pueden ser categorizados en base a muchos parámetros, como lugar, duración, tipo, etc. pero cuando el sonido es molesto y no deseado, se trata de ruido. Este ruido puede llegar a ser perjudicial para la audición, el físico y el psique de seres vivos, convirtiéndose en contaminación acústica.
     
     La contaminación acústica es hoy día un factor clave en el deterioro de la calidad ambiental de un territorio. Según estudios de la Unión Europea “80 millones de personas están expuestas diariamente a niveles de ruido ambiental superiores a 65dBa y otros 170 millones, lo están a niveles entre 55-65dBa” \cite{directiva}
     
-    Normalmente, las mediciones de ruido conllevan el uso de múltiples y muy caros aparatos tales como sonómetro, calibrador, pantalla anti-viento, trípode, micrófono, preamplificador, etc. Esto supone una importante barrera de accesibilidad a mediciones de ruido. En este proyecto se plantea tomar provecho de la alta penetración en el mercado que tienen los teléfonos inteligentes, y conseguir poner la medición de ruido a un nivel bastante más accesible, a costa de pérdida de precisión. Sin embargo, a cambio se obtienen una mayor facilidad y simplicidad a la hora de realizar mediciones.
+    Normalmente, las mediciones de ruido conllevan el uso de aparatos diversos y muy caros tales como sonómetro, calibrador, pantalla anti-viento, trípode, micrófono, preamplificador, etc. Esto supone una importante barrera de accesibilidad a mediciones de ruido. En este proyecto se plantea tomar provecho de la alta penetración en el mercado que tienen los teléfonos inteligentes, y conseguir poner la medición de ruido a un nivel bastante más accesible, a costa de pérdida de precisión. Sin embargo, a cambio se obtienen una mayor facilidad y simplicidad a la hora de realizar mediciones.
     
     Por otra parte, la vasta mayoría de estos dispositivos incorporan de serie un receptor GPS, micrófono y almacenamiento, además de acceso a internet y pantalla táctil. Son características que, de buscarlas todas juntas, sólo se encontrarían en sonómetros de la más alta gama, ya que no son esenciales en una medición profesional. Sin embargo, permiten mejorar la experiencia del usuario y compensar en gran parte la pérdida de precisión.\
 
 \sectionx{Estado del arte}
 % primera aproximación a un problema de campo 
 % hay que vender dos cosas: la medicion del sonido y la construccion android, que no se ha enseñado en la carrera
-    El ámbito de la medición y caracterización de ruido está hoy día bastante desarrollado, y no es difícil encontrar buenas herramientas y precisos aparatos que realicen las tareas pertinentes. Sin embargo, el coste de los mismos suele ser bastante elevado, no habiendo soluciones accesibles o de bajo presupuesto. El precio de un sonómetro profesional de clase 1, ronda entre 3 y cinco mil euros, lo que contrasta con el precio de un teléfono inteligente de gama alta, con precios rondando el medio millar de euros.
+    El ámbito de la medición y caracterización de ruido está hoy día bastante desarrollado, y no es difícil encontrar buenas herramientas y precisos aparatos que realicen las tareas pertinentes. Sin embargo, el coste de los mismos suele ser bastante elevado, no existiendo soluciones accesibles o de bajo presupuesto. El precio de un sonómetro profesional de clase 1, ronda entre 3 y 5 mil euros, lo que contrasta con el precio de un teléfono inteligente de gama alta, con precios rondando el medio millar de euros.
     
     Por otra parte, la penetración de mercado de los teléfonos inteligentes crece día a día, superando 1.75 mil millones de usuarios para final de 2014\cite{smartphoneusers}. Como se observa en la tabla \ref{tab:mobileusage}, cerca de dos quintos de la base total de usuarios de teléfonos móviles, utiliza teléfonos móviles inteligentes. Esto supone cerca de un cuarto de la población mundial.
 
@@ -43,7 +43,7 @@
     \tbf{\% de población mundial}&16.0\%&20.2\%&24.4\%&28.0\%&31.2\%&33.8\% \\ \hline
     \hline 
 \end{tabular}
-\caption{Tabla usuarios de teléfonos móviles inteligentes \cite{smartphoneusers}}\label{tab:mobileusage}
+\caption{Usuarios de teléfonos móviles inteligentes \cite{smartphoneusers}}\label{tab:mobileusage}
 \end{table} 
 
     Dentro del segmento de usuarios de teléfonos móviles inteligentes, existen varios sistemas operativos móviles, cada cual provee su propia plataforma de desarollo, entorno de desarrollo y ecosistema de aplicaciones. A raíz de la información de la tabla \ref{tab:mobimarketshare}, se observa que Android es el líder del mercado, con sobrada ventaja.
@@ -57,34 +57,43 @@
 \tbf{T3 2014}&84.4\%&11.7\%&2.9\%&0.5\%&0.6\%\\
 \tbf{T3 2013}&81.2\%&12.8\%&3.6\%&1.7\%&0.6\%\\
 \tbf{T3 2012}&74.9\%&14.4\%&2.0\%&4.1\%&4.5\%\\
-\tbf{T3 2011}&57.4\%&13.8\%&1.2\%&9.6\%&18.0\%
+\tbf{T3 2011}&57.4\%&13.8\%&1.2\%&9.6\%&18.0\%\\
+\hline
+    \hline 
     \end{tabular}
-\caption{Tabla usuarios de teléfonos móviles inteligentes \cite{smartphonemarket}}\label{tab:mobimarketshare}
+\caption{Cuota de mercado de los distintos sistemas operativos móviles \cite{smartphonemarket}}\label{tab:mobimarketshare}
 \end{table} 
     % situacion actual con relativo detalle 
     
 \sectionx{Herramientas y metodologías utilizadas}
+Para el desarollo de la aplicación, la principal herramienta utilizada ha sido el entorno de desarrollo integrado Android Studio. Es un entorno de relativa novedad, ya que aunque su primera versión estable fue liberada en Diciembre de 2014, su desarrollo se remonta a Mayo de 2013. Sin embargo, no ha sido desarrollado desde cero, sino que está basado en el popular entorno de desarrollo integrado IntelliJ IDEA, de JetBrains. Android Studio está disponible de manera gratuita para las plataformas mayoritarias Windows, Mac OS X y Linux. Al ser un entorno de desarrollo enfocado completamente al ecosistema Android, provee múltiples ayudas y mejoras sobre un entorno de desarrollo integrado más genérico como puede ser Eclipse. Características que han hecho decantarse por Android Studio y no Eclipse se analizan en el apartado \ref{sec:IDE}.
+
+Además de el código generado para el proyecto, han sido utilizadas dos librerías Java. La librería OpenCSV, genérica de Java, provee una implementación sólida del formato de archivo CSV y nos abstrae de él, y la librería AndroidPlot, específica para Android, nos permite hacer representaciones gráficas de conjuntos de datos sin tener que entrar en pormenores de la generación de dichas imágenes.
+
+Ha sido necesario también un teléfono inteligente con Android, tanto durante la fase de desarrollo como durante las posteriores de utilización y realización de pruebas. 
+
+Para la fase de pruebas, se ha hecho uso de equipo básico de laboratorio de acústica, incluyendo monitores de estudio y sonómetro.
 
 \sectionx{Estructura del documento}
 
-\textbf{Introducción teórica}
+\begin{description}
 
+\item[Introducción teórica]\hfill \\
 En el capítulo 1 se hará una introducción a los conceptos teóricos requeridos para la comprensión del trabajo realizado.
 Se explicarán los parámetros acústicos tratados a lo largo de la memoria.
 A su vez, también se explicarán conceptos relativos a la programación en Android, tratados a lo largo del proyecto.
 
-\textbf{Implementación}
-
+\item[Implementación]\hfill \\
 En el capítulo 2 se explicará cómo se ha llevado a cabo toda la implementación de la aplicación, empezando por un análisis de los requisitos necesarios para la realización de esta, y siguiendo con los aspectos relevantes a la programación de la aplicación: métodos, interfaz gráfica, algoritmos, etc.
 
-\textbf{Plan de pruebas y verificación}
-
+\filbreak
+\item[Plan de pruebas y verificación] \hfill \\
 En el capítulo 3 se explicarán los procedimientos llevados a cabo para cerciorar el correcto funcionamiento de la aplicación.
 
-\textbf{Conclusiones y trabajo futuro}
+\item[Conclusiones y trabajo futuro] \hfill \\
+En este apartado se pretende representar las conclusiones obtenidas durante la realización de este proyecto, así como plasmar posibles ideas que se consideran interesantes de cara a una futura continuidad en el desarrollo de la aplicación.
 
-En este apartado se pretende representar las conclusiones obtenidas durante la realización de este proyecto así como plasmar posibles ideas que se consideran interesantes de cara a una futura continuidad en el desarrollo de la aplicación.
-
+\end{description}
 %\sectionx{Ámbito de aplicación}
 %	Por último, completando los apartados anteriores, se explican las áreas de las que se compone el proyecto.
 

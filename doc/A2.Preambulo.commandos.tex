@@ -96,7 +96,7 @@
 \newcommand{\chapterx}[1]{
 	\chapter*{#1}
 	%\addcontentsline{toc}{chapter}{#1} %Caused by minitoc package%
-	\addstarredchapter{#1} %For minitoc package%
+	%\addstarredchapter{#1} %For minitoc package%
 }
 
 % substituto del comando \chapter: incluye estilo de página.
@@ -133,9 +133,9 @@
 %\renewcommand{part}[1]{\Oldpart{#1}\renewcommand{\parttitle}{#1}} %Header customization%
 
 %Cambiar el título índice de capítulo a ``Contenido''.
-\renewcommand{\mtctitle}{Contenido}
+%\renewcommand{\mtctitle}{Contenido}
 
-\dominitoc % Para tablas de contenidos por capítulo.
+%\dominitoc % Para tablas de contenidos por capítulo.
 
 \addto{\captionsspanish}{
 	\renewcommand{\listtablename}{Índice de Tablas}
@@ -143,10 +143,19 @@
 
 \addto{\captionsspanish}{
 	\renewcommand{\contentsname}{Índice} }
+	
+	\addto{\captionsspanish}{
+	\renewcommand{\listingscaption}{Fragmento de código}}
+	
+	\addto{\captionsspanish}{
+	\renewcommand{\listoflistingscaption}{Índice de fragmentos de código}}
 
 \newcommand{\specialcell}[2][c]{%
   \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
   
+  \newcommand{\exedout}{%
+  \rule{0.8\textwidth}{0.5\textwidth}%
+}
 %Si se desea cambiar el tipo de letra a Arial
 % por cualquier razón, descomentar las siguientes
 % dos líneas
@@ -160,4 +169,4 @@
 %    \renewcommand{\refname}{\vspace{-4.5ex}}} % Para que no aparezca el texto 'referencias' en la bibliografía.
 
 % Modifica el interlineado
-%\renewcommand{\baselinestretch}{1.5}
+\renewcommand{\baselinestretch}{1.5}

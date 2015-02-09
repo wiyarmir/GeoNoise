@@ -21,6 +21,8 @@
 \input{A3.Preambulo.entornos.tex}
 \input{A4.Preambulo.estilodepagina.tex}
 
+\interfootnotelinepenalty=10000
+
 %Comando para crear glosario (index en inglés)
 \makeindex
 
@@ -28,7 +30,6 @@
 % Document body.
 %-------------------------------------------------------------------%
 \begin{document}
-\begin{spacing}{1}
 % Formato de documento hasta el capítulo 1 (sin incluirlo)
 \frontmatter
 
@@ -64,12 +65,12 @@
 % Tabla de contenidos, figuras y tablas.
 \input{B5.TableOfContents.tex}
 \input{B5.TableOfFigures.tex}
+\input{B5.TableOfCode.tex}
 \input{B5.TableOfTables.tex}
 
-\end{spacing}
 % Formato de documento durante los capítulos.
 \mainmatter
-\begin{spacing}{1.3}
+
 % Prólogo.
 %\input{B6.Prologo.tex}
 
@@ -99,10 +100,10 @@
 
 % Anexos
 % \part{Apéndices}
-\end{spacing}
+
 \appendix
 
-%\input{D1.AppendixA.tex}
+\input{D1.AppendixA.tex}
 
 %\input{D2.AppendixB.tex}
 
@@ -116,6 +117,6 @@
 \input{E1.Bibliografia.tex}
 
 % Índice alfabético%
-\input{F1.Index.tex}
+%\input{F1.Index.tex}
 
 \end{document}
