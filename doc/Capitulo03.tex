@@ -8,9 +8,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapterbegin{Plan de pruebas y verificación}
 \label{chp:App}
-%\minitoc
 \section{Funcionamiento de la aplicación}
-\begin{figure}[h] \centering
+    Una vez ejecutada la aplicación, se inicia la actividad del cajón de navegación, mostrando el fragmento \ttw{Mapa de Calor}. El mapa está centrado en la ubicación actual, tal y como muestra la figura \ref{fig:screen:location}. Esta permite utilizar el mapa de manera idéntica a la que lo haríamos en la aplicación Google Maps. Desde esta pantalla, se puede o bien \ttw{Cargar datos} de alguna sesión de grabación o abrir el cajón de navegación, ya sea pulsando sobre el icono de la aplicación, o haciendo el gesto característico de este patrón de diseño de interfaz de usuario, que es arrastrar desde fuera del borde izquierdo hacia dentro.
+    
+    Una vez abierto el cajón de navegación, se presentan los distintos elementos del menú. Apreciable en la figura \ref{fig:screen:navdrawer}, el cajón de navegación da acceso a los fragmentos \ttw{Mapa de calor}, \ttw{Medición}, \ttw{Sesiones anteriores} y a la actividad de \ttw{Opciones}.
+    
+    Para realizar una nueva medición, se accede a \ttw{Medición} desde el cajón de navegación, lo que hace aparecer al fragmento. Al pulsar el botón \ttw{Empezar medición}, el proceso de medición comienza. Los servicios en segundo plano son iniciados, y tras un breve retardo empiezan a aparecer en pantalla valores de la medición. 
+    
+    \begin{figure}[H] \centering
  \begin{minipage}{0.45\textwidth}\centering
     \includegraphics[height=11cm]{graphs/screen_location.png} \caption{Fragmento \ttw{Mapa de Calor}. }\label{fig:screen:location}
 \end{minipage}
@@ -20,7 +25,9 @@
 \end{minipage}
 \end{figure}
 
-\begin{figure}[h] \centering
+    Conforme los valores van siendo medidos y calculados, el histórico de las últimas muestras se dibuja en pantalla en el área dispuesta a tal efecto. Durante todo el proceso, los datos recabados son grabados a la memoria del dispositivo en segundo plano. Una vez finalizada la medida, se presiona el botón \ttw{Parar medición}, y los servicios en segundo plano de la aplicación vuelven al reposo. Abriendo de nuevo el cajón de navegación, es posible acceder al fragmento de \ttw{Sesiones anteriores}, donde se muestra una lista de todos los archivos producidos en grabaciones anteriores. De la misma manera, es posible volver al fragmento \ttw{Mapa de calor}.
+ 
+    \begin{figure}[H] \centering
  \begin{minipage}{0.45\textwidth}\centering
     \includegraphics[height=11cm]{graphs/measure-empty.png} \caption{Fragmento \ttw{Medición} en reposo.}\label{fig:screen:measure-empty}
  \end{minipage}
@@ -30,7 +37,9 @@
 \end{minipage}
 \end{figure}
 
-\begin{figure}[h] \centering%
+    De vuelta en el fragmento \ttw{Mapa de calor}, al pulsar el botón \ttw{Cargar datos}, se mostrará un diálogo con la lista de todos los archivos producidos en grabaciones anteriores. Al seleccionar uno de estos archivos, la aplicación calcula el mapa de calor resultante de los datos contenidos en dicho archivo, y lo superpone al mapa actual. En la figura \ref{fig:screen:heatmap} se aprecia un ejemplo de dicho comportamiento. Cambiando el nivel de acercamiento del mapa, se obtienen distintos niveles de agregamiento de los datos.
+    
+\begin{figure}[H] \centering%
  \begin{minipage}{0.45\textwidth}\centering%
     \includegraphics[height=11cm]{graphs/filepicker.png} \caption{Diálogo para la elección del archivo de sesión.}\label{fig:screen:filepicker}%
  \end{minipage}
@@ -40,7 +49,9 @@
 \end{minipage}
 \end{figure}
 
-\begin{figure}[h] \centering%
+    La aplicación dispone también de una actividad de \ttw{Opciones}, donde se pueden configurar varios aspectos del comportamiento de la misma. El acceso a dicha actividad, puede ser llevado a cabo de dos maneras. La primera es usando el mismo cajón de navegación que para acceder al resto de los fragmentos de la aplicación. La segunda es haciendo uso del menú contextual que aparece al tocar en la barra de acción cuando nos encontramos en cualquier fragmento que no sea \ttw{Mapa de calor}, ya que en este último el botón \ttw{Cargar datos} ocupa su lugar. En la figura \ref{fig:screen:settings} se observa el contenido de dicha actividad.
+    
+\begin{figure}[H] \centering%
  \begin{minipage}{0.45\textwidth}\centering%
     \includegraphics[height=11cm]{graphs/sessions.png} \caption{Fragmento \ttw{Sesiones} mostrando la lista de archivos de sesiones anteriores.}\label{fig:screen:sessions}%
  \end{minipage}
@@ -49,21 +60,6 @@
  \includegraphics[height=11cm]{graphs/settings.png} \caption{Actividad \ttw{Opciones}, donde se configuran distintos aspectos de la aplicación.}\label{fig:screen:settings}
 \end{minipage}
 \end{figure}
-
-    Una vez ejecutada la aplicación, se inicia la actividad del cajón de navegación, mostrando el fragmento \ttw{Mapa de Calor}. El mapa está centrado en la ubicación actual, tal y como muestra la figura \ref{fig:screen:location}. Esta permite utilizar el mapa de manera idéntica a la que lo haríamos en la aplicación Google Maps. Desde esta pantalla, se puede o bien \ttw{Cargar datos} de alguna sesión de grabación o abrir el cajón de navegación, ya sea pulsando sobre el icono de la aplicación, o haciendo el gesto característico de este patrón de diseño de interfaz de usuario, que es arrastrar desde fuera del borde izquierdo hacia dentro.
-    
-    Una vez abierto el cajón de navegación, se presentan los distintos elementos del menú. Apreciable en la figura \ref{fig:screen:navdrawer}, el cajón de navegación da acceso a los fragmentos \ttw{Mapa de calor}, \ttw{Medición}, \ttw{Sesiones anteriores} y a la actividad de \ttw{Opciones}.
-    
-    Para realizar una nueva medición, se hace click en el elemento \ttw{Medición} del cajón de navegación, para hacer aparecer al fragmento \ttw{Medición} en pantalla. Al pulsar el botón que lee \ttw{Empezar medición}, el proceso de medición comienza. Los servicios en segundo plano son iniciados, y tras un breve retardo empiezan a aparecer en pantalla valores de la medición. 
-    
-    Conforme los valores van siendo medidos y calculados, el histórico de las últimas muestras se dibuja en pantalla en el área dispuesta a tal efecto. Durante todo el proceso, los datos recabados son grabados a la memoria del dispositivo en segundo plano.
-    
-    Una vez finalizada la medida, se presiona el botón \ttw{Parar medición}, y los servicios en segundo plano de la aplicación vuelven al reposo. Abriendo de nuevo el cajón de navegación, es posible acceder al fragmento de \ttw{Sesiones anteriores}, donde se muestra una lista de todos los archivos producidos en grabaciones anteriores. De la misma manera, es posible volver al fragmento \ttw{Mapa de calor}.
-    
-    De vuelta en el fragmento \ttw{Mapa de calor}, al pulsar el botón \ttw{Cargar datos}, se mostrará un diálogo con la lista de todos los archivos producidos en grabaciones anteriores. Al seleccionar uno de estos archivos, la aplicación calcula el mapa de calor resultante de los datos contenidos en dicho archivo, y lo superpone al mapa actual. En la figura \ref{fig:screen:heatmap} se aprecia un ejemplo de dicho comportamiento. Cambiando el nivel de acercamiento del mapa, se obtienen distintos niveles de agregamiento de los datos.
-    
-    La aplicación dispone también de una actividad de \ttw{Opciones}, donde se pueden configurar varios aspectos del comportamiento de la misma. El acceso a dicha actividad, puede ser llevado a cabo de dos maneras. La primera es usando el mismo cajón de navegación que para acceder al resto de los fragmentos de la aplicación. La segunda es haciendo uso del menú contextual que aparece al tocar en la barra de acción cuando nos encontramos en cualquier fragmento que no sea \ttw{Mapa de calor}, ya que en este último el botón \ttw{Cargar datos} ocupa su lugar. En la figura \ref{fig:screen:settings} se observa el contenido de dicha actividad.
-    
     Dentro de la actividad \ttw{Opciones}, cabe la posibilidad de realizar múltiples configuraciones. Estas son:
     
     \begin{itemize}
@@ -111,7 +107,7 @@
 
     Los resultados de la batería de pruebas pueden observarse en la tabla \ref{tab:SAR}. Es notoria la similitud de las mediciones para el tono puro, y un resultado del todo esperado dado que cae dentro del rango de frecuencias típicas de trabajo de un micrófono de un dispositivo móvil.
     
-\begin{table}[h]%
+\begin{table}[H]%
 \centering
 \begin{tabular}{|l|c|c|}
     \hline
@@ -151,28 +147,28 @@
  \end{minipage}
  \hfill
 \begin{minipage}{0.45\textwidth}\centering
-    \includegraphics[height=11cm]{graphs/parkmapped.png} \caption{Vista del mapa del tranquilo con la medida superpuesta.}\label{fig:screen:parkmapped}
+    \includegraphics[height=11cm]{graphs/parkmapped.png} \caption{Vista del mapa del parque con la medida superpuesta.}\label{fig:screen:parkmapped}
 \end{minipage}
 \end{figure}
     Para el escenario de parque tranquilo, se ha elegido el parque Stanisława Tołpy de Wrocław, un parque de tamaño mediano con abundante vegetación, cuya disposición se observa en la figura \ref{fig:screen:park}. En este caso, se da una mayor diversidad de medidas. Las medidas de mayor intensidad se encuentran cerca de la carretera, y disminuyen de intensidad conforme se aproxima al centro del parque.
 
 
-\section{Realización de los objectivos}
+\section{Realización de los objetivos}
 
 \subsection{Capacidad de medir la magnitud del ruido ambiente}
-La aplicación es capaz de medir la magnitud de ruido ambiente en cualquier momento dado, tan solo hay que comenzar la captación y se muestra un valor estimado en decibelios. Podemos observar que dicho objetivo se cumple en la figura \ref{fig:screen:measure}.
+    La aplicación es capaz de medir la magnitud de ruido ambiente en cualquier momento dado, tan solo hay que comenzar la captación y se muestra un valor estimado en decibelios. Es posible observar que dicho objetivo se cumple en la figura \ref{fig:screen:measure}.
 
 \subsection{Capacidad de determinar la posición del dispositivo}
-La aplicación cumple con el objetivo de ser capaz de determinar la posición absoluta del dispositivo móvil, ya sea dentro del mapa utilizado para representar los datos obtenidos previamente, o durante la operación de recabado de datos. Es posible apreciar cómo el punto azul determina nuestra posición actual en la figura \ref{fig:screen:location}. Durante la medición no se muestra de forma directa la posición absoluta medida, pero es tenida en cuenta en todo momento de la misma.
+    La aplicación cumple con el objetivo de ser capaz de determinar la posición absoluta del dispositivo móvil, ya sea dentro del mapa utilizado para representar los datos obtenidos previamente, o durante la operación de recabado de datos. Es posible apreciar cómo el punto azul determina nuestra posición actual en la figura \ref{fig:screen:location}. Durante la medición no se muestra de forma directa la posición absoluta medida, pero es tenida en cuenta en todo momento de la misma.
 
 
 \subsection{Capacidad de asociar ambas mediciones}
-La aplicación vincula en cada operación de muestreo la magnitud medida y la posición absoluta medida, de manera que sea posible conocer a qué punto geográfico pertenece cada medida. Es posible observar dicha asociación en el contenido del archivo creado por cada sesión de grabación, como puede observarse en la figura \ref{fig:dump:file}.
+    La aplicación vincula en cada operación de muestreo la magnitud medida y la posición absoluta medida, de manera que sea posible conocer a qué punto geográfico pertenece cada medida. Es posible observar dicha asociación en el contenido del archivo creado por cada sesión de grabación, como puede observarse en la figura \ref{fig:dump:file}.
 
 \subsection{Capacidad de almacenar los datos obtenidos}
-Los datos son almacenados inmediatamente después de la finalización de la sesión de grabado a la memoria del dispositivo. Estos pueden ser recuperados conectando el dispositivo móvil a un ordenador personal, o bien representados dentro de la propia aplicación. Una muestra del contenido de un archivo de almacenamiento se puede observar en la figura \ref{fig:dump:file}.
+    Los datos son almacenados inmediatamente después de la finalización de la sesión de grabado a la memoria del dispositivo. Estos pueden ser recuperados conectando el dispositivo móvil a un ordenador personal, o bien representados dentro de la propia aplicación. Una muestra del contenido de un archivo de almacenamiento se puede observar en la figura \ref{fig:dump:file}.
 
 \subsection{Capacidad de mostrar los datos obtenidos sobre un mapa}
-Una vez finalizada una sesión de grabación, la aplicación está capacitada para mostrar un listado de las sesiones finalizadas. Una vez seleccionada la sesión que se quiere representar sobre el mapa, la pantalla se actualiza mostrando los datos pertinentes, tal y como se aprecia en la figura \ref{fig:screen:heatmap}.
+    Una vez finalizada una sesión de grabación, la aplicación está capacitada para mostrar un listado de las sesiones finalizadas. Una vez seleccionada la sesión que se quiere representar sobre el mapa, la pantalla se actualiza mostrando los datos pertinentes, tal y como se aprecia en la figura \ref{fig:screen:heatmap}.
 
 \chapterend{}

@@ -61,72 +61,76 @@ La aplicación está enfocada hacia la accesibilidad de las mediciones de ruido 
 Como paso previo a la implementación en código, se han diseñado unos borradores de las distintas pantallas de las que constará la aplicación. La aplicación se ha dividido en cuatro pantallas básicas: mapa, grabar, sesiones y opciones, las cuales se pueden observar en la figura \ref{fig:mockup}.
 
 \begin{description}
-\item[Mapa] es la pantalla inicial, que muestra un mapa geográfico y nos permite superponer los datos previamente recabados
-\item[Grabar] es la pantalla que interactúa con los sensores del dispositivo y comanda las acciones de grabación y guardado de archivos.
-\item[Sesiones] presenta todos los datos recabados en pasadas grabaciones.
-\item[Opciones] permite ajustar los parámetros que en la aplicación hayan sido decididos como configurables.
+\item[Mapa]\hfill \\
+    La pantalla inicial, que muestra un mapa geográfico y nos permite superponer los datos previamente recabados
+\item[Grabar]\hfill \\
+ Aquí se interactúa con los sensores del dispositivo, y se comandan las acciones de grabación y guardado de archivos.
+\item[Sesiones]\hfill \\
+ Se presentan todos los datos recabados en pasadas grabaciones.
+\item[Opciones]\hfill \\
+ Permite ajustar los parámetros que en la aplicación hayan sido decididos como configurables.
 \end{description} 
 
 \begin{figure}[h] \centering
     \includegraphics[width=15cm]{graphs/mockup.png} \caption{Borrador para el aspecto de las distintas pantallas de la aplicación}\label{fig:mockup}
 \end{figure}
 \subsection{Dispositivo Android}
+    El desarrollo de este proyecto ha sido realizado y testeado en dos dispositivos. El primero, modelo HTC Desire HD poseedor de la versión 4.2.2 de Android; el segundo un Google Nexus 5, bajo la versión Android 5.0, lo cual garantiza que la aplicación conserva toda su funcionalidad en los modelos más modernos, tanto en software como en hardware. 
 
-El desarrollo de este proyecto ha sido realizado y testeado en dos dispositivos. El primero, modelo HTC Desire HD poseedor de la versión 4.2.2 de Android y el segundo Google Nexus 5, bajo la versión Android 5.0, lo cual garantiza que la aplicación conserva toda su funcionalidad en los modelos más modernos, tanto en software como en hardware. 
+    No obstante, también se ha comprobado su funcionalidad en una rango de dispositivos más amplio, tales como: Samsung Galaxy S3, Samsung Galaxy Nexus, Sony Xperia P. No se ha percibido en ningún momento pérdida alguna de funcionalidad. 
 
-No obstante, también se ha comprobado su funcionalidad en una rango de dispositivos más amplio, tales como Samsung Galaxy S3, Samsung Galaxy Nexus, Sony Xperia P, no mostrando pérdida alguna de funcionalidad.
-
-La versión mínima de Android requerida para el correcto funcionamiento de esta aplicación, es el nivel de \ac{API} 15, correspondiente a Android 4.0.3. Es posible hacerla funcionar en niveles más bajos (antiguos), pero requiere esfuerzo adicional, tal y como se esboza en el apartado de Conclusiones y Trabajo Futuro.
+    La versión mínima de Android requerida para el correcto funcionamiento de esta aplicación, es el nivel de \ac{API} 15, correspondiente a Android 4.0.3. Es posible hacerla funcionar en niveles más bajos (antiguos), pero requiere esfuerzo adicional, tal y como se esboza en el apartado de Conclusiones y Trabajo Futuro.
 
 \subsection{Micrófono externo}
+    Los micrófonos empotrados en los teléfonos móviles tienen un objetivo muy claro: la transmisión de voz vía redes celulares. Por tanto, es de esperar que muestren cierto sesgo en diseño cuando se les intenta usar para otro propósito.
 
-Los micrófonos empotrados en los teléfonos móviles tienen un objetivo muy claro y marcado, que es la transmisión de voz vía redes celulares, y muestran cierto sesgo en diseño cuando se les intenta usar para otro propósito.
+    Un perfecto ejemplo de ello es el \ac{CAG}. El \ac{CAG} es de verdadera utilidad para mejorar los niveles sonoros realizando una llamada, pero entra en conflicto con el propósito de este proyecto, ya que necesita de una señal sin pre-procesamiento alguno. El efecto de compresión que realiza el \ac{CAG}, proporciona unas medidas sin sentido alguno.
 
-Un perfecto ejemplo de ello es el \ac{CAG}. El \ac{CAG} es de verdadera utilidad para mejorar los niveles sonoros realizando una llamada, pero entra en conflicto con el propósito de este proyecto, ya que necesita de una señal sin pre-procesamiento alguno. El efecto de compresión que realiza el \ac{CAG}, proporciona unas medidas sin sentido alguno.
+    Adicionalmente, el tamaño y posición empotrada del mismo, los hace muy sensibles a interferencias indeseadas tales como la vibración del propio teléfono.
 
-Adicionalmente, el tamaño y posición empotrada del mismo, los hace muy sensibles a interferencias indeseadas tales como la vibración del propio teléfono.
-
-Uno de los modelos utilizados en el desarrollo, el Google Nexus 5, permite la desactivación del \ac{CAG}, por tanto se obtienen medidas aceptables. No obstante, para mejores resultados, se debe de usar un micrófono externo sin \ac{CAG}.
+    Uno de los modelos utilizados en el desarrollo, el Google Nexus 5, permite la desactivación del \ac{CAG}, por tanto se obtienen medidas aceptables. No obstante, para mejores resultados, se debe de usar un micrófono externo sin \ac{CAG}.
 
 \subsection{Calibración}
-La aplicación debe de ser capaz de adaptarse a distintos dispositivos, y no sólo trabajar correctamente con el dispositivo en el que fue desarrollada. Para ello, se habilita en las opciones de la aplicación un apartado en el que se pueda introducir un valor de compensación en la medida. Esto ayuda a subsanar previsibles diferencias entre los sistemas de captación sonora de distintos dispositivos móviles.
+    La aplicación debe de ser capaz de adaptarse a distintos dispositivos, no basta con trabajar correctamente únicamente en el dispositivo en el que fue desarrollada. Para ello, se habilitará en las opciones de la aplicación un apartado en el que se pueda introducir un valor de compensación en la medida. Esto ayuda a subsanar previsibles diferencias entre los sistemas de captación sonora de distintos dispositivos móviles.
 
 \section{Aplicación Android}
 
 \subsection{Entorno de desarrollo integrado}
 \label{sec:IDE}
-Es posible elegir entre varios entornos integrados de desarollo a la hora de desarrollar una aplicación para la plataforma Android. Los dos principales son Eclipse y Android Studio.
 \begin{figure}[h] \centering
     \includegraphics[width=12cm]{graphs/intellij.png} \caption{Entorno de desarrollo integrado Android Studio}\label{fig:astudio}
 \end{figure}
-
-Android Studio es un \ac{IDE} específico para desarrollar en la plataforma Android. Está basado en el popular IntelliJ IDEA de la compañía JetBrains, pero fuertemente modificado, tanto en aspecto como en funcionalidad. Android Studio es de reciente desarrollo, llegando a su versión 1.0 inicial en Diciembre de 2014. La versión 1.0.2 se puede observar en la figura \ref{fig:astudio}.
-
-Eclipse es un \ac{IDE} de propósito general, que provee un espacio de trabajo y un sistema de complementos muy extensible y flexible. Está escrito en Java, e inicialmente se enfocó al desarrollo en dicho lenguaje, pero gracias a su sistema de complementos, Eclipse puede ser utilizado para desarrollar aplicaciones en múltiples lenguajes: Ada, ABAP, C, C++, COBOL, Fortran, Haskell, JavaScript, Lasso, Lua, Natural, Perl, PHP, Prolog, Python, R, Ruby (inlcuyendo el framework Ruby on Rails), Scala, Clojure, Groovy, Scheme, y Erlang. Eclipse fue también el primer \ac{IDE} con soporte para desarrollo en la plataforma Android. La figura \ref{fig:eclipse} muestra la versión 4.4 Luna.
- 
  \begin{figure}[h] \centering
     \includegraphics[width=12cm]{graphs/eclipse.png} \caption{Entorno de desarrollo integrado Eclipse}\label{fig:eclipse}
 \end{figure}
- 
-A la hora de realizar el proyecto, se consideraron ambas soluciones, y se optó por utlizar el entorno de desarrollo integrado Android Studio, por varias razones.
-\begin{itemize}
+    Es posible elegir entre varios entornos integrados de desarollo a la hora de desarrollar una aplicación para la plataforma Android. Los dos principales son Eclipse y Android Studio.
+    
+    Android Studio es un \ac{IDE} específico para desarrollar en la plataforma Android. Está basado en el popular IntelliJ IDEA de la compañía JetBrains, pero fuertemente modificado, tanto en aspecto como en funcionalidad. Android Studio es de reciente desarrollo, llegando a su versión 1.0 inicial en Diciembre de 2014. La versión 1.0.2 se puede observar en la figura \ref{fig:astudio}.
 
-\item Android Studio utiliza Gradle como su sistema de compilación, el cual resulta mucho más claro y menos tedioso de lidiar que ANT, el utilizado por Eclipse. Con Gradle, es mucho más sencillo declarar dependencias de librerías externas, caracteristica utilizada en el apartado \ref{sec:libext} y siguientes. Dichas dependencias pueden estar incluso basadas en el sistema de gestión de paquetes Maven, proveyendo facilidad adicional para gestionar versiones de dependencias.
+    Eclipse es un \ac{IDE} de propósito general, que provee un espacio de trabajo y un sistema de complementos muy extensible y flexible. Está escrito en Java, e inicialmente se enfocó al desarrollo en dicho lenguaje. 
+    
+    Gracias a su sistema de complementos, Eclipse puede ser utilizado para desarrollar aplicaciones en múltiples lenguajes: Ada, ABAP, C, C++, COBOL, Fortran, Haskell, JavaScript, Lasso, Lua, Natural, Perl, PHP, Prolog, Python, R, Ruby (inlcuyendo el framework Ruby on Rails), Scala, Clojure, Groovy, Scheme y Erlang. Eclipse fue también el primer \ac{IDE} con soporte para desarrollo en la plataforma Android. La figura \ref{fig:eclipse} muestra la versión 4.4 Luna.
+
+    A la hora de realizar el proyecto, se consideraron ambas soluciones, y se optó por utlizar el entorno de desarrollo integrado Android Studio, por varias razones.
+\begin{itemize}
+\item Android Studio utiliza Gradle como su sistema de compilación, el cual resulta mucho más claro y menos tedioso de lidiar que ANT, el utilizado por Eclipse. Con Gradle, es mucho más sencillo declarar dependencias de librerías externas, caracteristica utilizada en el apartado \ref{sec:libext} y siguientes. Dichas dependencias pueden estar incluso basadas en el sistema de gestión de paquetes Maven; proveyendo facilidad adicional para gestionar versiones de dependencias.
 
 \item Android Studio posee una superior cantidad y calidad de análisis en tiempo real del código del proyecto. Autocompletado de código, refactorización asistida y sugerencias de optimización son algunas de las características en las que supera a Eclipse.
 
 \item El editor gráfico de interfaces gráficas de usuario, aunque presente en Eclipse de manera básica, es mucho más completo, rápido y preciso en Android Studio.
 
-\item El único aspecto en el que Eclipse supera a Android Studio, es en el soporte para extensiones nativas de Android, escritas en C++, que todavía no ha sido implementado en Android Studio. Sin embargo, en este proyecto no se hace uso de dichas extensiones, por lo que no supone un problema.
+\item El único aspecto en el que Eclipse supera a Android Studio es en el soporte para extensiones nativas de Android, escritas en C++, que todavía no ha sido implementado en Android Studio. Sin embargo, en este proyecto no se hace uso de dichas extensiones, por lo que no supone un problema.
 
 \end{itemize}
+
+\FloatBarrier
 \subsection{Estructura del código}
 \label{sec:estructura}
 La estructura de la aplicación sigue la estructura estándar de proyecto Android que se sigue en el entorno de desarrollo Android Studio. Se distinguen cuatro grupos principales:
 \begin{description}
-\item[Manifiestos] son archivos que presentan la aplicación al sistema operativo y proveen información básica sobre la misma, tal como el paquete Java de la aplicación, los componentes de la misma (actividades, servicios, eventos de emisión, proveedores de contenido...), los permisos requeridos por la aplicación, el nivel mínimo de \ac{API} Android requerido y los permisos proporcionados por la aplicación.
+\item[Manifiestos] son archivos que presentan la aplicación al sistema operativo y proveen información básica sobre la misma. Esta información incluye el paquete Java de la aplicación, los componentes de la misma (actividades, servicios, eventos de emisión, proveedores de contenido...), los permisos requeridos por la aplicación, el nivel mínimo de \ac{API} Android requerido y los permisos proporcionados por la aplicación.
 \item[Código fuente] escrito en el lenguaje de programación Java, el cual será compilado posteriormente y convertido a código intermedio. Toda la lógica de la aplicación está implementada de esta manera. El código fuente a su vez se organiza dentro de paquetes, que son agrupaciones lógicas y funcionales de distintos archivos de código fuente.
-\item[Recursos] que incluyen todo elemento gráfico, diseño de interfaces gráficas de usuario o componentes de las mismas, composición de menús contextuales, y valores de variables. Es posible proveer distintas versiones de cada uno de los recursos enfocadas a características en concreto de los dispositivos. Por ejemplo, es posible especificar un recurso para un idioma del télefono, tamaño de pantalla, ratio, orientación del dispositivo, versión de la API Android e incluso si el dispositivo se encuentra en modo nocturno o no. Esta característica es aprovechada en el proyecto para proveer una aplicación bilingüe, que muestre un idioma u otro dependiendo del que tenga configurado el dispositivo en el que la aplicación ha sido instalada.
+\item[Recursos] que incluyen todo elemento gráfico, diseño de interfaces gráficas de usuario o componentes de las mismas, composición de menús contextuales y valores de variables. Es posible proveer distintas versiones de cada uno de los recursos enfocadas a características en concreto de los dispositivos. Por ejemplo, es posible especificar un recurso para un idioma del télefono, tamaño de pantalla, ratio, orientación del dispositivo, versión de la API Android e incluso si el dispositivo se encuentra en modo nocturno o no. Esta característica es aprovechada en el proyecto para proveer una aplicación bilingüe, que muestre un idioma u otro dependiendo del que tenga configurado el dispositivo en el que la aplicación ha sido instalada.
 \item[Instrucciones de compilación] escritos en el \ac{DSL} de Gradle. Esto es una herramienta de automatización de proyectos que permite manejar de manera cómoda y eficiente tareas como gestión de dependencias, compilación, empaquetado y publicado de artefactos.
 \end{description}
  
@@ -138,19 +142,19 @@ La estructura de la aplicación sigue la estructura estándar de proyecto Androi
  
 \subsection{Interfaz gráfica}
 
-La interfaz gráfica de esta aplicación se ha desarrollado siguiendo las guías de diseño vigentes para la versión del sistema KitKat. Estas no son las más modernas, ya que recientemente han sido actualizadas a Lollipop, y las guías de diseño cambiadas hacia el llamado “Material Design” (diseño material), pero se ha desestimado seguirlas dadas su novedad, que implica una nueva curva de aprendizaje y posible escasez de recursos de apoyo.
+    La interfaz gráfica de esta aplicación se ha desarrollado siguiendo las guías de diseño vigentes para la versión del sistema KitKat. Estas no son las más modernas, ya que recientemente han sido actualizadas a Lollipop. En esta última actualización, las guías de diseño cambiadas hacia el llamado “Material Design” (diseño material). Se ha desestimado seguirlas dadas su novedad, que implica una nueva curva de aprendizaje y posible escasez de recursos de apoyo.
 
-No obstante, la interfaz es sencilla e intuitiva, y resulta familiar para todo usuario del sistema operativo Android. Además se han incluido explicaciones y guías de usuario dentro de la aplicación, para mejorar su usabilidad y asegurar el correcto uso de la misma por parte del usuario.
+    No obstante, la interfaz es sencilla e intuitiva, y resulta familiar para todo usuario del sistema operativo Android. Además se han incluido explicaciones y guías de usuario dentro de la aplicación, para mejorar su usabilidad y asegurar el correcto uso de la misma por parte del usuario.
 
-En Android hay dos maneras de definir una interfaz gráfica: programáticamente o por archivos de recurso XML. Se ha optado por la segunda opción, la cual disminuye el acoplamiento en el código, aumenta la reusabilidad y la claridad del mismo, y por otra parte el entorno de desarrollo permite previsualizar el resultado de dichos archivos XML con bastante fidelidad.
+    En Android hay dos maneras de definir una interfaz gráfica: programáticamente o por archivos de recurso XML. Se ha optado por la segunda opción. Esto disminuye el acoplamiento en el código, aumenta la reusabilidad y la claridad del mismo. Por otra parte, el entorno de desarrollo permite previsualizar el resultado de dichos archivos XML con bastante fidelidad.
 
  \begin{figure}[h] \centering
     \includegraphics[height=10cm]{graphs/layoutedit.png} \caption{Editor de archivos de recurso XML con vista previa.}\label{fig:layoutedit}
 \end{figure}
 
-Además, en consonancia con las últimas recomendaciones de diseño de aplicaciones de Google, se han utilizado fragmentos cuando ha sido conveniente, incrementando la modularidad de los componentes de la interfaz gráfica y su potencial reusabilidad.
+    Además, en consonancia con las últimas recomendaciones de diseño de aplicaciones de Google, se han utilizado fragmentos cuando ha sido conveniente; incrementando la modularidad de los componentes de la interfaz gráfica y su potencial reusabilidad.
 
-Para el diseño de los archivos XML se ha hecho uso de la herramienta incorporada para tal propósito en el entorno de desarrollo Android Studio, la cual nos brinda la posibilidad de tener una vista previa del resultado de la descripción en XML que estamos realizando dela interfaz gráfica de usuario. Como ejemplo, en la figura \ref{fig:layoutedit} se puede observar la edición de la interfaz gráfica de usuario de la actividad engargada de grabar los sonidos.
+    Para el diseño de los archivos XML se ha hecho uso de la herramienta incorporada para tal     propósito en el entorno de desarrollo Android Studio; la cual nos brinda la posibilidad de tener una vista previa del resultado de la descripción en XML que estamos realizando dela interfaz gráfica de usuario. Como ejemplo, en la figura \ref{fig:layoutedit} se puede observar la edición de la interfaz gráfica de usuario de la actividad engargada de grabar los sonidos.
 
 Si así se deseara, también cambe la posibilidad de diseñar las interfaces gráficas de usuario de la aplicación mediante la misma herramienta, pero de una manera completamente visual, tal y como se observa en la figura \ref{fig:layoutvisual}. De esta manera, se sacrifica precisión y control por comodidad y claridad.
 
@@ -197,6 +201,7 @@ El cajón de navegación, más conocido por su denominación inglesa Navigation 
     \includegraphics[height=10cm]{graphs/navdrawer.png} \caption{Patrón de cajón de navegación implementado en la aplicación.}\label{fig:navdrawer}
 \end{figure}
 
+\filbreak
 \subsubsection{Multilengüaje}
 \begin{figure}[h] \centering
  \begin{minipage}{0.45\textwidth}\centering
@@ -207,23 +212,30 @@ El cajón de navegación, más conocido por su denominación inglesa Navigation 
     \includegraphics[width=7cm]{graphs/settings_en.png} \caption{Actividad \ttw{Opciones} en un dispositivo con cualquier otro lenguaje del sistema.}\label{fig:screen:settings_en}
 \end{minipage}
 \end{figure}
-    Como se ha mencionado anteriormente en el apartado \ref{sec:estructura}, en este proyecto se aprovecha que los archivos de recursos pueden ser discriminados según el idioma principal configurado en el dispositivo de instalación, para obtener una aplicación bilingüe. La manera de conseguirlo es, en lugar de incrustar cadenas de texto en código e interfaces gráficas de usuario, extraer las que se desee traducida a un archivo de recurso, normalmente \ttw{strings.xml}, y referenciar dichas cadenas de texto por un identificador dado. De esta manera, por cada versión adicional de \ttw{strings.xml} que se cree, y que sea configurado para estar asociado a un lenguaje del sistema en concreto, se consigue una traducción de la aplicación
-    En las figuras \ref{fig:screen:settings_es} y \ref{fig:screen:settings_en} se muestra la actividad \ttw{Opciones}. La diferencia es, que en la figura \ref{fig:screen:settings_es} el dispositivo está configurado con el Castellano como lengua del sistema, por lo que las cadenas de texto son cargadas de la versión \ttw{strings-es.xml} asociada con dicho perfil. En la figura \ref{fig:screen:settings_en}, el sistema no está configurado en ninguno de los casos especiales, por lo que las cadenas de texto se extraen del archivo por defecto, \ttw{strings.xml}, el cual se encuentra traducido al Inglés.
+    Como se ha mencionado anteriormente en el apartado \ref{sec:estructura}, en este proyecto se aprovecha que los archivos de recursos pueden ser discriminados según el idioma principal configurado en el dispositivo de instalación, para obtener una aplicación bilingüe. La manera de conseguirlo es, en lugar de incrustar cadenas de texto en código e interfaces gráficas de usuario, extraer las que se desee traducida a un archivo de recurso, normalmente \ttw{strings.xml}, y referenciar dichas cadenas de texto por un identificador dado. De esta manera, por cada versión adicional de \ttw{strings.xml} que se cree, y que sea configurado para estar asociado a un lenguaje del sistema en concreto, se consigue una traducción de la aplicación.
+    
+    En las figuras \ref{fig:screen:settings_es} y \ref{fig:screen:settings_en} se muestra la actividad \ttw{Opciones}. La diferencia es que en la figura \ref{fig:screen:settings_es} el dispositivo está configurado con el Castellano como lengua del sistema, por lo que las cadenas de texto son cargadas de la versión \ttw{strings-es.xml} asociada con dicho perfil. En la figura \ref{fig:screen:settings_en}, el sistema no está configurado en ninguno de los casos especiales, por lo que las cadenas de texto se extraen del archivo por defecto, \ttw{strings.xml}, el cual se encuentra traducido al Inglés.
+    
     En caso de que fuera necesaria la traducción a cualquier idioma adicional, bastaría con crear una versión de \ttw{strings.xml} para dicho idioma, y asociarlo con el perfil correspondiente, de manera que sea preferida dicha versión en lugar de la versión por defecto.
     
 \subsection{Captura de audio}
+
     El sistema operativo Android provee una \ac{HAL} que conecta todas las \ac{API} de alto nivel con los controladores y hardware subyacentes en cada dispositivo. La figura \ref{fig:diagrama:audiohal} muestra los distintos niveles de la arquitectura del audio en el sistema operativo Android y su interconexión.
-\begin{figure}[h] \centering
-    \includegraphics[height=10cm]{graphs/audio_hal.png} \caption{Arquitectura del audio en Android  \cite{audiohal}}\label{fig:diagrama:audiohal}
-\end{figure}
 
 En la aplicación se ha optado por la simplicidad, y utilizado las clases del paquete \ttw{android.media.*} que provee el framework, y que brindan un nivel de abstracción bastante cómodo.
 
-Para garantizar que la operación de captura de audio no se ve interferida por otras funciones de la aplicación, se ha optado por crear un servicio que corra en segundo plano y responda a los comandos de la aplicación en primer plano, tal y como se explicó en el apartado \ref{ssec:teo:svc}.
+    Para garantizar que la operación de captura de audio no se ve interferida por otras funciones de la aplicación, se ha optado por crear un servicio que corra en segundo plano. Este responde a los comandos de la aplicación en primer plano, tal y como se explicó en el apartado \ref{ssec:teo:svc}.
 
-El servicio hace uso de la clase \ttw{AudioRecord}, la cual requiere una preparación previa a la grabación, tal y como se muestra en el extracto \ref{code:audioprep}.
+El servicio hace uso de la clase \ttw{AudioRecord}, la cual requiere una preparación previa a la grabación, tal y como se muestra en el fragmento de código \ref{code:audioprep}.
 
-\begin{listing}[h] 
+
+\begin{figure}[H] \centering
+    \includegraphics[height=10cm]{graphs/audio_hal.png} \caption{Arquitectura del audio en Android  \cite{audiohal}}\label{fig:diagrama:audiohal}
+\end{figure}
+
+    Una vez la instancia de AudioRecord ha sido configurada, es posible comenzar la misma llamando al método \ttw{startRecording()}. De esta manera, el sistema operativo empezará a rellenar el búfer interno de la instancia de AudioRecord según los parámetros que han sido indicados. Los datos del búfer son obtenidos bajo demanda, llamando al método \ttw{read(short[] audioData, int offsetInShorts, int sizeInShorts)} que introducirá en el búfer referenciado las muestras obtenidas hasta el momento. Una muestra de cómo es realizado en la aplicación está presente en la figura \ref{code:audiocapture}. 
+
+\begin{listing}[H] 
 %\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
 \begin{minted}[linenos,numberblanklines,breaklines,frame=lines]{java}
 private void prepareAudio() {
@@ -239,13 +251,10 @@ private void prepareAudio() {
 \caption{Preparación de AudioRecord}
 \label{code:audioprep}
 \end{listing}
+    
+    Las muestras están codificadas en formato \ac{PCM} de 16 bits con signo. Por tanto, el límite superior del valor de las muestras es $2^{15}-1=32767$. Los teléfonos móviles inteligentes suelen incorporar micrófonos de tecnología \ac{MEMS}. El valor típico de saturación de estos micrófonos es de 90dB SPL. Asumiremos pues, que el valor máximo \ttw{32767} corresponde a 90dB SPL, que corresponden con $P=0.6325 Pa$ en el micrófono. Asumiremos también que para el valor $P_0=0.00002 Pa$ se obtiene una muestra PCM con valor 1. En consecuencia, a las muestras obtenidas les es aplicado un factor $\frac{32767}{0.6325 Pa} \approx  51805.5336 Pa^{-1}$.
 
-Una vez la instancia de AudioRecord ha sido configurada, es posible comenzar la misma llamando al método \ttw{startRecording()}. De esta manera, el sistema operativo empezará a rellenar el búfer interno de la instancia de AudioRecord según los parámetros que han sido indicados. Los datos del búfer son obtenidos bajo demanda, llamando al método \ttw{read(short[] audioData, int offsetInShorts, int sizeInShorts)} que introducirá en el búfer referenciado las muestras obtenidas hasta el momento. Una muestra de cómo es realizado en la aplicación está presente en la figura \ref{code:audiocapture}. 
-
-Las muestras están codificadas en formato \ac{PCM} de 16 bits con signo. Por tanto, el límite superior del valor de las muestras es $2^{15}-1=32767$. Los teléfonos móviles inteligentes suelen incorporar micrófonos de tecnología \ac{MEMS}. El valor típico de saturación de estos micrófonos es de 90dB SPL. Asumiremos pues, que el valor máximo \ttw{32767} corresponde a 90dB SPL, que corresponden con $P=0.6325 Pa$ en el micrófono. Asumiremos también que para el valor $P_0=0.00002 Pa$ se obtiene una muestra PCM con valor 1.
-En consecuencia, a las muestras obtenidas les es aplicado un factor $\frac{32767}{0.6325 Pa} \approx  51805.5336 Pa^{-1}$.
-
-\begin{listing}[h] 
+\begin{listing}[H] 
 %\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
 \begin{minted}[mathescape,linenos,numberblanklines,breaklines,frame=lines]{java}
 short[] buffer = new short[bufferSize];
@@ -262,11 +271,11 @@ double p_rms = Math.sqrt(sum / resultSize);
 \label{code:audiocapture}
 \end{listing}
 
-Al mismo tiempo que se realiza la captura de sonido, se solicita al servicio de geolocalización la posición actual, para poder relacionar ambas medidas. Dicho servicio de geolocalización se trata en detalle en la sección \ref{sec:impl:geo}.
+    Al mismo tiempo que se realiza la captura de sonido, se solicita al servicio de geolocalización la posición actual, para poder relacionar ambas medidas. Dicho servicio de geolocalización se trata en detalle en la sección \ref{sec:impl:geo}.
 
-Una vez obtenido el contenido del búfer de muestras, realizamos el procesado de las mismas. Según la definición de $p_{rms}$ vista en la ecuación \ref{eq:prms}, y teniendo en cuenta que para muestras discretas la integral pasa a ser un sumatorio, se implementa el cálculo de $p_{rms}$ tal y como en \ref{code:audiocapture}.
+    Una vez obtenido el contenido del búfer de muestras, realizamos el procesado de las mismas. Según la definición de $p_{rms}$ vista en la ecuación \ref{eq:prms}, y teniendo en cuenta que para muestras discretas la integral pasa a ser un sumatorio, se implementa el cálculo de $p_{rms}$ tal y como en \ref{code:audiocapture}.
 
-El siguiente paso es obtener el \ac{SPL} correspondiente a la $p_{rms}$ calculada, implementado en el fragmento de código \autoref{code:spl} según la ecuación \ref{eq:spl}. Se ha añadido una constante \ttw{splAdjustment}, la cual se utiliza para calibrar previsibles diferencias en el sistema captador de audio de distintos teléfonos.
+    El siguiente paso es obtener el \ac{SPL} correspondiente a la $p_{rms}$ calculada, implementado en el fragmento de código \autoref{code:spl} según la ecuación \ref{eq:spl}. Se ha añadido una constante \ttw{splAdjustment}, la cual se utiliza para calibrar previsibles diferencias en el sistema captador de audio de distintos teléfonos.
 
 \begin{listing}[h] 
 %\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
@@ -283,9 +292,9 @@ public double getDecibels(double level) {
 \subsubsection{Ubicación}
 \label{sec:libext}
 \label{sec:impl:geo}
-Para obtener la ubicacion absoluta del dispositivo móvil, la aplicación se comunica con los \ac{GMS}, que no sólo actúan como una capa de abstracción del hardware GPS del dispositivo, sino que además proveen servicios de valor añadido, tales como un menor tiempo de precalentamiento, localización por redes WiFi u optimización del consumo energético.
+    Para obtener la ubicacion absoluta del dispositivo móvil, la aplicación se comunica con los \ac{GMS}. Estos no sólo actúan como una capa de abstracción del hardware GPS del dispositivo, sino que además proveen servicios de valor añadido. Algunos de los beneficios incluyen un menor tiempo de precalentamiento, localización por redes WiFi y optimización del consumo energético.
 
-No obstante, antes de hacer uso de los \ac{GMS}, es necesario configurar el proyecto para que obtenga como dependencias las librerías pertinentes. Gracias al sistema de compilación de Gradle, este paso es sumamente sencillo. 
+    No obstante, antes de hacer uso de los \ac{GMS}, es necesario configurar el proyecto para que obtenga como dependencias las librerías pertinentes. Gracias al sistema de compilación de Gradle, este paso es sumamente sencillo. 
 \begin{listing}[h] 
 %\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
 \begin{minted}[mathescape,linenos,numberblanklines,breaklines,frame=lines]{groovy}

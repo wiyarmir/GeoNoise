@@ -1,6 +1,7 @@
 package es.guillermoorellana.geonoise.utils;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.heatmaps.WeightedLatLng;
@@ -9,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -39,7 +41,11 @@ public class AsyncHeatmapFileLoader extends AsyncTask<String, Void, List<Weighte
                 for (String[] line : lines) {
                     if (line[0].equals("magnitude")) // headers
                         continue;
-                    WeightedLatLng item = new WeightedLatLng(new LatLng(Double.parseDouble(line[1]), Double.parseDouble(line[2])), Double.parseDouble(line[0]));
+//                    Log.d("TAG", Arrays.toString(line));
+                    WeightedLatLng item = new WeightedLatLng(
+                            new LatLng(Double.parseDouble(line[1]), Double.parseDouble(line[2])),
+                            Double.parseDouble(line[0])
+                    );
                     ret.add(item);
                 }
             } catch (FileNotFoundException e) {

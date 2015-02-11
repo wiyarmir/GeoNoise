@@ -155,8 +155,10 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
     @Override
     public void onLocationNoiseUpdate(@Nullable Location location, double noise) {
 
-        tDecibels.setText(String.format("%.2f db", noise));
-        tUpdate.setText(String.format("Last updated: %s", location != null ? new Date(location.getTime()).toString() : null));
+        tDecibels.setText(String.format("%.2f dB", noise));
+        tUpdate.setText(String.format("%s: %s",
+                getString(R.string.last_updated),
+                location != null ? new Date(location.getTime()).toString() : null));
         if (mySeries.size() > HISTORY_SIZE) {
             mySeries.removeFirst();
         }

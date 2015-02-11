@@ -1,13 +1,13 @@
 \chapterbegin{Conclusiones y líneas de trabajo futuras}
 \label{chp:concl}
 \section{Conclusiones}
-    En este proyecto se ha investigado, planificado y desarrollado una aplicación Android que permite una primera aproximación al problema de realizar medidas de nivel de presión sonora de manera fácil, clara,y sin equipamiento extra. Además, posibilita la visualización de las mismas superpuestas a un mapa, en forma de mapa de calor.
+    En este proyecto se ha investigado, planificado y desarrollado una aplicación Android que permite una primera aproximación al problema de realizar medidas de nivel de presión sonora de manera fácil, clara y sin equipamiento extra. Además, posibilita la visualización de las mismas superpuestas a un mapa, en forma de mapa de calor.
 
     Durante el proyecto se han tenido en cuenta todos los conocimientos adquiridos durante el estudio de la titulación de Ingeniero Técnico de Telecomunicación, especialidad en Sonido e Imagen. Estos conocimientos han sido de crítica importancia para superar problemas que han ido apareciendo en el transcurso del proyecto, tales como el control automático de ganancia (CAG), o la percepción subjetiva de los esquemas de colores de los mapas de calor. 
     
     Sin embargo, uno de los mayores retos del proyecto no ha sido su complejidad técnica en el apartado acústico, que es más bien simple, sino su implementación en el sistema operativo Android. Durante la titulación no se han cursado ninguna asignatura relativa a programación móvil o Java. Por tanto, el  factor de mayor novedad y en el que más se ha aprendido durante la realización del proyecto, es el componente Android del mismo. Este valioso conjunto de conocimientos sienta las bases para, en un futuro, poder construir aplicaciones de mayor complejidad técnica y científica en la plataforma Android.
     
-    La aplicación generada como resultado de este Proyecto Fin de Carrera, aún con ciertas limitaciones, responde de manera satisfactoria a los objetivos autoimpuestos al principio del mismo, como se ha demostrado en el capítulo de pruebas. Por tanto, al haber obtenido un producto funcional, se considera el proyecto como exitoso.
+    La aplicación generada como resultado de este Proyecto Fin de Carrera, aún con ciertas limitaciones, responde de manera satisfactoria a los objetivos autoimpuestos al principio del mismo; como se ha demostrado en el capítulo de pruebas. Por tanto, al haber obtenido un producto funcional, se considera el proyecto como exitoso.
     
 \section{Líneas de trabajo futuras}
     Durante el desarrollo del proyecto, y especialmente durante las pruebas finales del mismo, han surgido ideas y mejoras para el mismo, que son posibles de implementar en un futuro.
@@ -17,15 +17,15 @@
 	El almacenamiento en un servidor externo de los datos obtenidos por la aplicación es una mejora que se presenta obvia, pero no trivial. A implementar quedaría toda la lógica de sincronización, junto con la no sencilla elección de la infraestructura externa a procura. Esto abre camino a toda una serie de mejoras futuras.	
 	
 	\item[Plataforma web de visualizado y agregación]\hfill \\	
-	Como acompañante a la aplicación, y extendiendo la idea de almacenamiento remoto, se puede construir una plataforma web en la que, con la entrada de las medidas de múltiples usuarios, se puedan agregar los datos y, por ejemplo, representar los datos de toda una ciudad.
+	Como acompañante a la aplicación, y extendiendo la idea de almacenamiento remoto, se puede construir una plataforma web. En ella, con la entrada de las medidas de múltiples usuarios, se puedan agregar los datos. Uno de los posibles resultados de dicha agregación es poder representar los datos de toda una ciudad.
 	
     \item[Exploración de alternativas en el formato de almacenamiento]\hfill \\	
-    En este proyecto se ha utilizado \ac{CSV} como formato de almacenamiento, pero cabe la posibilidad de que otros formatos brinden un valor añadido o incluso posibiliten nuevos usos para la aplicación. Formatos a considerar serían \acl{JSON}, \ac{XML}
+    En este proyecto se ha utilizado \ac{CSV} como formato de almacenamiento, pero cabe la posibilidad de que otros formatos brinden un valor añadido o incluso posibiliten nuevos usos para la aplicación. Formatos a considerar serían \acl{JSON}, \ac{XML}.
     
     \item[Análisis en frecuencia de las medidas]\hfill \\
     Extendiendo las funcionalidades acústicas de la aplicación, sería de gran utilidad la inclusión de representación en frecuencia de las medidas, y aplicar mediciones tales como división por octavas o tercios de octava.
     
-    \item[Asociación de colores y niveles en la vista de Mapa de Calor]\hifll\\
+    \item[Asociación de colores y niveles en la vista de Mapa de Calor]\hfill\\
     El mapa de calor proporciona una manera muy directa de visualizar datos en un plano, pero en caso de necesitar una mayor exactitud, actualmente es necesario acudir a los archivos de sesión y buscar los valores. La presencia de una barra con el esquema de colores utilizado y la escala a la que corresponde fue estimada inicialmente como una característica a incluir, pero tras una investigación inicial, resultó de demasiada complejidad 
     
     \item[Inclusión de curvas de ponderación isofónicas]\hfill\\

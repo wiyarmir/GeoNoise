@@ -1,11 +1,13 @@
 package es.guillermoorellana.geonoise.fragment;
 
 import android.app.Activity;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,38 +26,26 @@ import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
 
 import java.util.List;
+import java.util.Random;
 
+import es.guillermoorellana.geonoise.R;
 import es.guillermoorellana.geonoise.utils.HeatmapCapable;
 import es.guillermoorellana.geonoise.utils.LocationNoiseUpdatesListener;
-import es.guillermoorellana.geonoise.R;
+import es.guillermoorellana.geonoise.utils.Utils;
 
 public class MapsFragment extends Fragment implements HeatmapCapable, LocationNoiseUpdatesListener {
 
-    public static final float[] ALT_HEATMAP_GRADIENT_START_POINTS = {
-            0.0f, 0.10f, 0.20f, 0.60f, 1.0f
-    };
 
+    public static final float[] ALT_HEATMAP_GRADIENT_START_POINTS = Utils.helix_index;
     /**
      * Alternative radius for convolution
      */
     private static final int ALT_HEATMAP_RADIUS = 10;
-
     /**
      * Alternative opacity of heatmap overlay
      */
     private static final double ALT_HEATMAP_OPACITY = 0.4;
-
-    /**
-     * Alternative heatmap gradient (blue -> red)
-     * Copied from Javascript version
-     */
-    private static final int[] ALT_HEATMAP_GRADIENT_COLORS = {
-            Color.argb(0, 0, 255, 255),// transparent
-            Color.argb(255 / 3 * 2, 0, 255, 255),
-            Color.rgb(0, 191, 255),
-            Color.rgb(0, 0, 127),
-            Color.rgb(255, 0, 0)
-    };
+    private static final int[] ALT_HEATMAP_GRADIENT_COLORS = Utils.cubehelix();
     public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(ALT_HEATMAP_GRADIENT_COLORS,
             ALT_HEATMAP_GRADIENT_START_POINTS);
     private static final String TAG = "MAPFRAGMENT";
@@ -64,6 +54,7 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
     private HeatmapTileProvider mProvider;
     private TileOverlay mOverlay;
     private FilePickerDialogFragment fpdf;
+    private Random random = new Random();
 
 
     @Override
@@ -149,17 +140,38 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
     private void setUpMap() {
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setMyLocationEnabled(true);
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            public void onMapClick(LatLng point) {
+                Log.d("TAG", '"' + Double.toString(65d + random.nextDouble() * 15d) + "\",\"" + point.latitude + "\",\"" + point.longitude + '"');
+            }
+        });
     }
 
     public void addHeatMap(List<WeightedLatLng> list) {
+
         if (list.isEmpty()) {
             Toast.makeText(getActivity(), "Empty!", Toast.LENGTH_LONG).show();
         } else {
-            mProvider = new HeatmapTileProvider.Builder()
-                    .weightedData(list)
-                            //.gradient(ALT_HEATMAP_GRADIENT)
-                    .build();
-            mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+            SharedPreferences defaultSharedPreferences = PreferenceManager
+                    .getDefaultSharedPreferences(getActivity());
+            if (!defaultSharedPreferences
+                    .getString("map_cubehelix", "0").equals("0")) {
+                mProvider = new HeatmapTileProvider.Builder()
+                        .opacity(Double.parseDouble(defaultSharedPreferences.getString("map_transparency", ".5")))
+                        .radius(Integer.parseInt(defaultSharedPreferences.getString("map_convolution", "30")))
+                        .weightedData(list)
+                        .gradient(ALT_HEATMAP_GRADIENT)
+                        .build();
+                mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+            } else {
+                mProvider = new HeatmapTileProvider.Builder()
+                        .opacity(Double.parseDouble(defaultSharedPreferences.getString("map_transparency", ".5")))
+                        .radius(Integer.parseInt(defaultSharedPreferences.getString("map_convolution", "30")))
+                        .weightedData(list)
+                        .build();
+                mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+            }
+//            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(list.get(0).getPoint().y, list.get(0).getPoint().x), 14.0f));
         }
     }
 

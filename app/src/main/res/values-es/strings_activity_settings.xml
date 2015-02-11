@@ -6,25 +6,10 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact based on your message history</string>
+    <string name="pref_title_system_location_settings">Preferencias de ubicación</string>
+    <string name="pref_title_file_prefix">Prefijo de los archivos</string>
+    <string name="pref_default_file_prefix">Grabacion</string>
 
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
-    <!-- Example settings for Data & Sync -->
     <string name="pref_header_audio_record">Grabación</string>
 
     <string name="pref_title_sample_frequency">Período de integración</string>
@@ -43,15 +28,19 @@
         <item>360</item>
     </string-array>
 
+    <string name="pref_header_mapdisplay">Mapa de calor</string>
+
+    <string name="pref_title_colorscheme">Esquema de colores</string>
+    <string-array name="pref_colorscheme_titles">
+        <item>Por defecto</item>
+        <item>Cubehelix</item>
+    </string-array>
+    <string-array name="pref_colorscheme_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
     <string name="pref_title_gain_correction">Corrección de Ganancia (dB SPL)</string>
+    <string name="pref_radius_title">Radio de convolución</string>
+    <string name="pref_opacity_title">Transparencia</string>
 
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_mapdisplay">Map Display</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
 </resources>

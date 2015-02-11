@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import java.io.File;
 
+import es.guillermoorellana.geonoise.R;
 import es.guillermoorellana.geonoise.utils.AsyncHeatmapFileLoader;
 import es.guillermoorellana.geonoise.utils.HeatmapCapable;
 import es.guillermoorellana.geonoise.utils.Utils;
@@ -33,7 +34,7 @@ public class FilePickerDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Pick file");
+        builder.setTitle(getString(R.string.dialog_pick_file));
         Utils.listFilesInPath(mPath);
         builder.setNegativeButton("Cancel", null)
                 .setItems(mFileList, new DialogInterface.OnClickListener() {

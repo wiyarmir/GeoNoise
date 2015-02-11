@@ -166,10 +166,17 @@ public class RecordService extends Service implements LocationListener {
     }
 
     public String getFilePathForSession() {
-        return Utils.getSaveDirPath()
-                + File.separator + "dump - "
-                + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date())
-                + ".csv";
+        return new StringBuilder()
+                .append(Utils.getSaveDirPath())
+                .append(File.separator)
+                .append("dump")
+                .append("-")
+                .append(
+                        new SimpleDateFormat("yyyyMMddhhmmss")
+                                .format(new Date())
+                )
+                .append(".csv")
+                .toString();
     }
 
     public void stopRecording() {
@@ -212,6 +219,12 @@ public class RecordService extends Service implements LocationListener {
         return mBound;
     }
 
+    public class RecordBinder extends Binder {
+        public RecordService getService() {
+            return RecordService.this;
+        }
+    }
+
     Runnable recorderRunnable = new Runnable() {
         @Override
         public void run() {
@@ -220,12 +233,6 @@ public class RecordService extends Service implements LocationListener {
                 mHandler.postDelayed(recorderRunnable, runnableDelay);
         }
     };
-
-    public class RecordBinder extends Binder {
-        public RecordService getService() {
-            return RecordService.this;
-        }
-    }
 
 
 }
