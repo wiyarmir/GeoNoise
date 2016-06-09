@@ -35,7 +35,6 @@ import es.guillermoorellana.geonoise.utils.Utils;
 
 public class MapsFragment extends Fragment implements HeatmapCapable, LocationNoiseUpdatesListener {
 
-
     public static final float[] ALT_HEATMAP_GRADIENT_START_POINTS = Utils.helix_index;
     /**
      * Alternative radius for convolution
@@ -47,7 +46,7 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
     private static final double ALT_HEATMAP_OPACITY = 0.4;
     private static final int[] ALT_HEATMAP_GRADIENT_COLORS = Utils.cubehelix();
     public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(ALT_HEATMAP_GRADIENT_COLORS,
-            ALT_HEATMAP_GRADIENT_START_POINTS);
+        ALT_HEATMAP_GRADIENT_START_POINTS);
     private static final String TAG = "MAPFRAGMENT";
     private static View view = null;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
@@ -55,7 +54,6 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
     private TileOverlay mOverlay;
     private FilePickerDialogFragment fpdf;
     private Random random = new Random();
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +72,8 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
         }
         try {
             view = inflater.inflate(R.layout.activity_maps, container, false);
-        } catch (InflateException e) {
+        }
+        catch (InflateException e) {
             //map is somehow already there
         }
         return view;
@@ -122,8 +121,7 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
+            mMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
