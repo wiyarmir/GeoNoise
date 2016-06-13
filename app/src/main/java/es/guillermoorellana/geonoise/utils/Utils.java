@@ -59,6 +59,4 @@ public class Utils {
     public static int[] cubehelix() {
         return helix_colors;
     }
-
 }
-

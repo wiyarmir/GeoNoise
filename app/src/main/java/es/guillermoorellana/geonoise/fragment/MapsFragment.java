@@ -45,9 +45,7 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
      */
     private static final double ALT_HEATMAP_OPACITY = 0.4;
     private static final int[] ALT_HEATMAP_GRADIENT_COLORS = Utils.cubehelix();
-    public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(ALT_HEATMAP_GRADIENT_COLORS,
-        ALT_HEATMAP_GRADIENT_START_POINTS);
-    private static final String TAG = "MAPFRAGMENT";
+    public static final Gradient ALT_HEATMAP_GRADIENT = new Gradient(ALT_HEATMAP_GRADIENT_COLORS, ALT_HEATMAP_GRADIENT_START_POINTS);
     private static View view = null;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private HeatmapTileProvider mProvider;
@@ -72,8 +70,7 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
         }
         try {
             view = inflater.inflate(R.layout.activity_maps, container, false);
-        }
-        catch (InflateException e) {
+        } catch (InflateException e) {
             //map is somehow already there
         }
         return view;
@@ -106,11 +103,11 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
      * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p/>
+     * <p>
      * If it isn't installed {@link SupportMapFragment} (and
      * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
      * install/update the Google Play services APK on their device.
-     * <p/>
+     * <p>
      * A user can return to this FragmentActivity after following the prompt and correctly
      * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
      * have been completely destroyed during this process (it is likely that it would only be
@@ -129,12 +126,6 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
         }
     }
 
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
     private void setUpMap() {
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setMyLocationEnabled(true);
@@ -150,8 +141,7 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
         if (list.isEmpty()) {
             Toast.makeText(getActivity(), "Empty!", Toast.LENGTH_LONG).show();
         } else {
-            SharedPreferences defaultSharedPreferences = PreferenceManager
-                    .getDefaultSharedPreferences(getActivity());
+            SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
             if (!defaultSharedPreferences
                     .getString("map_cubehelix", "0").equals("0")) {
                 mProvider = new HeatmapTileProvider.Builder()

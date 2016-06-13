@@ -116,7 +116,7 @@ public class RecordService extends Service implements LocationListener {
             if (audio != null) {
                 resultSize = audio.read(buffer, 0, bufferSize);
                 double sum = 0;
-// p_rms = sqrt(1/T Integral 0->T p^2) =sqrt( 1/T Sum 0->T p^2 )
+                // p_rms = sqrt(1/T Integral 0->T p^2) =sqrt( 1/T Sum 0->T p^2 )
                 for (int i = 0; i < resultSize; i++) {
                     sum += buffer[i] * buffer[i] / 51805.5336 / 51805.5336;
                 }
@@ -131,9 +131,13 @@ public class RecordService extends Service implements LocationListener {
                     i.putExtra("Noise", db);
                     sendBroadcast(i);
                     //Log.i(TAG, "a:" + db + " l:" + location.toString());
-                    wr.writeNext(new String[]{String.valueOf(db), String.valueOf(location.getLatitude()),
-                            String.valueOf(location.getLongitude()), String.valueOf(location.getAccuracy()),
-                            new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date(location.getTime()))});
+                    wr.writeNext(
+                            new String[]{
+                                    String.valueOf(db), String.valueOf(location.getLatitude()),
+                                    String.valueOf(location.getLongitude()), String.valueOf(location.getAccuracy()),
+                                    new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date(location.getTime()))
+                            }
+                    );
                 }
             }
         } catch (Exception e) {
