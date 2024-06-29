@@ -2,10 +2,12 @@ package es.guillermoorellana.geonoise.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.ListFragment;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ public class PastSessionFragment extends ListFragment {
 
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
@@ -58,7 +60,7 @@ public class PastSessionFragment extends ListFragment {
 
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
         if (null != mListener) {

@@ -8,6 +8,8 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -77,7 +79,7 @@ public class LocationService extends Service implements
      * Location Services fails.
      */
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
         Toast.makeText(this, "Connection failed", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Connection to GMS failed");
@@ -85,8 +87,8 @@ public class LocationService extends Service implements
     }
 
 
-    public class LocationBinder extends Binder {
-        public LocationService getService() {
+    static class LocationBinder extends Binder {
+        LocationService getService() {
             return getInstance();
         }
     }

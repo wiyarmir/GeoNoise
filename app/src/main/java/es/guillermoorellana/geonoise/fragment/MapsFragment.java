@@ -1,12 +1,12 @@
 package es.guillermoorellana.geonoise.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -15,8 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.TileOverlay;
@@ -33,7 +39,7 @@ import es.guillermoorellana.geonoise.utils.HeatmapCapable;
 import es.guillermoorellana.geonoise.utils.LocationNoiseUpdatesListener;
 import es.guillermoorellana.geonoise.utils.Utils;
 
-public class MapsFragment extends Fragment implements HeatmapCapable, LocationNoiseUpdatesListener {
+public class MapsFragment extends Fragment implements HeatmapCapable, LocationNoiseUpdatesListener, OnMapReadyCallback {
 
     public static final float[] ALT_HEATMAP_GRADIENT_START_POINTS = Utils.helix_index;
     /**
@@ -61,7 +67,7 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (view != null) { // already have a view
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null) { // it has a parent, de attach it
@@ -84,18 +90,16 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.load:
-                fpdf = new FilePickerDialogFragment(this);
-                fpdf.show(getFragmentManager(), "filedialog");
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.load) {
+            fpdf = new FilePickerDialogFragment(this);
+            fpdf.show(getFragmentManager(), "filedialog");
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
     }
 
@@ -118,22 +122,37 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
-            // Check if we were successful in obtaining the map.
-            if (mMap != null) {
-                setUpMap();
-            }
+            ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
         }
     }
 
     private void setUpMap() {
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
-        mMap.setMyLocationEnabled(true);
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            public void onMapClick(LatLng point) {
+            public void onMapClick(@NonNull LatLng point) {
                 Log.d("TAG", '"' + Double.toString(65d + random.nextDouble() * 15d) + "\",\"" + point.latitude + "\",\"" + point.longitude + '"');
             }
         });
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+           ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            setUpMap();
+        }
     }
 
     public void addHeatMap(List<WeightedLatLng> list) {
@@ -171,5 +190,11 @@ public class MapsFragment extends Fragment implements HeatmapCapable, LocationNo
     @Override
     public boolean isInterestedInLocationNoiseUpdates() {
         return true;
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+        setUpMap();
     }
 }

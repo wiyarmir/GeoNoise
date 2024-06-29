@@ -6,13 +6,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import es.guillermoorellana.geonoise.fragment.MapsFragment;
 import es.guillermoorellana.geonoise.fragment.NavigationDrawerFragment;
@@ -23,7 +25,7 @@ import es.guillermoorellana.geonoise.utils.LocationNoiseUpdatesListener;
 import es.guillermoorellana.geonoise.R;
 
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, PastSessionFragment.OnFragmentInteractionListener {
 
     private static final int REQUEST_SOLVE_ERROR = 1001;
@@ -57,7 +59,7 @@ public class MainActivity extends ActionBarActivity
     protected void onResume() {
         super.onResume();
         IntentFilter filter = new IntentFilter(RecordService.LOCATION_NOISE_UPDATE);
-        registerReceiver(lnr, filter);
+        ContextCompat.registerReceiver(this, lnr, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
     }
 
     @Override

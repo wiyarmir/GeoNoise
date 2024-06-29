@@ -9,14 +9,15 @@ import android.graphics.Paint;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
@@ -42,7 +43,7 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
     private RecordService mService;
     private boolean mBound;
     private Button startStopButton = null;
-    private ServiceConnection mConnection = new ServiceConnection() {
+    private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
@@ -80,13 +81,13 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
     @Override
     public void onStart() {
         super.onStart();
-        getActivity().bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
+        requireActivity().bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getActivity().unbindService(mConnection);
+        requireActivity().unbindService(mConnection);
         mService = null;
         mBound = false;
 
