@@ -7,7 +7,7 @@ android {
         namespace "es.guillermoorellana.geonoise"
         minSdkVersion 21
         targetSdkVersion 34 // can't move up without updating permissions model
-        versionCode 1
+        versionCode 5
         versionName "1.0"
     }
     buildTypes {

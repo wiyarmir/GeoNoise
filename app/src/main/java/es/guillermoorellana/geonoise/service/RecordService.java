@@ -103,9 +103,22 @@ public class RecordService extends Service implements LocationListener {
             samplePeriod = 1.0f / ((float) sampleRate / (float) bufferSize);
             Log.d(TAG, String.format("Creating recorder, sample rate of %d, buffer size %d. Should get full every %.2f s",
                     sampleRate, bufferSize, samplePeriod));
-            audio = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
+
+            try {
+                audio = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
+
+                // Check if AudioRecord was initialized properly
+                if (audio.getState() != AudioRecord.STATE_INITIALIZED) {
+                    Log.e(TAG, "AudioRecord initialization failed");
+                    audio = null;
+                }
+            } catch (SecurityException e) {
+                Log.e(TAG, "Permission denied for AudioRecord: " + e.getMessage());
+                audio = null;
+            }
         } catch (Exception e) {
-            Log.d(TAG, "Error creating audioRecorder");
+            Log.e(TAG, "Error creating audioRecorder: " + e.getMessage());
+            audio = null;
         }
     }
 
@@ -150,28 +163,65 @@ public class RecordService extends Service implements LocationListener {
             prepareAudio();
         }
 
-        audio.startRecording();
-        mHandler.post(recorderRunnable);
-
-        recording = true;
-        LocationServices.FusedLocationApi.requestLocationUpdates(mService.getLocationClient(), locationRequest, this);
-
-        Toast.makeText(this, "Saving session to " + getFilePathForSession(), Toast.LENGTH_LONG).show();
-
-        try {
-            String path = getFilePathForSession();
-            new File(Utils.getSaveDirPath()).mkdirs(); // create dirs by if the flies
-            wr = new CSVWriter(new FileWriter(path));
-            wr.writeNext(new String[]{"magnitude", "latitude", "longitude", "accuracy", "timestamp"});
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Check if audio is still null after prepareAudio()
+        if (audio == null) {
+            Log.e(TAG, "Failed to initialize AudioRecord");
+            Toast.makeText(this, "Failed to initialize audio recorder. Please check app permissions in Settings.", Toast.LENGTH_LONG).show();
+            return;
         }
 
+        try {
+            audio.startRecording();
+            mHandler.post(recorderRunnable);
+
+            recording = true;
+            try {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mService.getLocationClient(), locationRequest, this);
+            } catch (SecurityException e) {
+                Log.e(TAG, "Location permission denied: " + e.getMessage());
+            }
+
+            Toast.makeText(this, "Saving session to " + getFilePathForSession(), Toast.LENGTH_LONG).show();
+
+            try {
+                // Create directory structure
+                File directory = new File(Utils.getSaveDirPath(this));
+                boolean dirCreated = directory.exists() || directory.mkdirs();
+
+                if (!dirCreated) {
+                    Log.e(TAG, "Failed to create directory: " + directory.getAbsolutePath());
+                    Toast.makeText(this, "Failed to create directory for saving data", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                // Verify directory exists before creating file
+                if (!directory.exists()) {
+                    Log.e(TAG, "Directory does not exist after creation attempt: " + directory.getAbsolutePath());
+                    Toast.makeText(this, "Storage directory unavailable", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                String path = getFilePathForSession();
+                Log.d(TAG, "Creating file at: " + path);
+                wr = new CSVWriter(new FileWriter(path));
+                wr.writeNext(new String[]{"magnitude", "latitude", "longitude", "accuracy", "timestamp"});
+            } catch (IOException e) {
+                Log.e(TAG, "Error creating file: " + e.getMessage(), e);
+                e.printStackTrace();
+                Toast.makeText(this, "Error creating file: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        } catch (IllegalStateException e) {
+            Log.e(TAG, "Error starting recording: " + e.getMessage());
+            e.printStackTrace();
+            audio = null;
+            recording = false;
+            Toast.makeText(this, "Error starting recording", Toast.LENGTH_LONG).show();
+        }
     }
 
     public String getFilePathForSession() {
         return new StringBuilder()
-                .append(Utils.getSaveDirPath())
+                .append(Utils.getSaveDirPath(this))
                 .append(File.separator)
                 .append("dump")
                 .append("-")
@@ -214,7 +264,7 @@ public class RecordService extends Service implements LocationListener {
     }
 
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(@androidx.annotation.NonNull Location location) {
         lastLocation = location;
         Log.d(TAG, "Location change: " + location);
     }

@@ -1,5 +1,6 @@
 package es.guillermoorellana.geonoise.utils;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Environment;
 import android.util.Log;
@@ -31,9 +32,35 @@ public class Utils {
 
     private static int[] helix_colors;
 
+    /**
+     * Gets the path to the directory where session files are saved.
+     * Uses app-specific storage which doesn't require WRITE_EXTERNAL_STORAGE permission
+     * on Android 10 (API 29) and above.
+     *
+     * @param context The context to use for getting the app-specific directory
+     * @return The absolute path to the save directory
+     */
+    public static String getSaveDirPath(Context context) {
+        if (context == null) {
+            Log.e("Utils", "Context is null in getSaveDirPath, falling back to legacy method");
+            // Fallback to legacy method for backward compatibility
+            File dir = Environment.getExternalStorageDirectory();
+            return dir.getAbsolutePath() + File.separator + SAVEFILE_DIR;
+        }
+
+        // Use app-specific directory which doesn't require WRITE_EXTERNAL_STORAGE permission
+        File dir = context.getExternalFilesDir(null);
+        return dir.getAbsolutePath() + File.separator + SAVEFILE_DIR;
+    }
+
+    /**
+     * Legacy method for backward compatibility.
+     * @deprecated Use getSaveDirPath(Context) instead
+     */
+    @Deprecated
     public static String getSaveDirPath() {
+        Log.w("Utils", "Using deprecated getSaveDirPath() without context");
         File dir = Environment.getExternalStorageDirectory();
-        //
         return dir.getAbsolutePath() + File.separator + SAVEFILE_DIR;
     }
 

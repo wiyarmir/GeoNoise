@@ -20,6 +20,8 @@
     <string name="button_stop_rec">Stop listening</string>
     <string name="dialog_pick_file">Pick file</string>
     <string name="last_updated">Last updated</string>
+    <string name="no_recordings">No recordings available</string>
+    <string name="cancel">Cancel</string>
 
 
 </resources>

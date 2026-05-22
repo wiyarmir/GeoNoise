@@ -26,9 +26,15 @@ public class FilePickerDialogFragment extends DialogFragment {
     public String[] mFileList;
 
     public FilePickerDialogFragment(HeatmapCapable hc) {
-        mPath = new File(Utils.getSaveDirPath());
-        mFileList = Utils.listFilesInPath(mPath);
         this.instance = hc;
+    }
+
+    @Override
+    public void onAttach(@NonNull android.content.Context context) {
+        super.onAttach(context);
+        // Initialize path and file list here to ensure context is available
+        mPath = new File(Utils.getSaveDirPath(context));
+        mFileList = Utils.listFilesInPath(mPath);
     }
 
     @NonNull
@@ -37,16 +43,24 @@ public class FilePickerDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.dialog_pick_file));
         Utils.listFilesInPath(mPath);
-        builder.setNegativeButton("Cancel", null)
-                .setItems(mFileList, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getActivity(), "Chose " + mFileList[i], Toast.LENGTH_LONG).show();
-                        new AsyncHeatmapFileLoader(instance).execute(mPath + File.separator + mFileList[i]);
-                    }
-                });
-        return builder.create();
 
+        // Check if there are any recordings available
+        if (mFileList == null || mFileList.length == 0) {
+            // Show a message when there are no recordings
+            builder.setMessage(getString(R.string.no_recordings))
+                  .setNegativeButton(getString(R.string.cancel), null);
+        } else {
+            // Show the list of recordings
+            builder.setNegativeButton(getString(R.string.cancel), null)
+                  .setItems(mFileList, new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialogInterface, int i) {
+                          Toast.makeText(getActivity(), "Chose " + mFileList[i], Toast.LENGTH_LONG).show();
+                          new AsyncHeatmapFileLoader(instance).execute(mPath + File.separator + mFileList[i]);
+                      }
+                  });
+        }
+        return builder.create();
     }
 
 }

@@ -20,5 +20,7 @@
     <string name="button_stop_rec">Parar medición</string>
     <string name="dialog_pick_file">Elija un archivo</string>
     <string name="last_updated">Última actualización</string>
+    <string name="no_recordings">No hay grabaciones disponibles</string>
+    <string name="cancel">Cancelar</string>
 
 </resources>

@@ -1,16 +1,21 @@
 package es.guillermoorellana.geonoise.activity;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -29,6 +34,12 @@ public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, PastSessionFragment.OnFragmentInteractionListener {
 
     private static final int REQUEST_SOLVE_ERROR = 1001;
+    private static final int REQUEST_PERMISSIONS = 1002;
+    private static final String[] REQUIRED_PERMISSIONS = {
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.ACCESS_FINE_LOCATION
+            // WRITE_EXTERNAL_STORAGE permission is no longer needed for app-specific storage
+    };
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -53,6 +64,67 @@ public class MainActivity extends AppCompatActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         lnr = new StuffReceiver();
+
+        // Check and request permissions
+        checkAndRequestPermissions();
+    }
+
+    /**
+     * Checks if all required permissions are granted and requests them if not.
+     * This method can be called by fragments or other components that need to ensure permissions.
+     * 
+     * @return true if all permissions are already granted, false otherwise
+     */
+    public boolean checkAndRequestPermissions() {
+        boolean allPermissionsGranted = true;
+        boolean shouldShowRationale = false;
+
+        for (String permission : REQUIRED_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                allPermissionsGranted = false;
+
+                // Check if we should show rationale for any permission
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                    shouldShowRationale = true;
+                }
+            }
+        }
+
+        if (!allPermissionsGranted) {
+            if (shouldShowRationale) {
+                // Show dialog explaining why we need permissions before requesting
+                new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Permissions Required")
+                    .setMessage("This app needs microphone and location permissions to record noise levels and save them with location data.")
+                    .setPositiveButton("Grant Permissions", (dialog, which) -> {
+                        ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_PERMISSIONS);
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> {
+                        Toast.makeText(this, "The app needs these permissions to function properly", Toast.LENGTH_LONG).show();
+                    })
+                    .setCancelable(false)
+                    .show();
+            } else {
+                // Request permissions directly
+                ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_PERMISSIONS);
+            }
+        }
+
+        return allPermissionsGranted;
+    }
+
+    /**
+     * Checks if all required permissions are granted without requesting them.
+     * 
+     * @return true if all permissions are granted, false otherwise
+     */
+    public boolean areAllPermissionsGranted() {
+        for (String permission : REQUIRED_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -155,6 +227,40 @@ public class MainActivity extends AppCompatActivity
                 super.onActivityResult(requestCode, resultCode, data);
 
                 break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_PERMISSIONS) {
+            boolean allPermissionsGranted = true;
+
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false;
+                    break;
+                }
+            }
+
+            if (!allPermissionsGranted) {
+                // Show dialog with option to go to settings
+                new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Permissions Required")
+                    .setMessage("This app needs permissions to function properly. Would you like to open settings to grant them?")
+                    .setPositiveButton("Open Settings", (dialog, which) -> {
+                        // Open app settings
+                        Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        intent.setData(android.net.Uri.fromParts("package", getPackageName(), null));
+                        startActivity(intent);
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> {
+                        Toast.makeText(this, "The app needs these permissions to function properly", Toast.LENGTH_LONG).show();
+                    })
+                    .setCancelable(false)
+                    .show();
+            }
         }
     }
 

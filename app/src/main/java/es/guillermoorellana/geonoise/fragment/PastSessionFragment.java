@@ -1,6 +1,7 @@
 package es.guillermoorellana.geonoise.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -32,12 +33,16 @@ public class PastSessionFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
 
-        // TODO: Change Adapter to display your content
-        setListAdapter(new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                new ArrayList<String>(Arrays.asList(Utils.listFilesInPath(new File(Utils.getSaveDirPath())))))
-        );
+        // Use the new getSaveDirPath method with context
+        Context context = getActivity();
+        if (context != null) {
+            File saveDirPath = new File(Utils.getSaveDirPath(context));
+            setListAdapter(new ArrayAdapter<String>(context,
+                    android.R.layout.simple_list_item_1,
+                    android.R.id.text1,
+                    new ArrayList<String>(Arrays.asList(Utils.listFilesInPath(saveDirPath))))
+            );
+        }
     }
 
 

@@ -27,6 +27,7 @@ import com.androidplot.xy.XYPlot;
 import java.util.Date;
 
 import es.guillermoorellana.geonoise.R;
+import es.guillermoorellana.geonoise.activity.MainActivity;
 import es.guillermoorellana.geonoise.service.RecordService;
 import es.guillermoorellana.geonoise.utils.LocationNoiseUpdatesListener;
 
@@ -118,13 +119,18 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
             @Override
             public void onClick(View view) {
                 if (!mService.isRecording()) {
-                    mService.startRecording();
-                    clearSeries();
-                    startStopButton.setText(getText(R.string.button_stop_rec));
+                    // Check if we have all required permissions before starting recording
+                    if (checkPermissions()) {
+                        mService.startRecording();
+                        clearSeries();
+                        startStopButton.setText(getText(R.string.button_stop_rec));
+                    } else {
+                        // Request permissions if not granted
+                        requestPermissions();
+                    }
                 } else {
                     mService.stopRecording();
                     startStopButton.setText(getText(R.string.button_start_rec));
-
                 }
             }
         });
@@ -171,6 +177,29 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
     @Override
     public boolean isInterestedInLocationNoiseUpdates() {
         return true;
+    }
+
+    /**
+     * Checks if all required permissions are granted.
+     * Uses MainActivity's permission checking method.
+     * 
+     * @return true if all permissions are granted, false otherwise
+     */
+    private boolean checkPermissions() {
+        if (getActivity() instanceof MainActivity) {
+            return ((MainActivity) getActivity()).areAllPermissionsGranted();
+        }
+        return false;
+    }
+
+    /**
+     * Requests all required permissions.
+     * Uses MainActivity's permission request method.
+     */
+    private void requestPermissions() {
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).checkAndRequestPermissions();
+        }
     }
 
 
