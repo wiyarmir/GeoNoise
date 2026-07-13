@@ -1,5 +1,6 @@
 package es.guillermoorellana.geonoise.fragment;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -27,9 +31,9 @@ import com.androidplot.xy.XYPlot;
 import java.util.Date;
 
 import es.guillermoorellana.geonoise.R;
-import es.guillermoorellana.geonoise.activity.MainActivity;
 import es.guillermoorellana.geonoise.service.RecordService;
 import es.guillermoorellana.geonoise.utils.LocationNoiseUpdatesListener;
+import es.guillermoorellana.geonoise.utils.RecordAudioPermission;
 
 
 public class RecordFragment extends Fragment implements LocationNoiseUpdatesListener {
@@ -44,6 +48,7 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
     private RecordService mService;
     private boolean mBound;
     private Button startStopButton = null;
+    private ActivityResultLauncher<String> recordAudioPermissionLauncher;
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className,
@@ -77,6 +82,42 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
         super.onCreate(savedInstanceState);
         serviceIntent = new Intent(getActivity(), RecordService.class);
 
+        // Registered here (before STARTED) as required by the Activity Result API.
+        recordAudioPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                this::onRecordAudioPermissionResult);
+    }
+
+    private void onRecordAudioPermissionResult(boolean granted) {
+        boolean canShowRationale =
+                shouldShowRequestPermissionRationale(RecordAudioPermission.PERMISSION);
+        switch (RecordAudioPermission.onRequestResult(granted, canShowRationale)) {
+            case START:
+                beginRecording();
+                break;
+            case DENIED_CAN_RETRY:
+                Toast.makeText(getActivity(), R.string.permission_record_audio_rationale,
+                        Toast.LENGTH_LONG).show();
+                break;
+            case DENIED_DONT_ASK_AGAIN:
+                Toast.makeText(getActivity(), R.string.permission_record_audio_denied_settings,
+                        Toast.LENGTH_LONG).show();
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Runs the actual start-recording side effects. Only reached once RECORD_AUDIO is granted.
+     */
+    private void beginRecording() {
+        if (mService == null) {
+            return;
+        }
+        mService.startRecording();
+        clearSeries();
+        startStopButton.setText(getText(R.string.button_stop_rec));
     }
 
     @Override
@@ -119,18 +160,21 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
             @Override
             public void onClick(View view) {
                 if (!mService.isRecording()) {
-                    // Check if we have all required permissions before starting recording
-                    if (checkPermissions()) {
-                        mService.startRecording();
-                        clearSeries();
-                        startStopButton.setText(getText(R.string.button_stop_rec));
-                    } else {
-                        // Request permissions if not granted
-                        requestPermissions();
+                    boolean granted = RecordAudioPermission.isGranted(requireContext());
+                    switch (RecordAudioPermission.onStartPressed(granted)) {
+                        case START:
+                            beginRecording();
+                            break;
+                        case REQUEST:
+                            recordAudioPermissionLauncher.launch(RecordAudioPermission.PERMISSION);
+                            break;
+                        default:
+                            break;
                     }
                 } else {
                     mService.stopRecording();
                     startStopButton.setText(getText(R.string.button_start_rec));
+
                 }
             }
         });
@@ -177,29 +221,6 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
     @Override
     public boolean isInterestedInLocationNoiseUpdates() {
         return true;
-    }
-
-    /**
-     * Checks if all required permissions are granted.
-     * Uses MainActivity's permission checking method.
-     * 
-     * @return true if all permissions are granted, false otherwise
-     */
-    private boolean checkPermissions() {
-        if (getActivity() instanceof MainActivity) {
-            return ((MainActivity) getActivity()).areAllPermissionsGranted();
-        }
-        return false;
-    }
-
-    /**
-     * Requests all required permissions.
-     * Uses MainActivity's permission request method.
-     */
-    private void requestPermissions() {
-        if (getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).checkAndRequestPermissions();
-        }
     }
 
 

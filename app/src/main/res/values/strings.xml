@@ -22,6 +22,8 @@
     <string name="last_updated">Last updated</string>
     <string name="no_recordings">No recordings available</string>
     <string name="cancel">Cancel</string>
+    <string name="permission_record_audio_rationale">Microphone access is required to measure noise. Please allow it to start recording.</string>
+    <string name="permission_record_audio_denied_settings">Microphone access is blocked. Enable it in Settings &#8250; Permissions to record.</string>
 
 
 </resources>
