@@ -1,11 +1,14 @@
 package es.guillermoorellana.geonoise.service;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
 import android.location.Location;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -15,6 +18,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.core.app.ServiceCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -27,6 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import au.com.bytecode.opencsv.CSVWriter;
+import es.guillermoorellana.geonoise.R;
+import es.guillermoorellana.geonoise.utils.ForegroundNotifications;
 import es.guillermoorellana.geonoise.utils.RecordAudioPermission;
 import es.guillermoorellana.geonoise.utils.Utils;
 
@@ -36,6 +44,7 @@ import es.guillermoorellana.geonoise.utils.Utils;
 public class RecordService extends Service implements LocationListener {
     public static String LOCATION_NOISE_UPDATE = "es.guillermoorellana.geonoise.action.update";
     private static String TAG = "RecordService";
+    private static final int NOTIF_ID_RECORD = 2001;
     private final IBinder mBinder = new RecordBinder();
     protected LocationRequest locationRequest = null;
     protected CSVWriter wr = null;
@@ -172,12 +181,37 @@ public class RecordService extends Service implements LocationListener {
             prepareAudio();
         }
 
-        // Gate the recorder: only start when RECORD_AUDIO is granted and the AudioRecord
-        // initialised. Otherwise never touch audio.startRecording() or the location client.
+        boolean granted = RecordAudioPermission.isGranted(this);
         boolean audioInitialized = audio != null && audio.getState() == AudioRecord.STATE_INITIALIZED;
-        if (!RecordAudioPermission.canStartAudio(RecordAudioPermission.isGranted(this), audioInitialized)) {
-            Log.w(TAG, "Not starting recording: permission denied or AudioRecord uninitialised");
+
+        // Without RECORD_AUDIO it is never legal to be a microphone-typed foreground service, so
+        // never call startForeground here; abandon any Started state (from startForegroundService)
+        // and bail out.
+        if (!granted) {
+            Log.w(TAG, "Not starting recording: RECORD_AUDIO not granted");
             Toast.makeText(this, "Failed to initialize audio recorder. Please check app permissions in Settings.", Toast.LENGTH_LONG).show();
+            stopSelf();
+            return;
+        }
+
+        // RECORD_AUDIO is granted, so promoting to a microphone-typed foreground service is legal.
+        // Do it immediately, before the capture gate below, so a service started via
+        // startForegroundService() always calls startForeground() within the platform's ~5s window
+        // even on the failure path (otherwise: ForegroundServiceDidNotStartInTimeException).
+        ForegroundNotifications.ensureChannel(this);
+        ServiceCompat.startForeground(
+                this,
+                NOTIF_ID_RECORD,
+                ForegroundNotifications.ongoing(this, R.string.notification_recording_text),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE);
+
+        // Gate actual capture: if the AudioRecord never initialised (e.g. mic busy), leave the
+        // foreground state and end the Started state rather than lingering as an idle FGS.
+        if (!RecordAudioPermission.canStartAudio(granted, audioInitialized)) {
+            Log.w(TAG, "Not starting recording: AudioRecord uninitialised");
+            Toast.makeText(this, "Failed to initialize audio recorder. Please check app permissions in Settings.", Toast.LENGTH_LONG).show();
+            ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE);
+            stopSelf();
             return;
         }
 
@@ -186,6 +220,16 @@ public class RecordService extends Service implements LocationListener {
             mHandler.post(recorderRunnable);
 
             recording = true;
+
+            // Only promote LocationService to a location-typed foreground service when a location
+            // permission is granted; a location-typed startForeground without it throws
+            // SecurityException (mirrors the try/catch around requestLocationUpdates below).
+            if (hasLocationPermission()) {
+                ContextCompat.startForegroundService(this, new Intent(this, LocationService.class));
+                if (mBound && mService != null) {
+                    mService.startTracking();
+                }
+            }
             try {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mService.getLocationClient(), locationRequest, this);
             } catch (SecurityException e) {
@@ -263,6 +307,21 @@ public class RecordService extends Service implements LocationListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Stop the location foreground service, then leave our own foreground state, remove the
+        // notification, and end the Started state so the service can be reclaimed once unbound.
+        if (mBound && mService != null) {
+            mService.stopTracking();
+        }
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE);
+        stopSelf();
+    }
+
+    private boolean hasLocationPermission() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
     }
 
     public double getDecibels(double level) {
