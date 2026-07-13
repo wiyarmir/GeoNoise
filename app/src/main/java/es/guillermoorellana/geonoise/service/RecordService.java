@@ -222,13 +222,13 @@ public class RecordService extends Service implements LocationListener {
             recording = true;
 
             // Only promote LocationService to a location-typed foreground service when a location
-            // permission is granted; a location-typed startForeground without it throws
-            // SecurityException (mirrors the try/catch around requestLocationUpdates below).
-            if (hasLocationPermission()) {
+            // permission is granted (a location-typed startForeground without it throws
+            // SecurityException, mirroring the try/catch around requestLocationUpdates below) AND
+            // the bound instance is available, so startForegroundService() is always paired with an
+            // immediate startTracking()/startForeground() call within the platform's ~5s window.
+            if (hasLocationPermission() && mBound && mService != null) {
                 ContextCompat.startForegroundService(this, new Intent(this, LocationService.class));
-                if (mBound && mService != null) {
-                    mService.startTracking();
-                }
+                mService.startTracking();
             }
             try {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mService.getLocationClient(), locationRequest, this);
