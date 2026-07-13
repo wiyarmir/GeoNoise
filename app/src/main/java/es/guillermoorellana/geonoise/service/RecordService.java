@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import au.com.bytecode.opencsv.CSVWriter;
+import es.guillermoorellana.geonoise.utils.RecordAudioPermission;
 import es.guillermoorellana.geonoise.utils.Utils;
 
 /**
@@ -163,9 +164,11 @@ public class RecordService extends Service implements LocationListener {
             prepareAudio();
         }
 
-        // Check if audio is still null after prepareAudio()
-        if (audio == null) {
-            Log.e(TAG, "Failed to initialize AudioRecord");
+        // Gate the recorder: only start when RECORD_AUDIO is granted and the AudioRecord
+        // initialised. Otherwise never touch audio.startRecording() or the location client.
+        boolean audioInitialized = audio != null && audio.getState() == AudioRecord.STATE_INITIALIZED;
+        if (!RecordAudioPermission.canStartAudio(RecordAudioPermission.isGranted(this), audioInitialized)) {
+            Log.w(TAG, "Not starting recording: permission denied or AudioRecord uninitialised");
             Toast.makeText(this, "Failed to initialize audio recorder. Please check app permissions in Settings.", Toast.LENGTH_LONG).show();
             return;
         }

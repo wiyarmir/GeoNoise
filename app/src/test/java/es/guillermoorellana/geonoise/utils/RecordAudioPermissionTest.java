@@ -5,6 +5,8 @@ import static es.guillermoorellana.geonoise.utils.RecordAudioPermission.Outcome.
 import static es.guillermoorellana.geonoise.utils.RecordAudioPermission.Outcome.REQUEST;
 import static es.guillermoorellana.geonoise.utils.RecordAudioPermission.Outcome.START;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -37,5 +39,17 @@ public class RecordAudioPermissionTest {
     @Test
     public void onRequestResult_deniedWithoutRationale_dontAskAgain() {
         assertEquals(DENIED_DONT_ASK_AGAIN, RecordAudioPermission.onRequestResult(false, false));
+    }
+
+    @Test
+    public void canStartAudio_grantedAndInitialized_true() {
+        assertTrue(RecordAudioPermission.canStartAudio(true, true));
+    }
+
+    @Test
+    public void canStartAudio_deniedOrUninitialized_false() {
+        assertFalse(RecordAudioPermission.canStartAudio(false, true));
+        assertFalse(RecordAudioPermission.canStartAudio(true, false));
+        assertFalse(RecordAudioPermission.canStartAudio(false, false));
     }
 }

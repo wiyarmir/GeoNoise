@@ -61,6 +61,17 @@ public final class RecordAudioPermission {
     }
 
     /**
+     * Whether audio capture may actually be started.
+     *
+     * @param granted          whether {@link #PERMISSION} is granted
+     * @param audioInitialized whether the {@code AudioRecord} was constructed and initialised
+     * @return {@code true} only if both hold — never touch the recorder otherwise
+     */
+    public static boolean canStartAudio(boolean granted, boolean audioInitialized) {
+        return granted && audioInitialized;
+    }
+
+    /**
      * Thin wrapper over {@link ContextCompat#checkSelfPermission}. Framework passthrough — not unit
      * tested.
      */
