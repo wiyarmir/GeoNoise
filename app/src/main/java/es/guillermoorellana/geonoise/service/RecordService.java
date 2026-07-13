@@ -1,5 +1,6 @@
 package es.guillermoorellana.geonoise.service;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -26,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import au.com.bytecode.opencsv.CSVWriter;
+import es.guillermoorellana.geonoise.utils.RecordAudioPermission;
 import es.guillermoorellana.geonoise.utils.Utils;
 
 /**
@@ -97,6 +99,10 @@ public class RecordService extends Service implements LocationListener {
         return START_STICKY;
     }
 
+    // Constructing AudioRecord without RECORD_AUDIO does not throw; it yields an instance in
+    // STATE_UNINITIALIZED. startRecording() gates actual use behind RecordAudioPermission, so the
+    // recorder is never read/started without the grant.
+    @SuppressLint("MissingPermission")
     private void prepareAudio() {
         try {
             bufferSize = 10 * AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
@@ -158,14 +164,19 @@ public class RecordService extends Service implements LocationListener {
         }
     }
 
+    // audio.startRecording() is reached only after the canStartAudio() guard below confirms
+    // RECORD_AUDIO is granted and the recorder is initialised.
+    @SuppressLint("MissingPermission")
     public void startRecording() {
         if (audio == null) {
             prepareAudio();
         }
 
-        // Check if audio is still null after prepareAudio()
-        if (audio == null) {
-            Log.e(TAG, "Failed to initialize AudioRecord");
+        // Gate the recorder: only start when RECORD_AUDIO is granted and the AudioRecord
+        // initialised. Otherwise never touch audio.startRecording() or the location client.
+        boolean audioInitialized = audio != null && audio.getState() == AudioRecord.STATE_INITIALIZED;
+        if (!RecordAudioPermission.canStartAudio(RecordAudioPermission.isGranted(this), audioInitialized)) {
+            Log.w(TAG, "Not starting recording: permission denied or AudioRecord uninitialised");
             Toast.makeText(this, "Failed to initialize audio recorder. Please check app permissions in Settings.", Toast.LENGTH_LONG).show();
             return;
         }
