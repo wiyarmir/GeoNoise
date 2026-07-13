@@ -25,4 +25,8 @@
     <string name="permission_record_audio_rationale">Se necesita acceso al micrófono para medir el ruido. Concédelo para empezar a medir.</string>
     <string name="permission_record_audio_denied_settings">El acceso al micrófono está bloqueado. Actívalo en Ajustes &#8250; Permisos para medir.</string>
 
+    <string name="notification_channel_name">Medición</string>
+    <string name="notification_recording_text">Midiendo el nivel de ruido ambiental</string>
+    <string name="notification_location_text">Registrando la ubicación para el mapa de ruido</string>
+
 </resources>

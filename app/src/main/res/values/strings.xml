@@ -25,5 +25,9 @@
     <string name="permission_record_audio_rationale">Microphone access is required to measure noise. Please allow it to start recording.</string>
     <string name="permission_record_audio_denied_settings">Microphone access is blocked. Enable it in Settings &#8250; Permissions to record.</string>
 
+    <string name="notification_channel_name">Recording</string>
+    <string name="notification_recording_text">Measuring ambient noise level</string>
+    <string name="notification_location_text">Tracking location for noise mapping</string>
+
 
 </resources>
