@@ -8,6 +8,7 @@ import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.androidplot.xy.BoundaryMode;
@@ -33,6 +35,7 @@ import java.util.Date;
 import es.guillermoorellana.geonoise.R;
 import es.guillermoorellana.geonoise.service.RecordService;
 import es.guillermoorellana.geonoise.utils.LocationNoiseUpdatesListener;
+import es.guillermoorellana.geonoise.utils.PostNotificationsPermission;
 import es.guillermoorellana.geonoise.utils.RecordAudioPermission;
 
 
@@ -49,6 +52,7 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
     private boolean mBound;
     private Button startStopButton = null;
     private ActivityResultLauncher<String> recordAudioPermissionLauncher;
+    private ActivityResultLauncher<String> postNotificationsPermissionLauncher;
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className,
@@ -86,6 +90,14 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
         recordAudioPermissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
                 this::onRecordAudioPermissionResult);
+
+        // Also registered before STARTED, as the Activity Result API requires. The result is
+        // intentionally ignored: POST_NOTIFICATIONS is non-blocking — if denied, the ongoing
+        // foreground-service notification is simply not shown, but recording still runs.
+        postNotificationsPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                granted -> {
+                });
     }
 
     private void onRecordAudioPermissionResult(boolean granted) {
@@ -115,7 +127,20 @@ public class RecordFragment extends Fragment implements LocationNoiseUpdatesList
         if (mService == null) {
             return;
         }
+        // Transition RecordService to the Started state so it outlives this fragment unbinding
+        // (e.g. the app being backgrounded) mid-recording. Immediately followed by
+        // startRecording(), which synchronously calls startForeground()/stopSelf() well within the
+        // platform's ~5s window.
+        ContextCompat.startForegroundService(requireContext(), serviceIntent);
         mService.startRecording();
+
+        // Request POST_NOTIFICATIONS on API 33+ so the ongoing foreground notification is visible.
+        // Non-blocking: recording proceeds regardless of the outcome.
+        if (PostNotificationsPermission.shouldRequest(
+                Build.VERSION.SDK_INT, PostNotificationsPermission.isGranted(requireContext()))) {
+            postNotificationsPermissionLauncher.launch(PostNotificationsPermission.PERMISSION);
+        }
+
         clearSeries();
         startStopButton.setText(getText(R.string.button_stop_rec));
     }
