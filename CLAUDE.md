@@ -45,18 +45,29 @@ Test reports land in `app/build/reports/tests/testDebugUnitTest/index.html`.
 
 ### Local-only files needed to build
 
-Two files are **git-ignored to avoid leaking secrets** (`.gitignore` ignores
-`google_maps_api.xml`; commit `b0841d5` untracked them). A checkout will not
-contain them, and a build that touches resources fails with
-`resource string/google_maps_key ... not found` until you provide them:
+`local.properties` at the repo root is **git-ignored** (`.gitignore` ignores
+`/local.properties`) and per-machine. It must at least point at your Android SDK
+(`sdk.dir=...`).
 
-- `app/src/debug/res/values/google_maps_api.xml`
-- `app/src/release/res/values/google_maps_api.xml`
+The **Google Maps API key is injected at build time** (GN-13), so no key ever
+lives in a checked-in resource file. `app/build.gradle`'s `resolveMapsApiKey()`
+supplies the `MAPS_API_KEY` manifest placeholder (referenced from
+`AndroidManifest.xml` as `${MAPS_API_KEY}`) from the first available source:
 
-Each must define a `google_maps_key` string. For local builds a placeholder is
-enough (maps just won't render); a real Google Maps API key is needed for maps
-to work. `local.properties` (holding `sdk.dir`) is likewise git-ignored and
-per-machine — point it at your Android SDK.
+1. a `MAPS_API_KEY` entry in the repo-root `local.properties` (per-machine,
+   git-ignored) — the usual path for developers;
+2. the `MAPS_API_KEY` environment variable — for CI/release builds;
+3. otherwise a non-secret `YOUR_MAPS_API_KEY` placeholder, so a checkout with no
+   key still builds (maps just won't render).
+
+To make maps render, add your real key to `local.properties`:
+
+```
+MAPS_API_KEY=AIza...
+```
+
+The old per-checkout `app/src/{debug,release}/res/values/google_maps_api.xml`
+files are no longer used or needed.
 
 ## Testing conventions
 

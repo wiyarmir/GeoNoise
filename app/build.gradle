@@ -1,5 +1,27 @@
 apply plugin: 'com.android.application'
 
+// Resolve the Google Maps API key at build time so it never lives in a
+// checked-in resource file (GN-13). Precedence:
+//   1. MAPS_API_KEY in the repo-root local.properties (per-machine, git-ignored)
+//   2. the MAPS_API_KEY environment variable (CI / release builds)
+//   3. a non-secret placeholder so a keyless checkout still builds (maps won't render)
+def resolveMapsApiKey() {
+    def propsFile = rootProject.file('local.properties')
+    if (propsFile.exists()) {
+        def props = new Properties()
+        propsFile.withInputStream { props.load(it) }
+        def fromProps = props.getProperty('MAPS_API_KEY')
+        if (fromProps?.trim()) {
+            return fromProps.trim()
+        }
+    }
+    def fromEnv = System.getenv('MAPS_API_KEY')
+    if (fromEnv?.trim()) {
+        return fromEnv.trim()
+    }
+    return 'YOUR_MAPS_API_KEY'
+}
+
 android {
     compileSdk 34
 
@@ -9,6 +31,7 @@ android {
         targetSdkVersion 34 // can't move up without updating permissions model
         versionCode 5
         versionName "1.0"
+        manifestPlaceholders = [MAPS_API_KEY: resolveMapsApiKey()]
     }
     buildTypes {
         release {
