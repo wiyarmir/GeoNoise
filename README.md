@@ -3,6 +3,19 @@ Bachelor thesis for the BEng in Telecommunications at Universidad de Málaga
 
 Topic: Android application for ambient noise measuring and geolocalised representation
 
+# Building
+Build with the Gradle wrapper: `./gradlew assembleDebug`.
+
+The Google Maps API key is injected at build time, so it is never committed. Add
+your key to the repo-root `local.properties` (git-ignored) before building:
+
+```
+MAPS_API_KEY=AIza...
+```
+
+Alternatively export it as a `MAPS_API_KEY` environment variable (e.g. on CI). If
+neither is set the app still builds, but the map won't render.
+
 # Author
 [Guillermo Orellana Ruiz](https://profiles.udacity.com/u/guillermoorellana)
 # Director
