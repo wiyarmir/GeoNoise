@@ -46,24 +46,36 @@ Test reports land in `app/build/reports/tests/testDebugUnitTest/index.html`.
 ### Local-only files needed to build
 
 `local.properties` at the repo root is **git-ignored** (`.gitignore` ignores
-`/local.properties`) and per-machine. It must at least point at your Android SDK
-(`sdk.dir=...`).
+`/local.properties`) and per-machine. It only needs to point at your Android SDK
+(`sdk.dir=...`); it is **not** where the Maps API key goes (see below).
 
-The **Google Maps API key is injected at build time** (GN-13), so no key ever
-lives in a checked-in resource file. `app/build.gradle`'s `resolveMapsApiKey()`
-supplies the `MAPS_API_KEY` manifest placeholder (referenced from
-`AndroidManifest.xml` as `${MAPS_API_KEY}`) from the first available source:
+The **Google Maps API key is injected at build time** (GN-13, GN-15), so no key
+ever lives in a checked-in resource file. `app/build.gradle`'s
+`resolveMapsApiKey()` supplies the `MAPS_API_KEY` manifest placeholder
+(referenced from `AndroidManifest.xml` as `${MAPS_API_KEY}`) from the first
+available source:
 
-1. a `MAPS_API_KEY` entry in the repo-root `local.properties` (per-machine,
-   git-ignored) — the usual path for developers;
-2. the `MAPS_API_KEY` environment variable — for CI/release builds;
+1. the **`MAPS_API_KEY` Gradle project property** — the primary path, injectable
+   however Gradle surfaces project properties: on the command line
+   (`-PMAPS_API_KEY=...`, easy to pass on CI), in your per-user
+   `~/.gradle/gradle.properties` (never committed), or via the
+   `ORG_GRADLE_PROJECT_MAPS_API_KEY` environment variable (Gradle maps it to the
+   property automatically);
+2. the bare `MAPS_API_KEY` environment variable — kept for existing CI setups;
 3. otherwise a non-secret `YOUR_MAPS_API_KEY` placeholder, so a checkout with no
    key still builds (maps just won't render).
 
-To make maps render, add your real key to `local.properties`:
+To make maps render locally, add your real key to your per-user
+`~/.gradle/gradle.properties` (outside the repo, so it can never be committed):
 
 ```
 MAPS_API_KEY=AIza...
+```
+
+or pass it on the command line for a one-off build:
+
+```
+./gradlew assembleDebug -PMAPS_API_KEY=AIza...
 ```
 
 The old per-checkout `app/src/{debug,release}/res/values/google_maps_api.xml`

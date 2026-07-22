@@ -1,19 +1,17 @@
 apply plugin: 'com.android.application'
 
 // Resolve the Google Maps API key at build time so it never lives in a
-// checked-in resource file (GN-13). Precedence:
-//   1. MAPS_API_KEY in the repo-root local.properties (per-machine, git-ignored)
-//   2. the MAPS_API_KEY environment variable (CI / release builds)
+// checked-in resource file (GN-13, GN-15). Precedence:
+//   1. the MAPS_API_KEY Gradle project property — inject it whichever way
+//      Gradle surfaces project properties: on the CLI (-PMAPS_API_KEY=...),
+//      in ~/.gradle/gradle.properties (per-user, never committed), or via the
+//      ORG_GRADLE_PROJECT_MAPS_API_KEY environment variable (CI-friendly).
+//   2. the bare MAPS_API_KEY environment variable (kept for existing CI setups)
 //   3. a non-secret placeholder so a keyless checkout still builds (maps won't render)
 def resolveMapsApiKey() {
-    def propsFile = rootProject.file('local.properties')
-    if (propsFile.exists()) {
-        def props = new Properties()
-        propsFile.withInputStream { props.load(it) }
-        def fromProps = props.getProperty('MAPS_API_KEY')
-        if (fromProps?.trim()) {
-            return fromProps.trim()
-        }
+    def fromProperty = findProperty('MAPS_API_KEY')
+    if (fromProperty?.toString()?.trim()) {
+        return fromProperty.toString().trim()
     }
     def fromEnv = System.getenv('MAPS_API_KEY')
     if (fromEnv?.trim()) {
