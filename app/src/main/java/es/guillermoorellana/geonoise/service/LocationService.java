@@ -4,53 +4,36 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ServiceCompat;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 
 import es.guillermoorellana.geonoise.R;
 import es.guillermoorellana.geonoise.utils.ForegroundNotifications;
 
 /**
  * Created by Guillermo Orellana on 02/11/14.
+ *
+ * <p>Location updates are owned by {@code RecordService} via its own
+ * {@code FusedLocationProviderClient}; this service exists solely to host the
+ * {@code location}-typed foreground service (an ongoing notification while tracking) and expose a
+ * binder so {@code RecordService} can toggle it.
  */
-public class LocationService extends Service implements
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class LocationService extends Service {
 
-    private static final String TAG = "LocationService";
     private static final int NOTIF_ID_LOCATION = 2002;
     private static LocationService sInstance;
     private final IBinder mBinder = new LocationBinder();
-    private GoogleApiClient locationClient;
     private boolean tracking;
 
     public static LocationService getInstance() {
         return sInstance;
     }
 
-    public GoogleApiClient getLocationClient() {
-        return locationClient;
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
         sInstance = this;
-        locationClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-        locationClient.connect();
     }
 
     @Override
@@ -89,39 +72,8 @@ public class LocationService extends Service implements
             ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE);
             tracking = false;
         }
-        locationClient.disconnect();
         super.onDestroy();
     }
-
-    /*
-     * Called by Location Services when the request to connect the
-     * client finishes successfully. At this point, you can
-     * request the current location or start periodic updates
-     */
-    @Override
-    public void onConnected(Bundle dataBundle) {
-        // Display the connection status
-        Log.d(TAG, "Connected to GMS");
-        //locationClient.requestLocationUpdates(locationRequest, this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    /*
-     * Called by Location Services if the attempt to
-     * Location Services fails.
-     */
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-        Toast.makeText(this, "Connection failed", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "Connection to GMS failed");
-
-    }
-
 
     static class LocationBinder extends Binder {
         LocationService getService() {
