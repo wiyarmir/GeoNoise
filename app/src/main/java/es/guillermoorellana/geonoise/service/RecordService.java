@@ -1,13 +1,11 @@
 package es.guillermoorellana.geonoise.service;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
 import android.location.Location;
 import android.media.AudioFormat;
@@ -16,15 +14,19 @@ import android.media.MediaRecorder;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.ServiceCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -35,18 +37,20 @@ import java.util.Date;
 import au.com.bytecode.opencsv.CSVWriter;
 import es.guillermoorellana.geonoise.R;
 import es.guillermoorellana.geonoise.utils.ForegroundNotifications;
+import es.guillermoorellana.geonoise.utils.LocationPermission;
 import es.guillermoorellana.geonoise.utils.RecordAudioPermission;
 import es.guillermoorellana.geonoise.utils.Utils;
 
 /**
  * Created by Guillermo Orellana on 10/08/14.
  */
-public class RecordService extends Service implements LocationListener {
+public class RecordService extends Service {
     public static String LOCATION_NOISE_UPDATE = "es.guillermoorellana.geonoise.action.update";
     private static String TAG = "RecordService";
     private static final int NOTIF_ID_RECORD = 2001;
     private final IBinder mBinder = new RecordBinder();
     protected LocationRequest locationRequest = null;
+    private FusedLocationProviderClient fusedLocationClient;
     protected CSVWriter wr = null;
     private boolean recording;
     private LocationService mService;
@@ -78,15 +82,24 @@ public class RecordService extends Service implements LocationListener {
     private float samplePeriod;
     private double splAdjustment = +8;
 
+    private final LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(@androidx.annotation.NonNull LocationResult result) {
+            Location location = result.getLastLocation();
+            if (location != null) {
+                lastLocation = location;
+                Log.d(TAG, "Location change: " + location);
+            }
+        }
+    };
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         bindService(new Intent(RecordService.this, LocationService.class), mConnection, Context.BIND_AUTO_CREATE);
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(500);
-        locationRequest.setFastestInterval(500);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 500).build();
 
         prepareAudio();
     }
@@ -231,7 +244,7 @@ public class RecordService extends Service implements LocationListener {
                 mService.startTracking();
             }
             try {
-                LocationServices.FusedLocationApi.requestLocationUpdates(mService.getLocationClient(), locationRequest, this);
+                fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
             } catch (SecurityException e) {
                 Log.e(TAG, "Location permission denied: " + e.getMessage());
             }
@@ -300,6 +313,11 @@ public class RecordService extends Service implements LocationListener {
         }
 
         recording = false;
+
+        if (fusedLocationClient != null) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
+        }
+
         try {
             if (wr != null) {
                 wr.close();
@@ -318,10 +336,7 @@ public class RecordService extends Service implements LocationListener {
     }
 
     private boolean hasLocationPermission() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED;
+        return LocationPermission.isGranted(this);
     }
 
     public double getDecibels(double level) {
@@ -331,12 +346,6 @@ public class RecordService extends Service implements LocationListener {
 
     public boolean isRecording() {
         return recording;
-    }
-
-    @Override
-    public void onLocationChanged(@androidx.annotation.NonNull Location location) {
-        lastLocation = location;
-        Log.d(TAG, "Location change: " + location);
     }
 
     public boolean isBound() {
